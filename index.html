@@ -12087,27 +12087,35 @@ function computeGoalProgress(goal) {
 function renderGoals() {
   const goals = loadGoals();
   const list = document.getElementById('goals-list');
+  if (!list) return; // v0.60 added a second loadGoals() returning array; if old goals-list element missing, skip
   list.innerHTML = '';
   // Compute days until next Monday
   const d = new Date();
   const day = d.getDay() || 7;
   const daysUntilMonday = 8 - day;
-  document.getElementById('goals-reset').textContent = daysUntilMonday === 1 ? 'reset morgen' : `reset over ${daysUntilMonday} dagen`;
+  const resetEl = document.getElementById('goals-reset');
+  if (resetEl) resetEl.textContent = daysUntilMonday === 1 ? 'reset morgen' : `reset over ${daysUntilMonday} dagen`;
 
-  for (const goal of goals.items) {
-    const progress = computeGoalProgress(goal);
-    const pct = Math.min(100, (progress / goal.target) * 100);
-    const done = progress >= goal.target;
-    const row = document.createElement('div');
-    row.className = 'goal-row' + (done ? ' completed' : '');
-    row.innerHTML = `
-      <span class="goal-label"><span class="goal-icon">${goal.icon}</span>${goal.label}</span>
-      <span class="goal-amount${done ? ' done' : ''}">${progress}/${goal.target}${goal.type === 'minutes' ? ' min' : ''} ${done ? '✓' : ''}</span>
-      <span class="goal-progress">
-        <span class="goal-progress-track"><span class="goal-progress-bar" style="width:${pct}%"></span></span>
-      </span>
-    `;
-    list.appendChild(row);
+  // Defensive: v0.60 loadGoals() returns Array, original returns { items: [] }
+  const items = Array.isArray(goals) ? goals : (goals?.items || []);
+  for (const goal of items) {
+    // Skip v0.60 goal objects (have .song instead of .icon) — they're handled by separate Goal modal
+    if (!goal || typeof goal.icon === 'undefined' || typeof goal.label === 'undefined') continue;
+    try {
+      const progress = computeGoalProgress(goal);
+      const pct = Math.min(100, (progress / goal.target) * 100);
+      const done = progress >= goal.target;
+      const row = document.createElement('div');
+      row.className = 'goal-row' + (done ? ' completed' : '');
+      row.innerHTML = `
+        <span class="goal-label"><span class="goal-icon">${goal.icon}</span>${goal.label}</span>
+        <span class="goal-amount${done ? ' done' : ''}">${progress}/${goal.target}${goal.type === 'minutes' ? ' min' : ''} ${done ? '✓' : ''}</span>
+        <span class="goal-progress">
+          <span class="goal-progress-track"><span class="goal-progress-bar" style="width:${pct}%"></span></span>
+        </span>
+      `;
+      list.appendChild(row);
+    } catch (e) { console.warn('Goal render skipped:', e.message); }
   }
 }
 
