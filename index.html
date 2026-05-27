@@ -5179,6 +5179,7 @@ create policy "Anyone can update"
     <div class="wh-actions">
       <button id="wh-tour-btn">🎓 Geef me een tour (2 min)</button>
       <button id="wh-skip-btn">Naar de app →</button>
+      <button id="wh-hard-reset-btn" style="background:rgba(239,68,68,0.15);border-color:#ef4444;color:#fca5a5;">🚨 Hard Reset (bij problemen)</button>
     </div>
     <div class="wh-skip" id="wh-dont-show">Niet meer tonen bij opstarten</div>
   </div>
@@ -8053,9 +8054,78 @@ document.getElementById('install-no').onclick = () => {
   saveStore(store);
 };
 
-// Register service worker for offline support (inline)
-// v0.75: cache-bump + network-first voor index.html (so updates work without manual clear)
+// v0.75 hotfix: global error handler — visible op pagina als iets stuk gaat
+window.addEventListener('error', function(e) {
+  console.error('[Piano Coach error]', e.message, 'at', e.filename, ':', e.lineno);
+  // Show floating error chip if early in load (handlers might not be attached yet)
+  try {
+    let chip = document.getElementById('pc-error-chip');
+    if (!chip) {
+      chip = document.createElement('div');
+      chip.id = 'pc-error-chip';
+      chip.style.cssText = 'position:fixed;top:10px;right:10px;background:#dc2626;color:#fff;padding:8px 14px;border-radius:6px;font-size:11px;font-family:monospace;z-index:99999;max-width:400px;box-shadow:0 4px 12px rgba(0,0,0,0.5);cursor:pointer;';
+      chip.title = 'Klik om Hard Reset te openen';
+      chip.onclick = function() { try { hardResetApp(); } catch {} };
+      document.body && document.body.appendChild(chip);
+    }
+    if (chip) chip.innerHTML = '⚠ JS Error: ' + (e.message || 'unknown').slice(0, 80) + ' <small>(klik = reset)</small>';
+  } catch {}
+});
+
+// v0.75 hotfix: Hard Reset functie - wist ALLES (SW, caches, localStorage backup, force reload)
+window.hardResetApp = async function() {
+  if (!confirm('Hard Reset: wist alle caches + service workers + tijdelijke data. Je localStorage (sessies/journal/etc.) wordt eerst gedownload als backup. OK?')) return;
+  try {
+    // 1) Backup localStorage
+    const backup = {};
+    for (let i = 0; i < localStorage.length; i++) {
+      const k = localStorage.key(i);
+      backup[k] = localStorage.getItem(k);
+    }
+    const blob = new Blob([JSON.stringify(backup, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = 'piano-coach-localstorage-backup-' + new Date().toISOString().slice(0, 10) + '.json';
+    a.click();
+    URL.revokeObjectURL(url);
+    // 2) Unregister all SWs
+    if ('serviceWorker' in navigator) {
+      const regs = await navigator.serviceWorker.getRegistrations();
+      await Promise.all(regs.map(r => r.unregister()));
+    }
+    // 3) Clear all caches
+    if (window.caches) {
+      const names = await caches.keys();
+      await Promise.all(names.map(n => caches.delete(n)));
+    }
+    alert('Reset compleet. App herlaadt nu.');
+    location.reload(true);
+  } catch (e) {
+    alert('Reset deels gefaald: ' + e.message + '. Probeer DevTools → Application → Clear site data.');
+  }
+};
+
+// v0.75 hotfix: AGRESSIEF unregister bestaande SWs + clear caches
+// Service worker veroorzaakte cache-conflicts. We disablen 'm tijdelijk volledig.
 if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.getRegistrations().then(regs => {
+    for (const reg of regs) {
+      console.log('[Piano Coach] Unregistering old service worker');
+      reg.unregister();
+    }
+  }).catch(() => {});
+  if (window.caches) {
+    caches.keys().then(names => {
+      for (const name of names) {
+        console.log('[Piano Coach] Deleting old cache:', name);
+        caches.delete(name);
+      }
+    }).catch(() => {});
+  }
+}
+
+// Register service worker for offline support (DISABLED — see hotfix above)
+if (false && 'serviceWorker' in navigator) {
   const swCode = `
     const CACHE = 'piano-coach-v75';
     const ASSETS = [
@@ -22131,6 +22201,7 @@ document.getElementById('wh-coach-btn').onclick = () => {
 };
 document.getElementById('wh-skip-btn').onclick = closeWelcomeHub;
 document.getElementById('wh-tour-btn').onclick = () => { closeWelcomeHub(); startTour(); };
+document.getElementById('wh-hard-reset-btn')?.addEventListener('click', () => { try { hardResetApp(); } catch (e) { alert('Reset error: ' + e.message); } });
 document.getElementById('wh-dont-show').onclick = () => {
   try { const store = loadStore(); store.welcomeHubDismissed = true; saveStore(store); } catch {}
   closeWelcomeHub();
