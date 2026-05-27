@@ -1,0 +1,21 @@
+# Temp / build artifacts
+extracted-js.js
+*.log
+*.tmp
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor
+.vscode/
+.idea/
+
+# Node (if ever added)
+node_modules/
+
+# Backup/dev files
+*.bak
+*.swp
+*.orig
