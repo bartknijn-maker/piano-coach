@@ -8054,6 +8054,60 @@ document.getElementById('install-no').onclick = () => {
   saveStore(store);
 };
 
+// v0.76 — Self-test suite: run via URL ?test=1 or window.runSelfTest()
+window.runSelfTest = function() {
+  const results = { passed: [], failed: [], total: 0 };
+  function assert(name, cond, detail) {
+    results.total++;
+    if (cond) results.passed.push(name);
+    else results.failed.push(name + (detail ? ' :: ' + detail : ''));
+  }
+  // Button handlers (all expected interactive buttons)
+  const expectedBtns = ['btn-play','btn-pause','btn-restart','btn-wait','btn-loop-start','btn-loop-end','btn-loop-toggle','btn-section-save','btn-section-split','btn-section-smart','btn-tv','btn-recorder','btn-demo','btn-listen','btn-metronome','btn-chord-detect','btn-ear','btn-fingering','btn-scales','btn-mistakes-only','btn-duet','btn-improv','btn-playlist','btn-voice','btn-memory','btn-theory','btn-sight','btn-gym','btn-eartrain-audio','btn-coach','btn-voice-cmd','btn-stats','btn-sync','btn-self-review','btn-composers','btn-repertoire','btn-touch-piano','btn-pomodoro','btn-journal','btn-velocity-coach','btn-twohand','btn-improv-coach','btn-prima-vista','btn-stage','btn-etudes','btn-ear-to-piano','btn-goals','btn-analytics','btn-follow','btn-polyphonic','btn-compose','btn-patterns','btn-calendar','btn-share','btn-deep-insights','btn-tutor','btn-reharm','btn-listen-along','btn-backing','btn-review'];
+  for (const id of expectedBtns) {
+    const el = document.getElementById(id);
+    assert('button:' + id, el && typeof el.onclick === 'function', el ? 'onclick=' + typeof el.onclick : 'MISSING');
+  }
+  // Critical globals
+  try { assert('global:state', typeof state === 'object' && state !== null); } catch (e) { assert('global:state', false, e.message); }
+  try { assert('global:THEORY_LESSONS', Array.isArray(THEORY_LESSONS) && THEORY_LESSONS.length >= 30); } catch (e) { assert('global:THEORY_LESSONS', false, e.message); }
+  try { assert('global:FEATURE_CATEGORIES', typeof FEATURE_CATEGORIES === 'object'); } catch (e) { assert('global:FEATURE_CATEGORIES', false, e.message); }
+  try { assert('global:PROGRESSIONS', Array.isArray(PROGRESSIONS)); } catch (e) { assert('global:PROGRESSIONS', false, e.message); }
+  try { assert('global:COMPOSERS', Array.isArray(COMPOSERS)); } catch (e) { assert('global:COMPOSERS', false, e.message); }
+  try { assert('global:ETUDES', Array.isArray(ETUDES)); } catch (e) { assert('global:ETUDES', false, e.message); }
+  // Critical functions
+  try { assert('fn:play', typeof play === 'function'); } catch (e) { assert('fn:play', false); }
+  try { assert('fn:pause', typeof pause === 'function'); } catch (e) { assert('fn:pause', false); }
+  try { assert('fn:restart', typeof restart === 'function'); } catch (e) { assert('fn:restart', false); }
+  try { assert('fn:renderCoach', typeof renderCoach === 'function'); } catch (e) { assert('fn:renderCoach', false); }
+  try { assert('fn:renderSmartCoach', typeof renderSmartCoach === 'function'); } catch (e) { assert('fn:renderSmartCoach', false); }
+  try { assert('fn:generateCoachSession', typeof generateCoachSession === 'function'); } catch (e) { assert('fn:generateCoachSession', false); }
+  try { assert('fn:loadStore', typeof loadStore === 'function'); } catch (e) { assert('fn:loadStore', false); }
+  try { assert('fn:ensureAudio', typeof ensureAudio === 'function'); } catch (e) { assert('fn:ensureAudio', false); }
+  // APIs
+  assert('api:localStorage', typeof localStorage !== 'undefined');
+  assert('api:audioContext', typeof (window.AudioContext || window.webkitAudioContext) === 'function');
+  assert('api:webMIDI', typeof navigator.requestMIDIAccess === 'function');
+  assert('api:speechSynthesis', typeof window.speechSynthesis === 'object');
+  // No active error chip
+  assert('no-runtime-errors', !document.getElementById('pc-error-chip'), document.getElementById('pc-error-chip')?.textContent || '');
+  return results;
+};
+
+if (new URLSearchParams(location.search).get('test') === '1') {
+  setTimeout(() => {
+    const r = window.runSelfTest();
+    const passRate = ((r.passed.length / r.total) * 100).toFixed(1);
+    const banner = document.createElement('div');
+    banner.style.cssText = 'position:fixed;top:10px;left:10px;background:' + (r.failed.length === 0 ? '#16a34a' : '#dc2626') + ';color:#fff;padding:14px 20px;border-radius:10px;font-size:12px;font-family:monospace;z-index:99999;max-width:520px;max-height:80vh;overflow-y:auto;box-shadow:0 8px 24px rgba(0,0,0,0.5);';
+    banner.innerHTML = '<strong>🧪 Self-test: ' + r.passed.length + '/' + r.total + ' (' + passRate + '%)</strong>' +
+      (r.failed.length > 0 ? '<br><br><strong>❌ Failed:</strong><br>' + r.failed.slice(0, 30).map(f => '· ' + f).join('<br>') : '<br><br>✅ All systems go') +
+      '<br><br><button onclick="this.parentElement.remove()" style="background:#fff;color:#000;border:none;padding:4px 10px;border-radius:4px;cursor:pointer;">Sluit</button>';
+    document.body.appendChild(banner);
+    console.log('[Piano Coach self-test]', r);
+  }, 1000);
+}
+
 // v0.75 hotfix: global error handler — visible op pagina als iets stuk gaat
 window.addEventListener('error', function(e) {
   console.error('[Piano Coach error]', e.message, 'at', e.filename, ':', e.lineno);
@@ -13036,9 +13090,8 @@ eventsToMidi = function(events, opts = {}) {
 renderLibrary();
 updateStreakDisplay();
 renderAchievements();
-// Defer renderCoach() because later v0.40+ versions reference THEORY_LESSONS (declared later in file).
-// Without defer this throws TDZ ReferenceError that breaks ALL subsequent handler attachments.
-setTimeout(() => { try { renderCoach(); } catch (e) { console.warn('renderCoach skipped:', e.message); } }, 100);
+// v0.74 cleanup: no longer need to defer — renderCoach (v0.21) is now distinct from renderSmartCoach (v0.40+)
+renderCoach();
 checkAchievements();
 pomoUpdate();
 renderDailyChallenge();
@@ -14042,7 +14095,8 @@ function generateCoachSession() {
   return { session, weakPcs, sightTotalCorrect, gymCompleted, seqUnlocked };
 }
 
-function renderCoach() {
+// v0.74 cleanup: renamed from renderCoach() to avoid conflict with v0.21's renderCoach()
+function renderSmartCoach() {
   const data = generateCoachSession();
   const container = document.getElementById('coach-session');
   container.innerHTML = '';
@@ -14105,11 +14159,11 @@ function runCoachAction(action, payload) {
 }
 
 document.getElementById('btn-coach').onclick = () => {
-  renderCoach();
+  renderSmartCoach();
   document.getElementById('coach-overlay').style.display = 'flex';
 };
 document.getElementById('coach-close').onclick = () => document.getElementById('coach-overlay').style.display = 'none';
-document.getElementById('coach-regen').onclick = renderCoach;
+document.getElementById('coach-regen').onclick = renderSmartCoach;
 
 // Coach achievement
 ACHIEVEMENTS.push({
@@ -14173,7 +14227,7 @@ function setupVoiceRecognition() {
     const text = last[0].transcript.trim().toLowerCase();
     voiceCmdState.lastHeard = text;
     document.getElementById('voice-cmd-heard').textContent = `"${text}"`;
-    handleVoiceCommand(text);
+    handleVoiceCommandGym(text);
   };
   rec.onerror = (e) => {
     console.warn('Voice recognition error:', e.error);
@@ -14191,7 +14245,8 @@ function setupVoiceRecognition() {
   return rec;
 }
 
-function handleVoiceCommand(text) {
+// v0.74 cleanup: renamed from handleVoiceCommand() to avoid conflict with v0.21 voice control
+function handleVoiceCommandGym(text) {
   for (const [pattern, action] of Object.entries(VOICE_COMMANDS)) {
     const regex = new RegExp(`\\b(${pattern})\\b`, 'i');
     if (regex.test(text)) {
@@ -18618,10 +18673,11 @@ function generateGoalPlan(songName, target, weeks) {
   }).sort((a, b) => a.week - b.week);
 }
 
-function loadGoals() {
+// v0.74 cleanup: renamed from loadGoals/saveGoals to avoid conflict with old weekly-goals (which use {items:[]} shape)
+function loadGoalsV60() {
   try { return loadStore().goals || []; } catch { return []; }
 }
-function saveGoals(goals) {
+function saveGoalsV60(goals) {
   try { const store = loadStore(); store.goals = goals; saveStore(store); } catch {}
 }
 
@@ -18629,7 +18685,7 @@ function showGoalsListView() {
   document.getElementById('goals-list-view').style.display = 'block';
   document.getElementById('goals-create-view').style.display = 'none';
   document.getElementById('goals-detail-view').style.display = 'none';
-  const goals = loadGoals();
+  const goals = loadGoalsV60();
   const container = document.getElementById('goals-active-list');
   container.innerHTML = '';
   if (goals.length === 0) {
@@ -18693,7 +18749,7 @@ function updateGoalPreview() {
 }
 
 function showGoalDetail(goalId) {
-  const goals = loadGoals();
+  const goals = loadGoalsV60();
   const goal = goals.find(g => g.id === goalId);
   if (!goal) return;
   document.getElementById('goals-list-view').style.display = 'none';
@@ -18738,14 +18794,14 @@ document.getElementById('goal-create-confirm').onclick = () => {
   const target = document.getElementById('goal-target').value;
   const weeks = parseInt(document.getElementById('goal-weeks').value);
   if (!song) { alert('Selecteer een stuk'); return; }
-  const goals = loadGoals();
+  const goals = loadGoalsV60();
   goals.push({
     id: 'goal-' + Date.now(),
     song, target, weeks,
     createdAt: Date.now(),
     plan: generateGoalPlan(song, target, weeks),
   });
-  saveGoals(goals);
+  saveGoalsV60(goals);
   showGoalsListView();
   checkAchievements();
 };
@@ -18753,8 +18809,8 @@ document.getElementById('goal-detail-back').onclick = showGoalsListView;
 document.getElementById('goal-delete').onclick = () => {
   const goalId = document.getElementById('goal-detail-content').dataset.goalId;
   if (!confirm('Verwijder deze goal?')) return;
-  const goals = loadGoals().filter(g => g.id !== goalId);
-  saveGoals(goals);
+  const goals = loadGoalsV60().filter(g => g.id !== goalId);
+  saveGoalsV60(goals);
   showGoalsListView();
 };
 
@@ -18762,7 +18818,7 @@ document.getElementById('goal-delete').onclick = () => {
 const _origGenerateCoachSession3 = generateCoachSession;
 generateCoachSession = function() {
   const data = _origGenerateCoachSession3();
-  const goals = loadGoals();
+  const goals = loadGoalsV60();
   if (goals.length > 0) {
     // Show current-week task of most recent goal
     const goal = goals[goals.length - 1];
