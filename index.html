@@ -13023,7 +13023,9 @@ eventsToMidi = function(events, opts = {}) {
 renderLibrary();
 updateStreakDisplay();
 renderAchievements();
-renderCoach();
+// Defer renderCoach() because later v0.40+ versions reference THEORY_LESSONS (declared later in file).
+// Without defer this throws TDZ ReferenceError that breaks ALL subsequent handler attachments.
+setTimeout(() => { try { renderCoach(); } catch (e) { console.warn('renderCoach skipped:', e.message); } }, 100);
 checkAchievements();
 pomoUpdate();
 renderDailyChallenge();
