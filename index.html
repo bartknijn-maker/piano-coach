@@ -2,7 +2,7 @@
 <html lang="nl">
 <head>
 <meta charset="UTF-8">
-<title>Piano Coach — v0.75</title>
+<title>Piano Coach — v0.77</title>
 <link rel="manifest" href="data:application/json;charset=utf-8,%7B%22name%22%3A%22Piano%20Coach%22%2C%22short_name%22%3A%22PianoCoach%22%2C%22start_url%22%3A%22.%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%230f1419%22%2C%22theme_color%22%3A%22%234ade80%22%2C%22description%22%3A%22Self-hosted%20piano%20coaching%20met%20MIDI-input%2C%2035-song%20repertoire%2C%20coach%2C%20achievements%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22data%3Aimage%2Fsvg%2Bxml%2C%253Csvg%2520xmlns%3D%2522http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%2522%2520viewBox%3D%25220%25200%25201024%25201024%2522%253E%253Crect%2520fill%3D%2522%25230f1419%2522%2520width%3D%25221024%2522%2520height%3D%25221024%2522%2F%253E%253Ctext%2520x%3D%2522512%2522%2520y%3D%2522680%2522%2520font-size%3D%2522680%2522%2520text-anchor%3D%2522middle%2522%253E%25F0%259F%258E%25B9%253C%2Ftext%253E%253C%2Fsvg%253E%22%2C%22sizes%22%3A%22512x512%22%2C%22type%22%3A%22image%2Fsvg%2Bxml%22%7D%5D%7D">
 <meta name="theme-color" content="#4ade80">
 <script src="https://cdn.jsdelivr.net/npm/@tonejs/midi@2.0.28/build/Midi.js"></script>
@@ -1918,7 +1918,7 @@
   .eartrain-audio-answer { text-align: center; font-size: 20px; color: #4ade80; padding: 12px; margin-bottom: 12px; }
   .eartrain-audio-stats { display: flex; justify-content: center; gap: 24px; font-size: 13px; margin-bottom: 14px; }
   .eartrain-audio-hint { font-size: 11px; color: var(--muted); text-align: center; margin-top: 8px; }
-  /* v0.75 — Smart coach */
+  /* v0.77 — Smart coach */
   .coach-modal { max-width: 600px; }
   .coach-session { display: flex; flex-direction: column; gap: 10px; margin: 16px 0; }
   .coach-step {
@@ -1982,7 +1982,7 @@
   .stats-repertoire { font-size: 12px; color: var(--muted); max-height: 200px; overflow-y: auto; }
   .stats-rep-item { display: flex; justify-content: space-between; padding: 4px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
 
-  /* v0.75 — Backing Track Modal */
+  /* v0.77 — Backing Track Modal */
   .backing-modal { max-width: 640px; }
   .backing-progressions { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 6px; margin: 12px 0; }
   .backing-progressions button {
@@ -2003,7 +2003,7 @@
   .backing-next { font-size: 12px; color: var(--muted); }
   .backing-scale-info { font-size: 11px; color: var(--muted); text-align: center; padding: 8px; background: rgba(99,102,241,0.08); border-radius: 4px; margin-bottom: 12px; }
 
-  /* v0.75 — Knowledge Review */
+  /* v0.77 — Knowledge Review */
   .review-modal { max-width: 560px; }
   .review-stats { display: flex; gap: 16px; justify-content: center; font-size: 12px; color: var(--muted); margin-bottom: 12px; }
   .review-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1); padding: 18px; border-radius: 10px; margin-bottom: 12px; }
@@ -2082,7 +2082,7 @@
   .selfreview-history { max-height: 180px; overflow-y: auto; font-size: 11px; }
   .sr-history-row { display: flex; justify-content: space-between; padding: 4px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
 
-  /* v0.75 — Composers */
+  /* v0.77 — Composers */
   .composers-modal { max-width: 700px; }
   .composers-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 8px; margin: 14px 0; }
   .composer-card {
@@ -2166,7 +2166,7 @@
   .pwa-install-banner button { background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.4); color: #fff; padding: 6px 14px; border-radius: 4px; cursor: pointer; font-size: 13px; }
   .pwa-install-banner button:first-of-type { background: #fff; color: #4338ca; }
 
-  /* v0.75 — Pomodoro + Journal + Warm-up */
+  /* v0.77 — Pomodoro + Journal + Warm-up */
   .pomodoro-widget {
     position: fixed; bottom: 20px; left: 20px;
     background: rgba(0,0,0,0.9); border: 2px solid #ef4444;
@@ -2259,7 +2259,7 @@
   .vrt-marks { display: flex; justify-content: space-between; font-size: 8px; color: var(--muted); margin-bottom: 6px; }
   .vrt-recent { font-size: 11px; color: var(--muted); min-height: 16px; }
 
-  /* v0.75 — Two-Hand Drills */
+  /* v0.77 — Two-Hand Drills */
   .twohand-modal { max-width: 700px; }
   .twohand-drill-picker { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 6px; margin: 12px 0; }
   .twohand-drill-picker button {
@@ -2386,7 +2386,7 @@
   .mem-staff.hidden { opacity: 0; }
   .mem-instruction { font-size: 13px; color: #444; margin-top: 8px; }
 
-  /* v0.75 — Stage + Blind */
+  /* v0.77 — Stage + Blind */
   .stage-config, .blind-config { display: flex; flex-direction: column; gap: 8px; margin: 12px 0; font-size: 13px; color: var(--muted); }
   .stage-config label, .blind-config label { display: flex; align-items: center; gap: 8px; }
   .stage-config select, .blind-config select { background: rgba(255,255,255,0.08); color: #fff; border: 1px solid rgba(255,255,255,0.15); padding: 4px 8px; border-radius: 4px; font-size: 12px; }
@@ -2458,7 +2458,7 @@
   .etp-input-note { padding: 4px 8px; background: rgba(255,255,255,0.06); border-radius: 4px; font-family: monospace; }
   .etp-stats { display: flex; gap: 16px; justify-content: center; font-size: 12px; color: var(--muted); margin: 10px 0; flex-wrap: wrap; }
 
-  /* v0.75 — Goal-Based Curriculum */
+  /* v0.77 — Goal-Based Curriculum */
   .goals-modal { max-width: 720px; }
   .goals-active-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 14px; max-height: 320px; overflow-y: auto; }
   .goal-item {
@@ -2497,7 +2497,7 @@
   .goal-week-tasks { font-size: 12px; line-height: 1.5; }
   .goal-week-status { font-size: 18px; }
 
-  /* v0.75 — Practice Analytics Deep */
+  /* v0.77 — Practice Analytics Deep */
   .analytics-modal { max-width: 820px; }
   .analytics-section { margin: 18px 0; }
   .analytics-section-title { font-size: 13px; font-weight: 600; margin-bottom: 10px; color: rgba(255,255,255,0.9); }
@@ -2642,7 +2642,7 @@
   .poly-settings select { background: rgba(255,255,255,0.08); color: #fff; border: 1px solid rgba(255,255,255,0.15); padding: 4px 8px; border-radius: 4px; font-size: 12px; }
   .poly-stats { display: flex; gap: 16px; justify-content: center; font-size: 12px; color: var(--muted); margin: 10px 0; }
 
-  /* v0.75 — Composition Challenge */
+  /* v0.77 — Composition Challenge */
   .compose-modal { max-width: 680px; }
   .compose-challenge-info {
     background: rgba(99,102,241,0.1); border-left: 3px solid #6366f1;
@@ -2729,7 +2729,7 @@
   .pattern-row-count { font-family: monospace; font-size: 11px; color: var(--accent); text-align: right; }
   .pattern-intervals { font-family: monospace; font-size: 11px; color: var(--muted); }
 
-  /* v0.75 — Practice Calendar */
+  /* v0.77 — Practice Calendar */
   .calendar-modal { max-width: 880px; }
   .calendar-nav {
     display: flex; align-items: center; justify-content: space-between;
@@ -2840,7 +2840,7 @@
   .coach-view-content table th, .coach-view-content table td { padding: 6px 8px; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.06); }
   .coach-view-content table th { color: var(--muted); font-weight: 600; font-size: 10px; text-transform: uppercase; }
 
-  /* v0.75 — Deep Insights */
+  /* v0.77 — Deep Insights */
   .deep-insights-modal { max-width: 820px; max-height: 90vh; overflow-y: auto; }
   .di-loading { text-align: center; padding: 40px; font-size: 14px; color: var(--muted); }
   .di-period-selector { margin: 12px 0; font-size: 12px; color: var(--muted); }
@@ -2881,7 +2881,7 @@
   .di-correlations .di-corr-row { padding: 4px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
 
   /* ===================================================================== */
-  /* v0.75 — UX OVERHAUL: Compact Topbar + Command Palette + Welcome Hub  */
+  /* v0.77 — UX OVERHAUL: Compact Topbar + Command Palette + Welcome Hub  */
   /* ===================================================================== */
 
   /* Hide all feature buttons (data-grouped) — they live in .controls.row2 + others */
@@ -3106,7 +3106,7 @@
     background: transparent; border-color: rgba(255,255,255,0.2);
   }
 
-  /* v0.75 — Smart Fingering Display */
+  /* v0.77 — Smart Fingering Display */
   .fingering-modal { max-width: 600px; }
   .fm-modes { display: flex; flex-direction: column; gap: 8px; margin: 14px 0; }
   .fm-mode {
@@ -3186,6 +3186,42 @@
   .section-fingering-modal { max-width: 720px; }
   .sf-staff { background: #fff; border-radius: 8px; padding: 14px; margin: 14px 0; overflow-x: auto; }
   .sf-explanation { font-size: 12px; line-height: 1.6; color: var(--muted); padding: 10px; background: rgba(255,255,255,0.03); border-radius: 6px; }
+
+  /* v0.77 — Voice Journal */
+  .voice-journal-modal { max-width: 600px; }
+  .vj-status-row { display: flex; align-items: center; gap: 10px; margin: 14px 0; padding: 10px 14px; background: rgba(255,255,255,0.04); border-radius: 6px; }
+  .vj-status-dot { width: 12px; height: 12px; border-radius: 50%; background: #6b7280; transition: all 0.3s; }
+  .vj-status-dot.listening { background: #ef4444; animation: voicePulse 1.2s infinite; }
+  .vj-status-dot.ready { background: #4ade80; }
+  .vj-status-text { font-size: 13px; }
+  .vj-transcript-area { background: rgba(0,0,0,0.3); padding: 14px; border-radius: 8px; margin: 12px 0; min-height: 100px; }
+  .vj-transcript-label { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px; }
+  .vj-transcript { font-size: 14px; line-height: 1.6; color: #fff; min-height: 60px; }
+  .vj-transcript .vj-interim { color: rgba(255,255,255,0.5); font-style: italic; }
+  .vj-controls { display: flex; flex-direction: column; align-items: center; gap: 10px; margin: 16px 0; }
+  .vj-mic-btn {
+    width: 84px; height: 84px; border-radius: 50%;
+    background: linear-gradient(135deg, #6366f1, #a78bfa);
+    color: #fff; border: none; font-size: 36px; cursor: pointer;
+    box-shadow: 0 4px 20px rgba(99,102,241,0.5);
+    transition: all 0.2s;
+  }
+  .vj-mic-btn.recording { background: linear-gradient(135deg, #ef4444, #dc2626); animation: voicePulse 1.5s infinite; }
+  .vj-mic-btn:hover { transform: scale(1.05); }
+  .vj-toggle-label { font-size: 12px; color: var(--muted); }
+  .vj-edit-area { background: rgba(255,255,255,0.04); padding: 14px; border-radius: 8px; margin: 14px 0; }
+  .vj-section-title { font-size: 12px; font-weight: 600; margin-bottom: 8px; color: rgba(255,255,255,0.85); }
+  #vj-edit-text { width: 100%; padding: 10px; background: rgba(0,0,0,0.3); color: #fff; border: 1px solid rgba(255,255,255,0.15); border-radius: 4px; font-family: inherit; font-size: 13px; resize: vertical; box-sizing: border-box; }
+  .vj-categorize { display: flex; gap: 12px; margin: 10px 0; font-size: 12px; color: var(--muted); }
+  .vj-categorize label { display: flex; flex-direction: column; gap: 4px; flex: 1; }
+  .vj-categorize select { background: rgba(255,255,255,0.08); color: #fff; border: 1px solid rgba(255,255,255,0.15); padding: 6px 8px; border-radius: 4px; font-size: 12px; }
+  .vj-save-btn {
+    width: 100%; padding: 12px;
+    background: linear-gradient(135deg, #4ade80, #22c55e); color: #fff;
+    border: none; border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: 600;
+  }
+  .vj-save-btn:hover { transform: translateY(-1px); }
+  .vj-hint { background: rgba(251,191,36,0.08); border-left: 3px solid #fbbf24; padding: 10px 14px; border-radius: 0 6px 6px 0; font-size: 12px; line-height: 1.5; margin: 12px 0; }
 
   /* Mobile responsive: collapse compact topbar */
   @media (max-width: 720px) {
@@ -3296,7 +3332,7 @@
   .reharm-result.miss { background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.4); }
   .reharm-stats { display: flex; gap: 16px; justify-content: center; font-size: 12px; color: var(--muted); margin: 10px 0; }
 
-  /* v0.75 — Listen-Along Mode */
+  /* v0.77 — Listen-Along Mode */
   .listen-along-modal { max-width: 720px; }
   .la-source-toggle { display: flex; gap: 4px; margin-bottom: 12px; }
   .la-source-toggle button {
@@ -3353,7 +3389,7 @@
 </head>
 <body>
 
-<h1>Piano Coach <span style="color: var(--muted); font-weight: 400;">v0.75</span></h1>
+<h1>Piano Coach <span style="color: var(--muted); font-weight: 400;">v0.77</span></h1>
 <p class="sub">📜 Sight reading 2.0 (audio + keyboard + heatmap + adaptive + reaction) · 36 songs</p>
 
 <div class="topbar">
@@ -3522,6 +3558,7 @@
   <button id="btn-calendar" title="Practice Calendar — plan je oefen-week, app suggereert stukken op basis van mastery + decay">📅 Calendar</button>
   <button id="btn-share" title="Share met coach — genereer een URL met je voortgang om met een (echte) coach te delen">🤝 Share</button>
   <button id="btn-deep-insights" title="Deep Insights — AI-gedreven langetermijn-analyse: trends, voorspellingen, gepersonaliseerde aanbevelingen">🧠 Deep Insights</button>
+  <button id="btn-voice-journal" title="Voice Journal — spreek je reflecties in, auto-transcript naar je journal">🗣 Voice Journal</button>
   <button id="btn-tutor" title="AI Tutor Chat — stel vragen over je oefen-data, theorie, of wat je moet oefenen">💬 Tutor</button>
   <button id="btn-reharm" title="Reharmonization Drills — vervang akkoorden in progressies (jazz/klassiek harmonie training)">🔄 Reharm</button>
   <button id="btn-listen-along" title="Listen-Along — luister naar echte uitvoering (Spotify/YouTube) naast je MIDI">🎧 Listen-Along</button>
@@ -3841,7 +3878,7 @@
   </div>
 </div>
 
-<!-- v0.75 — Smart Coach (today's session) -->
+<!-- v0.77 — Smart Coach (today's session) -->
 <div class="modal-overlay" id="coach-overlay" style="display:none;">
   <div class="modal coach-modal">
     <h2>🧭 Smart Coach — Vandaag's sessie</h2>
@@ -3884,7 +3921,7 @@
   </div>
 </div>
 
-<!-- v0.75 — Backing Track / Chord Loop Improv -->
+<!-- v0.77 — Backing Track / Chord Loop Improv -->
 <div class="modal-overlay" id="backing-overlay" style="display:none;">
   <div class="modal backing-modal">
     <h2>🎸 Backing Track Improv</h2>
@@ -3931,7 +3968,7 @@
   </div>
 </div>
 
-<!-- v0.75 — Knowledge Review (spaced repetition over theory lessons) -->
+<!-- v0.77 — Knowledge Review (spaced repetition over theory lessons) -->
 <div class="modal-overlay" id="review-overlay" style="display:none;">
   <div class="modal review-modal">
     <h2>🧠 Knowledge Review</h2>
@@ -3956,7 +3993,7 @@
   </div>
 </div>
 
-<!-- v0.75 — Post-lesson quiz (auto-shown after Gym lesson completes) -->
+<!-- v0.77 — Post-lesson quiz (auto-shown after Gym lesson completes) -->
 <div class="modal-overlay" id="postquiz-overlay" style="display:none;">
   <div class="modal review-modal">
     <h2>🎯 Snelle check</h2>
@@ -4068,7 +4105,7 @@ create policy "Anyone can update"
   </div>
 </div>
 
-<!-- v0.75 — Composers / Componisten bios -->
+<!-- v0.77 — Composers / Componisten bios -->
 <div class="modal-overlay" id="composers-overlay" style="display:none;">
   <div class="modal composers-modal">
     <h2>👤 Componisten</h2>
@@ -4132,7 +4169,7 @@ create policy "Anyone can update"
   <button id="pwa-install-no">Later</button>
 </div>
 
-<!-- v0.75 — Pomodoro timer (floating + modal config) -->
+<!-- v0.77 — Pomodoro timer (floating + modal config) -->
 <div class="pomodoro-widget" id="pomodoro-widget" style="display:none;">
   <div class="pomodoro-phase" id="pomodoro-phase">🍅 Focus</div>
   <div class="pomodoro-time" id="pomodoro-time">25:00</div>
@@ -4168,7 +4205,7 @@ create policy "Anyone can update"
   </div>
 </div>
 
-<!-- v0.75 — Warm-up modal (forced before practice) -->
+<!-- v0.77 — Warm-up modal (forced before practice) -->
 <div class="modal-overlay" id="warmup-overlay" style="display:none;">
   <div class="modal warmup-modal">
     <h2>🔥 Warm-up (3 min)</h2>
@@ -4186,7 +4223,7 @@ create policy "Anyone can update"
   </div>
 </div>
 
-<!-- v0.75 — Daily Journal -->
+<!-- v0.77 — Daily Journal -->
 <div class="modal-overlay" id="journal-overlay" style="display:none;">
   <div class="modal journal-modal">
     <h2>📓 Practice Journal</h2>
@@ -4274,7 +4311,7 @@ create policy "Anyone can update"
   <div class="vrt-recent" id="vrt-recent"></div>
 </div>
 
-<!-- v0.75 — Two-Hand Independence Drills -->
+<!-- v0.77 — Two-Hand Independence Drills -->
 <div class="modal-overlay" id="twohand-overlay" style="display:none;">
   <div class="modal twohand-modal">
     <h2>✌ Two-Hand Independence Drills</h2>
@@ -4427,7 +4464,7 @@ create policy "Anyone can update"
   </div>
 </div>
 
-<!-- v0.75 — Stage Mode + Blind Playing -->
+<!-- v0.77 — Stage Mode + Blind Playing -->
 <div class="modal-overlay" id="stage-overlay" style="display:none;">
   <div class="modal stage-modal">
     <h2>🎭 Performance Prep</h2>
@@ -4569,7 +4606,7 @@ create policy "Anyone can update"
   </div>
 </div>
 
-<!-- v0.75 — Goal-Based Curriculum -->
+<!-- v0.77 — Goal-Based Curriculum -->
 <div class="modal-overlay" id="goals-overlay" style="display:none;">
   <div class="modal goals-modal">
     <h2>🎯 Goal-Based Curriculum</h2>
@@ -4619,7 +4656,7 @@ create policy "Anyone can update"
   </div>
 </div>
 
-<!-- v0.75 — Practice Analytics Deep -->
+<!-- v0.77 — Practice Analytics Deep -->
 <div class="modal-overlay" id="analytics-overlay" style="display:none;">
   <div class="modal analytics-modal">
     <h2>📈 Practice Analytics</h2>
@@ -4718,7 +4755,7 @@ create policy "Anyone can update"
   </div>
 </div>
 
-<!-- v0.75 — Composition Challenge -->
+<!-- v0.77 — Composition Challenge -->
 <div class="modal-overlay" id="compose-overlay" style="display:none;">
   <div class="modal compose-modal">
     <h2>✍ Compositie Challenge</h2>
@@ -4808,7 +4845,7 @@ create policy "Anyone can update"
   </div>
 </div>
 
-<!-- v0.75 — Practice Calendar -->
+<!-- v0.77 — Practice Calendar -->
 <div class="modal-overlay" id="calendar-overlay" style="display:none;">
   <div class="modal calendar-modal">
     <h2>📅 Practice Calendar</h2>
@@ -4888,7 +4925,7 @@ create policy "Anyone can update"
   </div>
 </div>
 
-<!-- v0.75 — Deep Insights -->
+<!-- v0.77 — Deep Insights -->
 <div class="modal-overlay" id="deep-insights-overlay" style="display:none;">
   <div class="modal deep-insights-modal">
     <h2>🧠 Deep Insights</h2>
@@ -5023,7 +5060,7 @@ create policy "Anyone can update"
   </div>
 </div>
 
-<!-- v0.75 — Listen-Along Mode -->
+<!-- v0.77 — Listen-Along Mode -->
 <div class="modal-overlay" id="listen-along-overlay" style="display:none;">
   <div class="modal listen-along-modal">
     <h2>🎧 Listen-Along</h2>
@@ -5063,7 +5100,7 @@ create policy "Anyone can update"
   </div>
 </div>
 
-<!-- v0.75 — Smart Fingering Display modal -->
+<!-- v0.77 — Smart Fingering Display modal -->
 <div class="modal-overlay" id="fingering-modal-overlay" style="display:none;">
   <div class="modal fingering-modal">
     <h2>🖐 Vingerzetting Display</h2>
@@ -5118,7 +5155,7 @@ create policy "Anyone can update"
   </div>
 </div>
 
-<!-- v0.75 — Hand position floating widget -->
+<!-- v0.77 — Hand position floating widget -->
 <div class="hand-position-widget" id="hand-position-widget" style="display:none;">
   <div class="hpw-row hpw-rh">
     <span class="hpw-label">RH</span>
@@ -5130,7 +5167,7 @@ create policy "Anyone can update"
   </div>
 </div>
 
-<!-- v0.75 — Section fingering preview overlay -->
+<!-- v0.77 — Section fingering preview overlay -->
 <div class="modal-overlay" id="section-fingering-overlay" style="display:none;">
   <div class="modal section-fingering-modal">
     <h2>👁 Vingerzettingen voor sectie</h2>
@@ -5143,7 +5180,7 @@ create policy "Anyone can update"
   </div>
 </div>
 
-<!-- v0.75 — Command Palette (⌘K / Ctrl+K) -->
+<!-- v0.77 — Command Palette (⌘K / Ctrl+K) -->
 <div class="cmd-palette-overlay" id="cmd-palette-overlay">
   <div class="cmd-palette">
     <div class="cmd-palette-input-wrap">
@@ -5155,7 +5192,7 @@ create policy "Anyone can update"
   </div>
 </div>
 
-<!-- v0.75 — Welcome Hub -->
+<!-- v0.77 — Welcome Hub -->
 <div class="welcome-hub-overlay" id="welcome-hub-overlay">
   <div class="welcome-hub">
     <div class="wh-header">
@@ -5182,6 +5219,57 @@ create policy "Anyone can update"
       <button id="wh-hard-reset-btn" style="background:rgba(239,68,68,0.15);border-color:#ef4444;color:#fca5a5;">🚨 Hard Reset (bij problemen)</button>
     </div>
     <div class="wh-skip" id="wh-dont-show">Niet meer tonen bij opstarten</div>
+  </div>
+</div>
+
+<!-- v0.77 — Voice Journal -->
+<div class="modal-overlay" id="voice-journal-overlay" style="display:none;">
+  <div class="modal voice-journal-modal">
+    <h2>🗣 Voice Journal</h2>
+    <div class="modal-sub">Spreek je reflecties in via je microfoon. Werkt op de fiets, in de auto, of na cooldown — handsfree journaling.</div>
+    <div class="vj-status-row">
+      <div class="vj-status-dot" id="vj-status-dot"></div>
+      <div class="vj-status-text" id="vj-status-text">Klaar om te starten</div>
+    </div>
+    <div class="vj-transcript-area">
+      <div class="vj-transcript-label">Live transcriptie:</div>
+      <div class="vj-transcript" id="vj-transcript"><em style="color:var(--muted)">Druk op de grote mic-knop om te beginnen...</em></div>
+    </div>
+    <div class="vj-controls">
+      <button id="vj-toggle" class="vj-mic-btn">🎙</button>
+      <div class="vj-toggle-label" id="vj-toggle-label">Start opname</div>
+    </div>
+    <div class="vj-edit-area" id="vj-edit-area" style="display:none;">
+      <div class="vj-section-title">📝 Bewerken voor opslaan:</div>
+      <textarea id="vj-edit-text" rows="4" placeholder="Edit je transcriptie..."></textarea>
+      <div class="vj-categorize">
+        <label>Categorie:
+          <select id="vj-category">
+            <option value="good">✓ Wat ging goed</option>
+            <option value="hard">! Wat was lastig</option>
+            <option value="tomorrow">→ Eén ding voor morgen</option>
+            <option value="general">📝 Algemeen</option>
+          </select>
+        </label>
+        <label>Stemming:
+          <select id="vj-mood">
+            <option value="">— (geen)</option>
+            <option value="1">😩</option>
+            <option value="2">😕</option>
+            <option value="3">😐</option>
+            <option value="4">🙂</option>
+            <option value="5">😄</option>
+          </select>
+        </label>
+      </div>
+      <button id="vj-save" class="vj-save-btn">💾 Opslaan in journal</button>
+    </div>
+    <div class="vj-hint">
+      <strong>💡 Tip:</strong> spreek in volle zinnen. App detecteert NL en EN automatisch. Pauze van 2 sec = einde van een gedachte. Werkt op Chrome/Edge.
+    </div>
+    <div class="modal-actions">
+      <button id="voice-journal-close">Sluit</button>
+    </div>
   </div>
 </div>
 
@@ -8108,7 +8196,7 @@ if (new URLSearchParams(location.search).get('test') === '1') {
   }, 1000);
 }
 
-// v0.75 hotfix: global error handler — visible op pagina als iets stuk gaat
+// v0.77 hotfix: global error handler — visible op pagina als iets stuk gaat
 window.addEventListener('error', function(e) {
   console.error('[Piano Coach error]', e.message, 'at', e.filename, ':', e.lineno);
   // Persist for later inspection via window.__pcLastError
@@ -8132,7 +8220,7 @@ window.addEventListener('error', function(e) {
   } catch {}
 });
 
-// v0.75 hotfix: Hard Reset functie - wist ALLES (SW, caches, localStorage backup, force reload)
+// v0.77 hotfix: Hard Reset functie - wist ALLES (SW, caches, localStorage backup, force reload)
 window.hardResetApp = async function() {
   if (!confirm('Hard Reset: wist alle caches + service workers + tijdelijke data. Je localStorage (sessies/journal/etc.) wordt eerst gedownload als backup. OK?')) return;
   try {
@@ -8165,7 +8253,7 @@ window.hardResetApp = async function() {
   }
 };
 
-// v0.75 hotfix: AGRESSIEF unregister bestaande SWs + clear caches
+// v0.77 hotfix: AGRESSIEF unregister bestaande SWs + clear caches
 // Service worker veroorzaakte cache-conflicts. We disablen 'm tijdelijk volledig.
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.getRegistrations().then(regs => {
@@ -8848,13 +8936,13 @@ const sightState = {
   total: 0,
   streak: 0,
   answered: false,
-  // v0.75 additions
+  // v0.77 additions
   askedAt: 0, // performance.now() at question start
   reactionTimes: [], // ms per answer (correct only)
   audioOn: true,
   perNote: {}, // pitchClass → { correct, total }
   recentAnswers: [], // last 10: true/false
-  // v0.75 additions — sequence mode
+  // v0.77 additions — sequence mode
   mode: 'single', // 'single' or 'sequence'
   sequence: [], // array of midi notes for current sequence
   sequenceIdx: 0, // current position in sequence
@@ -8864,7 +8952,7 @@ const sightState = {
   sequenceProgressionLvl: 1, // 1=3 notes, 2=4 notes, 3=5 notes
 };
 
-// v0.75 — Sequence mode unlock threshold (total correct single-note answers)
+// v0.77 — Sequence mode unlock threshold (total correct single-note answers)
 const SEQUENCE_UNLOCK_THRESHOLD = 30;
 function isSequenceUnlocked() {
   try {
@@ -8920,7 +9008,7 @@ function generateSightQuestion() {
   }
 }
 
-// v0.75 — Sequence mode: generate N notes, render them on the staff
+// v0.77 — Sequence mode: generate N notes, render them on the staff
 function generateSightSequence() {
   const length = sightState.sequenceLength;
   const notes = [];
@@ -9249,7 +9337,7 @@ function answerSightByMidi(midi) {
   reportSightResult(correct, noteNameFromMidi(midi));
 }
 
-// v0.75 — Sequence-mode per-note result handler
+// v0.77 — Sequence-mode per-note result handler
 function reportSequenceNoteResult(correct, given) {
   const idx = sightState.sequenceIdx;
   const total = sightState.sequence.length;
@@ -9494,7 +9582,7 @@ document.getElementById('btn-sight').onclick = () => {
   document.getElementById('sight-overlay').style.display = 'flex';
 };
 
-// v0.75 — Sequence mode toggle wiring
+// v0.77 — Sequence mode toggle wiring
 function updateSightModeToggle() {
   const unlocked = isSequenceUnlocked();
   const seqBtn = document.getElementById('sight-mode-sequence');
@@ -9535,7 +9623,7 @@ function updateSightModeToggle() {
   });
 })();
 
-// v0.75 — Sequence-mode achievements
+// v0.77 — Sequence-mode achievements
 ACHIEVEMENTS.push({
   id: 'seq-first', icon: '🎶', label: 'Eerste reeks voltooid', cat: 'Practice',
   test: s => (s.sightHistory?.sequencesCompleted || 0) >= 1,
@@ -9545,7 +9633,7 @@ ACHIEVEMENTS.push({
   test: s => (s.sightHistory?.sequencesPerfect || 0) >= 10,
 });
 
-// Audio mute toggle (v0.75)
+// Audio mute toggle (v0.77)
 (function wireSightMute(){
   const btn = document.getElementById('sight-mute');
   if (!btn) return;
@@ -14008,7 +14096,7 @@ document.querySelectorAll('#eartrain-audio-mode button').forEach(b => {
 });
 
 // ============================================================================
-// v0.75 — SMART COACH (today's session recommender)
+// v0.77 — SMART COACH (today's session recommender)
 // ============================================================================
 function generateCoachSession() {
   const store = loadStore();
@@ -14516,7 +14604,7 @@ document.getElementById('stats-export').onclick = () => {
 };
 
 // ============================================================================
-// v0.75 — BACKING TRACK / CHORD LOOP IMPROV
+// v0.77 — BACKING TRACK / CHORD LOOP IMPROV
 // ============================================================================
 const PROGRESSIONS = [
   { id: 'pop', name: 'I-V-vi-IV', desc: 'Pop loop (Axis of Awesome)', chords: [[0,4,7], [7,11,14], [9,12,16], [5,9,12]] },
@@ -14730,7 +14818,7 @@ ACHIEVEMENTS.push({
 })();
 
 // ============================================================================
-// v0.75 — KNOWLEDGE REVIEW: spaced repetition over theory lessons
+// v0.77 — KNOWLEDGE REVIEW: spaced repetition over theory lessons
 // ============================================================================
 // Each question is keyed by lessonId:idx. SM-2 lite tracks per-question state.
 // Intervals (days): wrong → 1, streak 1 → 3, 2 → 7, 3 → 14, 4 → 30, 5+ → 60.
@@ -15721,7 +15809,7 @@ ACHIEVEMENTS.push({
 });
 
 // ============================================================================
-// v0.75 — COMPOSERS / COMPONISTEN BIOS
+// v0.77 — COMPOSERS / COMPONISTEN BIOS
 // ============================================================================
 const COMPOSERS = [
   {
@@ -15888,7 +15976,7 @@ document.getElementById('composers-back').onclick = renderComposersList;
 document.getElementById('composers-close').onclick = () => document.getElementById('composers-overlay').style.display = 'none';
 
 // ============================================================================
-// v0.75 — Add 9 new Gym lessons (lesson IDs 12-20)
+// v0.77 — Add 9 new Gym lessons (lesson IDs 12-20)
 // ============================================================================
 THEORY_LESSONS.push(
   {
@@ -16135,7 +16223,7 @@ Object.assign(QUIZ_BANK, {
 });
 
 // ============================================================================
-// v0.75 — FOUNDATIONS COMPLETE: 10 nieuwe Gym lessen (lessen 21-30)
+// v0.77 — FOUNDATIONS COMPLETE: 10 nieuwe Gym lessen (lessen 21-30)
 // ============================================================================
 THEORY_LESSONS.push(
   {
@@ -16465,14 +16553,14 @@ ACHIEVEMENTS.push({
   test: s => (s.composersRead?.length || 0) >= COMPOSERS.length,
 });
 
-// v0.75 — Achievement for completing all 30 lessons
+// v0.77 — Achievement for completing all 30 lessons
 ACHIEVEMENTS.push({
   id: 'theory-foundation-complete', icon: '🎓', label: 'Volledige theorie-basis voltooid (30 lessen)', cat: 'Knowledge',
   test: s => Object.keys(s.gymProgress?.completed || {}).length >= 30,
 });
 
 // ============================================================================
-// v0.75 — VISUALIZATION ENGINE + ADVANCED CURRICULUM
+// v0.77 — VISUALIZATION ENGINE + ADVANCED CURRICULUM
 // ============================================================================
 
 // ----- Add level metadata to existing lessons -----
@@ -16744,7 +16832,7 @@ patchLessonVisuals('diatonic-chords', [
 ]);
 
 // ============================================================================
-// v0.75 — 15 ADVANCED LESSONS (jazz, classical-advanced, styles, science)
+// v0.77 — 15 ADVANCED LESSONS (jazz, classical-advanced, styles, science)
 // ============================================================================
 THEORY_LESSONS.push(
   // ----- Jazz harmonie -----
@@ -17836,7 +17924,7 @@ ACHIEVEMENTS.push({
 });
 
 // ============================================================================
-// v0.75 — STAGE MODE + BLIND PLAYING
+// v0.77 — STAGE MODE + BLIND PLAYING
 // ============================================================================
 const stageState = {
   active: false,
@@ -18621,7 +18709,7 @@ ACHIEVEMENTS.push({
 });
 
 // ============================================================================
-// v0.75 — GOAL-BASED CURRICULUM
+// v0.77 — GOAL-BASED CURRICULUM
 // ============================================================================
 const GOAL_TARGETS = {
   learn: { name: 'Leer het stuk', criteria: 'Tempo 70% + accuracy 80%', tempoTarget: 70, accTarget: 0.80 },
@@ -18850,7 +18938,7 @@ ACHIEVEMENTS.push({
 });
 
 // ============================================================================
-// v0.75 — TIME TRACKER + PRACTICE ANALYTICS DEEP
+// v0.77 — TIME TRACKER + PRACTICE ANALYTICS DEEP
 // ============================================================================
 // Lightweight time tracker: hooks into modal opens/closes for main modes.
 // Tracks: activity, startTime, endTime → stored in store.timeLog[]
@@ -19632,7 +19720,7 @@ ACHIEVEMENTS.push({
 });
 
 // ============================================================================
-// v0.75 — COMPOSITION CHALLENGE
+// v0.77 — COMPOSITION CHALLENGE
 // ============================================================================
 const COMPOSE_CHALLENGES = {
   beginner: {
@@ -20197,7 +20285,7 @@ ACHIEVEMENTS.push({
 });
 
 // ============================================================================
-// v0.75 — PRACTICE CALENDAR
+// v0.77 — PRACTICE CALENDAR
 // ============================================================================
 const calState = {
   weekOffset: 0, // 0 = current week, -1 = prev, +1 = next
@@ -20777,7 +20865,7 @@ ACHIEVEMENTS.push({
 });
 
 // ============================================================================
-// v0.75 — DEEP INSIGHTS (rule-based long-term analysis engine)
+// v0.77 — DEEP INSIGHTS (rule-based long-term analysis engine)
 // ============================================================================
 function runDeepAnalysis(periodDays = 30) {
   const store = loadStore();
@@ -21165,7 +21253,7 @@ document.getElementById('di-export-md').onclick = () => {
   for (const c of r.correlations) md += `- ${c.replace(/<[^>]+>/g, '')}\n`;
   md += `\n## ⚠ Watch-outs\n\n`;
   for (const w of r.warnings) md += `- ${w.replace(/<[^>]+>/g, '')}\n`;
-  md += `\n---\nGegenereerd door Piano Coach v0.75 — Deep Insights engine\n`;
+  md += `\n---\nGegenereerd door Piano Coach v0.77 — Deep Insights engine\n`;
   const blob = new Blob([md], { type: 'text/markdown' });
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
@@ -21771,7 +21859,7 @@ ACHIEVEMENTS.push({
 });
 
 // ============================================================================
-// v0.75 — LISTEN-ALONG MODE (YouTube/Spotify embed)
+// v0.77 — LISTEN-ALONG MODE (YouTube/Spotify embed)
 // ============================================================================
 const laState = {
   source: 'youtube',
@@ -21910,7 +21998,7 @@ ACHIEVEMENTS.push({
 });
 
 // ============================================================================
-// v0.75 — UX OVERHAUL: Compact Topbar + Command Palette + Welcome Hub + Tour
+// v0.77 — UX OVERHAUL: Compact Topbar + Command Palette + Welcome Hub + Tour
 // ============================================================================
 
 // Master feature registry — alle non-player-controls gegroepeerd in categorieën
@@ -21981,7 +22069,8 @@ const FEATURE_CATEGORIES = {
       { id: 'btn-goals', icon: '🎯', label: 'Goal-Based Curriculum', hint: 'Week-voor-week plan' },
       { id: 'btn-calendar', icon: '📅', label: 'Practice Calendar', hint: 'Plan je week' },
       { id: 'btn-repertoire', icon: '⭐', label: 'Repertoire Mastery', hint: 'Sterren per stuk' },
-      { id: 'btn-journal', icon: '📓', label: 'Daily Journal', hint: 'Reflectie' },
+      { id: 'btn-journal', icon: '📓', label: 'Daily Journal', hint: 'Reflectie (tekst)' },
+      { id: 'btn-voice-journal', icon: '🗣', label: 'Voice Journal', hint: 'Spreek je reflectie in (handsfree)' },
       { id: 'btn-diary', icon: '📔', label: 'Practice Diary', hint: 'Detail-log' },
       { id: 'btn-pomodoro', icon: '🍅', label: 'Pomodoro Timer', hint: '25/5 focus blokken' },
       { id: 'btn-playlist', icon: '🌐', label: 'Practice Playlist', hint: 'Multi-sectie queue' },
@@ -22391,7 +22480,7 @@ ACHIEVEMENTS.push({
 });
 
 // ============================================================================
-// v0.75 — SMART FINGERING DISPLAY (4 modes, progressive disclosure)
+// v0.77 — SMART FINGERING DISPLAY (4 modes, progressive disclosure)
 // ============================================================================
 // Replaces simple on/off toggle with 4 modes:
 //   off / position / next / subtle
@@ -22680,12 +22769,163 @@ function renderFingeringStaff(notes, clef) {
 document.getElementById('sf-close').onclick = () => document.getElementById('section-fingering-overlay').style.display = 'none';
 
 // Register fingering modal in compact topbar Learn category — already present as 'btn-fingering'
-// The categorisation in v0.75 already includes btn-fingering under Learn.
+// The categorisation in v0.77 already includes btn-fingering under Learn.
 
 // Achievement: try all 4 modes
 ACHIEVEMENTS.push({
   id: 'fingering-explorer', icon: '🖐', label: 'Vingerzetting-modes verkend', cat: 'Knowledge',
   test: s => (s.fingeringModesUsed?.length || 0) >= 3,
+});
+
+// ============================================================================
+// v0.77 — VOICE JOURNAL (auto-transcribed reflections via Web Speech Recognition)
+// ============================================================================
+const voiceJournalState = {
+  recognition: null,
+  active: false,
+  finalText: '',
+  interimText: '',
+};
+
+function setupVoiceJournalRecognition() {
+  const Rec = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!Rec) return null;
+  const rec = new Rec();
+  rec.lang = 'nl-NL';
+  rec.continuous = true;
+  rec.interimResults = true;
+  rec.onresult = (event) => {
+    let interim = '';
+    for (let i = event.resultIndex; i < event.results.length; i++) {
+      const result = event.results[i];
+      if (result.isFinal) {
+        voiceJournalState.finalText += result[0].transcript + ' ';
+      } else {
+        interim += result[0].transcript;
+      }
+    }
+    voiceJournalState.interimText = interim;
+    updateVoiceJournalTranscript();
+  };
+  rec.onerror = (e) => {
+    console.warn('Voice journal error:', e.error);
+    if (e.error === 'no-speech' || e.error === 'audio-capture') {
+      if (voiceJournalState.active) setTimeout(() => { try { rec.start(); } catch {} }, 1000);
+    } else {
+      stopVoiceJournal();
+      document.getElementById('vj-status-text').textContent = '⚠ Fout: ' + e.error;
+    }
+  };
+  rec.onend = () => {
+    if (voiceJournalState.active) { try { rec.start(); } catch {} }
+  };
+  return rec;
+}
+
+function updateVoiceJournalTranscript() {
+  const el = document.getElementById('vj-transcript');
+  const full = voiceJournalState.finalText;
+  const interim = voiceJournalState.interimText;
+  if (full || interim) {
+    el.innerHTML = full + '<span class="vj-interim">' + interim + '</span>';
+    // Auto-scroll
+    el.scrollTop = el.scrollHeight;
+  } else {
+    el.innerHTML = '<em style="color:var(--muted)">Spreek nu...</em>';
+  }
+}
+
+function startVoiceJournal() {
+  if (!voiceJournalState.recognition) {
+    voiceJournalState.recognition = setupVoiceJournalRecognition();
+  }
+  if (!voiceJournalState.recognition) {
+    alert('Voice Journal vereist Chrome of Edge (Web Speech API). Niet ondersteund in deze browser.');
+    return;
+  }
+  voiceJournalState.active = true;
+  voiceJournalState.finalText = '';
+  voiceJournalState.interimText = '';
+  try { voiceJournalState.recognition.start(); } catch (e) { console.warn(e); }
+  document.getElementById('vj-status-dot').className = 'vj-status-dot listening';
+  document.getElementById('vj-status-text').textContent = '🎙 Luistert... spreek nu';
+  document.getElementById('vj-toggle').className = 'vj-mic-btn recording';
+  document.getElementById('vj-toggle').textContent = '⏹';
+  document.getElementById('vj-toggle-label').textContent = 'Stop opname';
+  document.getElementById('vj-edit-area').style.display = 'none';
+  updateVoiceJournalTranscript();
+}
+
+function stopVoiceJournal() {
+  voiceJournalState.active = false;
+  try { voiceJournalState.recognition?.stop(); } catch {}
+  document.getElementById('vj-status-dot').className = 'vj-status-dot ready';
+  document.getElementById('vj-status-text').textContent = '✓ Opname gestopt — bewerk en sla op';
+  document.getElementById('vj-toggle').className = 'vj-mic-btn';
+  document.getElementById('vj-toggle').textContent = '🎙';
+  document.getElementById('vj-toggle-label').textContent = 'Start opnieuw';
+  // Show edit area with final transcript
+  const editArea = document.getElementById('vj-edit-area');
+  const editText = document.getElementById('vj-edit-text');
+  const finalText = voiceJournalState.finalText.trim();
+  if (finalText) {
+    editText.value = finalText;
+    editArea.style.display = 'block';
+  }
+}
+
+document.getElementById('btn-voice-journal').onclick = () => {
+  document.getElementById('voice-journal-overlay').style.display = 'flex';
+  document.getElementById('vj-status-dot').className = 'vj-status-dot';
+  document.getElementById('vj-status-text').textContent = 'Klaar om te starten';
+  document.getElementById('vj-transcript').innerHTML = '<em style="color:var(--muted)">Druk op de grote mic-knop om te beginnen...</em>';
+  document.getElementById('vj-edit-area').style.display = 'none';
+  document.getElementById('vj-toggle').className = 'vj-mic-btn';
+  document.getElementById('vj-toggle').textContent = '🎙';
+  document.getElementById('vj-toggle-label').textContent = 'Start opname';
+};
+document.getElementById('voice-journal-close').onclick = () => {
+  if (voiceJournalState.active) stopVoiceJournal();
+  document.getElementById('voice-journal-overlay').style.display = 'none';
+};
+document.getElementById('vj-toggle').onclick = () => {
+  if (voiceJournalState.active) stopVoiceJournal();
+  else startVoiceJournal();
+};
+document.getElementById('vj-save').onclick = () => {
+  const text = document.getElementById('vj-edit-text').value.trim();
+  if (!text) { alert('Geen tekst om op te slaan.'); return; }
+  const category = document.getElementById('vj-category').value;
+  const mood = document.getElementById('vj-mood').value;
+  // Save to journal
+  try {
+    const store = loadStore();
+    store.journal = store.journal || [];
+    const entry = { date: Date.now() };
+    if (category === 'good') entry.good = text;
+    else if (category === 'hard') entry.hard = text;
+    else if (category === 'tomorrow') entry.tomorrow = text;
+    else entry.good = text; // default to "good"
+    if (mood) entry.mood = parseInt(mood);
+    entry.voiceJournal = true;
+    store.journal.push(entry);
+    saveStore(store);
+    addXP(20, 'voice journal entry');
+    // Reset UI
+    document.getElementById('vj-edit-text').value = '';
+    document.getElementById('vj-status-text').textContent = '✅ Opgeslagen in journal! (+20 XP)';
+    document.getElementById('vj-edit-area').style.display = 'none';
+    document.getElementById('vj-transcript').innerHTML = '<em style="color:var(--muted)">Klaar voor volgende reflectie...</em>';
+    voiceJournalState.finalText = '';
+    checkAchievements();
+  } catch (e) {
+    alert('Opslaan mislukt: ' + e.message);
+  }
+};
+
+ACHIEVEMENTS.push({
+  id: 'voice-journal-first', icon: '🗣', label: 'Eerste voice journal entry', cat: 'Habits',
+  test: s => (s.journal || []).some(e => e.voiceJournal),
 });
 
 // Track which composer was viewed
@@ -23077,7 +23317,7 @@ window.addEventListener('resize', () => {
 });
 
 // ============================================================================
-// v0.75 — POMODORO + WARM-UP + DAILY JOURNAL
+// v0.77 — POMODORO + WARM-UP + DAILY JOURNAL
 // ============================================================================
 const pomodoroState = {
   active: false,
@@ -23576,7 +23816,7 @@ ACHIEVEMENTS.push({
 });
 
 // ============================================================================
-// v0.75 — TWO-HAND INDEPENDENCE DRILLS
+// v0.77 — TWO-HAND INDEPENDENCE DRILLS
 // ============================================================================
 // Each drill defines RH + LH patterns. Pattern = array of [time_in_beats, midi] tuples.
 // Beats run from 0 to length. Metronome ticks each integer beat.
