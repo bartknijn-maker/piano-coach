@@ -2884,8 +2884,10 @@
   /* v0.75 — UX OVERHAUL: Compact Topbar + Command Palette + Welcome Hub  */
   /* ===================================================================== */
 
-  /* Hide all feature buttons (data-grouped) in original topbar */
-  .topbar button.feature-grouped { display: none !important; }
+  /* Hide all feature buttons (data-grouped) — they live in .controls.row2 + others */
+  button.feature-grouped { display: none !important; }
+  /* Hide the surrounding span/label of feature-grouped buttons (if structured that way) */
+  label:has(> button.feature-grouped) { display: none !important; }
 
   /* New compact topbar */
   .compact-topbar {
@@ -8052,24 +8054,70 @@ document.getElementById('install-no').onclick = () => {
 };
 
 // Register service worker for offline support (inline)
+// v0.75: cache-bump + network-first voor index.html (so updates work without manual clear)
 if ('serviceWorker' in navigator) {
   const swCode = `
-    const CACHE = 'piano-coach-v1';
+    const CACHE = 'piano-coach-v75';
     const ASSETS = [
       '/',
       '/index.html',
       'https://cdn.jsdelivr.net/npm/@tonejs/midi@2.0.28/build/Midi.js',
     ];
     self.addEventListener('install', e => {
+      self.skipWaiting();
       e.waitUntil(caches.open(CACHE).then(c => c.addAll(ASSETS)));
     });
+    self.addEventListener('activate', e => {
+      e.waitUntil(Promise.all([
+        // Delete old caches
+        caches.keys().then(names => Promise.all(names.filter(n => n !== CACHE).map(n => caches.delete(n)))),
+        // Claim clients immediately
+        self.clients.claim()
+      ]));
+    });
     self.addEventListener('fetch', e => {
-      e.respondWith(caches.match(e.request).then(r => r || fetch(e.request)));
+      const url = new URL(e.request.url);
+      // Network-first for HTML (index.html) so updates land immediately
+      if (e.request.mode === 'navigate' || url.pathname === '/' || url.pathname.endsWith('.html')) {
+        e.respondWith(
+          fetch(e.request).then(resp => {
+            const clone = resp.clone();
+            caches.open(CACHE).then(c => c.put(e.request, clone)).catch(() => {});
+            return resp;
+          }).catch(() => caches.match(e.request))
+        );
+        return;
+      }
+      // Cache-first for everything else (MIDIs, CDN libs)
+      e.respondWith(caches.match(e.request).then(r => r || fetch(e.request).then(resp => {
+        if (resp.ok) {
+          const clone = resp.clone();
+          caches.open(CACHE).then(c => c.put(e.request, clone)).catch(() => {});
+        }
+        return resp;
+      })));
+    });
+    self.addEventListener('message', e => {
+      if (e.data === 'SKIP_WAITING') self.skipWaiting();
     });
   `;
   const blob = new Blob([swCode], { type: 'application/javascript' });
   const swUrl = URL.createObjectURL(blob);
-  navigator.serviceWorker.register(swUrl).catch(() => {});
+  navigator.serviceWorker.register(swUrl).then(reg => {
+    // Force update check on load
+    reg.update();
+    // When new SW found and waiting, activate it immediately
+    reg.addEventListener('updatefound', () => {
+      const newWorker = reg.installing;
+      if (newWorker) {
+        newWorker.addEventListener('statechange', () => {
+          if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+            newWorker.postMessage('SKIP_WAITING');
+          }
+        });
+      }
+    });
+  }).catch(() => {});
 }
 
 // ===========================================================================
