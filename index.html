@@ -2,7 +2,7 @@
 <html lang="nl">
 <head>
 <meta charset="UTF-8">
-<title>Piano Coach — v0.79</title>
+<title>Piano Coach — v0.80</title>
 <link rel="manifest" href="data:application/json;charset=utf-8,%7B%22name%22%3A%22Piano%20Coach%22%2C%22short_name%22%3A%22PianoCoach%22%2C%22start_url%22%3A%22.%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%230f1419%22%2C%22theme_color%22%3A%22%234ade80%22%2C%22description%22%3A%22Self-hosted%20piano%20coaching%20met%20MIDI-input%2C%2035-song%20repertoire%2C%20coach%2C%20achievements%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22data%3Aimage%2Fsvg%2Bxml%2C%253Csvg%2520xmlns%3D%2522http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%2522%2520viewBox%3D%25220%25200%25201024%25201024%2522%253E%253Crect%2520fill%3D%2522%25230f1419%2522%2520width%3D%25221024%2522%2520height%3D%25221024%2522%2F%253E%253Ctext%2520x%3D%2522512%2522%2520y%3D%2522680%2522%2520font-size%3D%2522680%2522%2520text-anchor%3D%2522middle%2522%253E%25F0%259F%258E%25B9%253C%2Ftext%253E%253C%2Fsvg%253E%22%2C%22sizes%22%3A%22512x512%22%2C%22type%22%3A%22image%2Fsvg%2Bxml%22%7D%5D%7D">
 <meta name="theme-color" content="#4ade80">
 <script src="https://cdn.jsdelivr.net/npm/@tonejs/midi@2.0.28/build/Midi.js"></script>
@@ -1918,7 +1918,7 @@
   .eartrain-audio-answer { text-align: center; font-size: 20px; color: #4ade80; padding: 12px; margin-bottom: 12px; }
   .eartrain-audio-stats { display: flex; justify-content: center; gap: 24px; font-size: 13px; margin-bottom: 14px; }
   .eartrain-audio-hint { font-size: 11px; color: var(--muted); text-align: center; margin-top: 8px; }
-  /* v0.79 — Smart coach */
+  /* v0.80 — Smart coach */
   .coach-modal { max-width: 600px; }
   .coach-session { display: flex; flex-direction: column; gap: 10px; margin: 16px 0; }
   .coach-step {
@@ -1982,7 +1982,7 @@
   .stats-repertoire { font-size: 12px; color: var(--muted); max-height: 200px; overflow-y: auto; }
   .stats-rep-item { display: flex; justify-content: space-between; padding: 4px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
 
-  /* v0.79 — Backing Track Modal */
+  /* v0.80 — Backing Track Modal */
   .backing-modal { max-width: 640px; }
   .backing-progressions { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 6px; margin: 12px 0; }
   .backing-progressions button {
@@ -2003,7 +2003,7 @@
   .backing-next { font-size: 12px; color: var(--muted); }
   .backing-scale-info { font-size: 11px; color: var(--muted); text-align: center; padding: 8px; background: rgba(99,102,241,0.08); border-radius: 4px; margin-bottom: 12px; }
 
-  /* v0.79 — Knowledge Review */
+  /* v0.80 — Knowledge Review */
   .review-modal { max-width: 560px; }
   .review-stats { display: flex; gap: 16px; justify-content: center; font-size: 12px; color: var(--muted); margin-bottom: 12px; }
   .review-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1); padding: 18px; border-radius: 10px; margin-bottom: 12px; }
@@ -2082,7 +2082,7 @@
   .selfreview-history { max-height: 180px; overflow-y: auto; font-size: 11px; }
   .sr-history-row { display: flex; justify-content: space-between; padding: 4px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
 
-  /* v0.79 — Composers */
+  /* v0.80 — Composers */
   .composers-modal { max-width: 700px; }
   .composers-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 8px; margin: 14px 0; }
   .composer-card {
@@ -2166,7 +2166,7 @@
   .pwa-install-banner button { background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.4); color: #fff; padding: 6px 14px; border-radius: 4px; cursor: pointer; font-size: 13px; }
   .pwa-install-banner button:first-of-type { background: #fff; color: #4338ca; }
 
-  /* v0.79 — Pomodoro + Journal + Warm-up */
+  /* v0.80 — Pomodoro + Journal + Warm-up */
   .pomodoro-widget {
     position: fixed; bottom: 20px; left: 20px;
     background: rgba(0,0,0,0.9); border: 2px solid #ef4444;
@@ -2259,7 +2259,7 @@
   .vrt-marks { display: flex; justify-content: space-between; font-size: 8px; color: var(--muted); margin-bottom: 6px; }
   .vrt-recent { font-size: 11px; color: var(--muted); min-height: 16px; }
 
-  /* v0.79 — Two-Hand Drills */
+  /* v0.80 — Two-Hand Drills */
   .twohand-modal { max-width: 700px; }
   .twohand-drill-picker { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 6px; margin: 12px 0; }
   .twohand-drill-picker button {
@@ -2386,7 +2386,7 @@
   .mem-staff.hidden { opacity: 0; }
   .mem-instruction { font-size: 13px; color: #444; margin-top: 8px; }
 
-  /* v0.79 — Stage + Blind */
+  /* v0.80 — Stage + Blind */
   .stage-config, .blind-config { display: flex; flex-direction: column; gap: 8px; margin: 12px 0; font-size: 13px; color: var(--muted); }
   .stage-config label, .blind-config label { display: flex; align-items: center; gap: 8px; }
   .stage-config select, .blind-config select { background: rgba(255,255,255,0.08); color: #fff; border: 1px solid rgba(255,255,255,0.15); padding: 4px 8px; border-radius: 4px; font-size: 12px; }
@@ -2458,7 +2458,7 @@
   .etp-input-note { padding: 4px 8px; background: rgba(255,255,255,0.06); border-radius: 4px; font-family: monospace; }
   .etp-stats { display: flex; gap: 16px; justify-content: center; font-size: 12px; color: var(--muted); margin: 10px 0; flex-wrap: wrap; }
 
-  /* v0.79 — Goal-Based Curriculum */
+  /* v0.80 — Goal-Based Curriculum */
   .goals-modal { max-width: 720px; }
   .goals-active-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 14px; max-height: 320px; overflow-y: auto; }
   .goal-item {
@@ -2497,7 +2497,7 @@
   .goal-week-tasks { font-size: 12px; line-height: 1.5; }
   .goal-week-status { font-size: 18px; }
 
-  /* v0.79 — Practice Analytics Deep */
+  /* v0.80 — Practice Analytics Deep */
   .analytics-modal { max-width: 820px; }
   .analytics-section { margin: 18px 0; }
   .analytics-section-title { font-size: 13px; font-weight: 600; margin-bottom: 10px; color: rgba(255,255,255,0.9); }
@@ -2642,7 +2642,7 @@
   .poly-settings select { background: rgba(255,255,255,0.08); color: #fff; border: 1px solid rgba(255,255,255,0.15); padding: 4px 8px; border-radius: 4px; font-size: 12px; }
   .poly-stats { display: flex; gap: 16px; justify-content: center; font-size: 12px; color: var(--muted); margin: 10px 0; }
 
-  /* v0.79 — Composition Challenge */
+  /* v0.80 — Composition Challenge */
   .compose-modal { max-width: 680px; }
   .compose-challenge-info {
     background: rgba(99,102,241,0.1); border-left: 3px solid #6366f1;
@@ -2729,7 +2729,7 @@
   .pattern-row-count { font-family: monospace; font-size: 11px; color: var(--accent); text-align: right; }
   .pattern-intervals { font-family: monospace; font-size: 11px; color: var(--muted); }
 
-  /* v0.79 — Practice Calendar */
+  /* v0.80 — Practice Calendar */
   .calendar-modal { max-width: 880px; }
   .calendar-nav {
     display: flex; align-items: center; justify-content: space-between;
@@ -2840,7 +2840,7 @@
   .coach-view-content table th, .coach-view-content table td { padding: 6px 8px; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.06); }
   .coach-view-content table th { color: var(--muted); font-weight: 600; font-size: 10px; text-transform: uppercase; }
 
-  /* v0.79 — Deep Insights */
+  /* v0.80 — Deep Insights */
   .deep-insights-modal { max-width: 820px; max-height: 90vh; overflow-y: auto; }
   .di-loading { text-align: center; padding: 40px; font-size: 14px; color: var(--muted); }
   .di-period-selector { margin: 12px 0; font-size: 12px; color: var(--muted); }
@@ -2881,7 +2881,7 @@
   .di-correlations .di-corr-row { padding: 4px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
 
   /* ===================================================================== */
-  /* v0.79 — UX OVERHAUL: Compact Topbar + Command Palette + Welcome Hub  */
+  /* v0.80 — UX OVERHAUL: Compact Topbar + Command Palette + Welcome Hub  */
   /* ===================================================================== */
 
   /* Hide all feature buttons (data-grouped) — they live in .controls.row2 + others */
@@ -3106,7 +3106,7 @@
     background: transparent; border-color: rgba(255,255,255,0.2);
   }
 
-  /* v0.79 — Smart Fingering Display */
+  /* v0.80 — Smart Fingering Display */
   .fingering-modal { max-width: 600px; }
   .fm-modes { display: flex; flex-direction: column; gap: 8px; margin: 14px 0; }
   .fm-mode {
@@ -3187,7 +3187,7 @@
   .sf-staff { background: #fff; border-radius: 8px; padding: 14px; margin: 14px 0; overflow-x: auto; }
   .sf-explanation { font-size: 12px; line-height: 1.6; color: var(--muted); padding: 10px; background: rgba(255,255,255,0.03); border-radius: 6px; }
 
-  /* v0.79 — Voice Journal */
+  /* v0.80 — Voice Journal */
   .voice-journal-modal { max-width: 600px; }
   .vj-status-row { display: flex; align-items: center; gap: 10px; margin: 14px 0; padding: 10px 14px; background: rgba(255,255,255,0.04); border-radius: 6px; }
   .vj-status-dot { width: 12px; height: 12px; border-radius: 50%; background: #6b7280; transition: all 0.3s; }
@@ -3223,7 +3223,104 @@
   .vj-save-btn:hover { transform: translateY(-1px); }
   .vj-hint { background: rgba(251,191,36,0.08); border-left: 3px solid #fbbf24; padding: 10px 14px; border-radius: 0 6px 6px 0; font-size: 12px; line-height: 1.5; margin: 12px 0; }
 
-  /* v0.79 — Keyboard cheat-sheet */
+  /* v0.80 — Inspiration Layer */
+  .inspiration-modal { max-width: 720px; }
+  .ins-tabs { display: flex; gap: 4px; margin-bottom: 16px; flex-wrap: wrap; }
+  .ins-tabs button {
+    flex: 1; padding: 8px 12px; font-size: 12px;
+    background: rgba(255,255,255,0.06); color: var(--muted);
+    border: 1px solid rgba(255,255,255,0.15); border-radius: 6px 6px 0 0; cursor: pointer;
+    min-width: 120px;
+  }
+  .ins-tabs button.on { background: rgba(167,139,250,0.15); border-bottom-color: #a78bfa; color: #fff; }
+  .ins-tab-content { padding: 8px 0; min-height: 200px; }
+  .ins-quote-card {
+    background: linear-gradient(135deg, rgba(167,139,250,0.08), rgba(99,102,241,0.04));
+    border: 1px solid rgba(167,139,250,0.25);
+    padding: 24px 28px; border-radius: 12px; margin: 12px 0;
+    position: relative;
+  }
+  .ins-quote-card::before {
+    content: '"'; position: absolute; top: -10px; left: 12px;
+    font-size: 80px; font-family: serif; color: rgba(167,139,250,0.3);
+    line-height: 1; font-weight: 700;
+  }
+  .ins-quote-text {
+    font-size: 18px; line-height: 1.6; font-style: italic;
+    color: rgba(255,255,255,0.95); font-family: Georgia, serif;
+    padding-left: 12px;
+  }
+  .ins-quote-author {
+    font-size: 12px; color: #a78bfa; margin-top: 12px;
+    text-transform: uppercase; letter-spacing: 0.08em;
+    font-weight: 600; text-align: right;
+  }
+  .ins-quote-author small { color: var(--muted); font-weight: 400; text-transform: none; letter-spacing: 0; margin-left: 8px; }
+  .ins-mantra-card {
+    background: linear-gradient(135deg, rgba(74,222,128,0.08), rgba(34,197,94,0.04));
+    border-left: 4px solid #4ade80; padding: 14px 18px;
+    border-radius: 0 8px 8px 0; margin: 12px 0;
+  }
+  .ins-mantra-label { font-size: 10px; color: #4ade80; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 4px; }
+  .ins-mantra-text { font-size: 15px; line-height: 1.5; font-style: italic; color: rgba(255,255,255,0.9); }
+  .ins-story-card {
+    background: rgba(255,255,255,0.04); padding: 14px 18px;
+    border-radius: 8px; margin-bottom: 10px;
+    border-left: 3px solid #fbbf24;
+  }
+  .ins-story-title { font-size: 13px; font-weight: 600; color: #fbbf24; margin-bottom: 6px; }
+  .ins-story-body { font-size: 13px; line-height: 1.6; color: rgba(255,255,255,0.85); }
+  .ins-quotes-list { display: flex; flex-direction: column; gap: 10px; max-height: 480px; overflow-y: auto; padding-right: 6px; }
+  .ins-stories-list { display: flex; flex-direction: column; gap: 8px; max-height: 480px; overflow-y: auto; padding-right: 6px; }
+  .ins-milestone-card {
+    background: linear-gradient(135deg, rgba(251,191,36,0.1), rgba(245,158,11,0.04));
+    border: 1px solid rgba(251,191,36,0.3); padding: 14px 18px;
+    border-radius: 8px; margin-bottom: 8px;
+  }
+  .ins-milestone-icon { font-size: 28px; margin-bottom: 4px; }
+  .ins-milestone-title { font-size: 14px; font-weight: 600; }
+  .ins-milestone-date { font-size: 11px; color: var(--muted); margin-top: 4px; }
+  .ins-empty { text-align: center; padding: 30px; color: var(--muted); font-size: 13px; font-style: italic; }
+
+  /* Welcome Hub daily wisdom block */
+  .wh-wisdom {
+    background: linear-gradient(135deg, rgba(167,139,250,0.08), rgba(99,102,241,0.04));
+    border: 1px solid rgba(167,139,250,0.2); border-radius: 10px;
+    padding: 14px 18px; margin-bottom: 16px;
+    text-align: left; position: relative;
+  }
+  .wh-wisdom-label { font-size: 10px; color: #a78bfa; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 4px; }
+  .wh-wisdom-text { font-size: 14px; line-height: 1.5; font-style: italic; color: rgba(255,255,255,0.92); font-family: Georgia, serif; }
+  .wh-wisdom-author { font-size: 11px; color: var(--muted); margin-top: 6px; text-align: right; }
+
+  /* Milestone overlay (celebration) */
+  .milestone-overlay {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.85);
+    z-index: 9700; display: flex; align-items: center; justify-content: center;
+    backdrop-filter: blur(6px);
+  }
+  .milestone-card {
+    background: linear-gradient(180deg, #1a1f2e, #0f1419);
+    border: 2px solid #fbbf24; padding: 36px 44px;
+    border-radius: 20px; max-width: 480px; width: 90%;
+    text-align: center; box-shadow: 0 20px 60px rgba(251,191,36,0.3);
+    animation: msPop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  @keyframes msPop {
+    from { transform: scale(0.7); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+  }
+  .ms-icon { font-size: 72px; margin-bottom: 8px; }
+  .ms-title { font-size: 26px; font-weight: 700; color: #fbbf24; margin-bottom: 14px; }
+  .ms-narrative { font-size: 15px; line-height: 1.65; color: rgba(255,255,255,0.9); margin-bottom: 22px; }
+  .ms-actions { display: flex; gap: 10px; justify-content: center; }
+  .ms-actions button {
+    background: rgba(255,255,255,0.1); color: #fff; border: 1px solid rgba(255,255,255,0.2);
+    padding: 10px 22px; border-radius: 6px; cursor: pointer; font-size: 13px;
+  }
+  .ms-actions button:first-child { background: #fbbf24; color: #1a1a1a; font-weight: 600; }
+
+  /* v0.80 — Keyboard cheat-sheet */
   .keyboard-help-modal { max-width: 720px; }
   .kh-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; margin: 16px 0; }
   .kh-group { background: rgba(255,255,255,0.04); padding: 12px 14px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.08); }
@@ -3239,7 +3336,7 @@
   }
   .kh-row span { color: var(--muted); }
 
-  /* v0.79 — Toast notifications */
+  /* v0.80 — Toast notifications */
   .toast-stack {
     position: fixed; bottom: 20px; right: 20px;
     display: flex; flex-direction: column-reverse; gap: 8px;
@@ -3385,7 +3482,7 @@
   .reharm-result.miss { background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.4); }
   .reharm-stats { display: flex; gap: 16px; justify-content: center; font-size: 12px; color: var(--muted); margin: 10px 0; }
 
-  /* v0.79 — Listen-Along Mode */
+  /* v0.80 — Listen-Along Mode */
   .listen-along-modal { max-width: 720px; }
   .la-source-toggle { display: flex; gap: 4px; margin-bottom: 12px; }
   .la-source-toggle button {
@@ -3442,7 +3539,7 @@
 </head>
 <body>
 
-<h1>Piano Coach <span style="color: var(--muted); font-weight: 400;">v0.79</span></h1>
+<h1>Piano Coach <span style="color: var(--muted); font-weight: 400;">v0.80</span></h1>
 <p class="sub">📜 Sight reading 2.0 (audio + keyboard + heatmap + adaptive + reaction) · 36 songs</p>
 
 <div class="topbar">
@@ -3612,6 +3709,7 @@
   <button id="btn-share" title="Share met coach — genereer een URL met je voortgang om met een (echte) coach te delen">🤝 Share</button>
   <button id="btn-deep-insights" title="Deep Insights — AI-gedreven langetermijn-analyse: trends, voorspellingen, gepersonaliseerde aanbevelingen">🧠 Deep Insights</button>
   <button id="btn-voice-journal" title="Voice Journal — spreek je reflecties in, auto-transcript naar je journal">🗣 Voice Journal</button>
+  <button id="btn-inspiration" title="Inspiration Hub — quotes, verhalen, mijlpalen van legendarische pianisten">✨ Inspiration</button>
   <button id="btn-tutor" title="AI Tutor Chat — stel vragen over je oefen-data, theorie, of wat je moet oefenen">💬 Tutor</button>
   <button id="btn-reharm" title="Reharmonization Drills — vervang akkoorden in progressies (jazz/klassiek harmonie training)">🔄 Reharm</button>
   <button id="btn-listen-along" title="Listen-Along — luister naar echte uitvoering (Spotify/YouTube) naast je MIDI">🎧 Listen-Along</button>
@@ -3931,7 +4029,7 @@
   </div>
 </div>
 
-<!-- v0.79 — Smart Coach (today's session) -->
+<!-- v0.80 — Smart Coach (today's session) -->
 <div class="modal-overlay" id="coach-overlay" style="display:none;">
   <div class="modal coach-modal">
     <h2>🧭 Smart Coach — Vandaag's sessie</h2>
@@ -3974,7 +4072,7 @@
   </div>
 </div>
 
-<!-- v0.79 — Backing Track / Chord Loop Improv -->
+<!-- v0.80 — Backing Track / Chord Loop Improv -->
 <div class="modal-overlay" id="backing-overlay" style="display:none;">
   <div class="modal backing-modal">
     <h2>🎸 Backing Track Improv</h2>
@@ -4021,7 +4119,7 @@
   </div>
 </div>
 
-<!-- v0.79 — Knowledge Review (spaced repetition over theory lessons) -->
+<!-- v0.80 — Knowledge Review (spaced repetition over theory lessons) -->
 <div class="modal-overlay" id="review-overlay" style="display:none;">
   <div class="modal review-modal">
     <h2>🧠 Knowledge Review</h2>
@@ -4046,7 +4144,7 @@
   </div>
 </div>
 
-<!-- v0.79 — Post-lesson quiz (auto-shown after Gym lesson completes) -->
+<!-- v0.80 — Post-lesson quiz (auto-shown after Gym lesson completes) -->
 <div class="modal-overlay" id="postquiz-overlay" style="display:none;">
   <div class="modal review-modal">
     <h2>🎯 Snelle check</h2>
@@ -4158,7 +4256,7 @@ create policy "Anyone can update"
   </div>
 </div>
 
-<!-- v0.79 — Composers / Componisten bios -->
+<!-- v0.80 — Composers / Componisten bios -->
 <div class="modal-overlay" id="composers-overlay" style="display:none;">
   <div class="modal composers-modal">
     <h2>👤 Componisten</h2>
@@ -4222,7 +4320,7 @@ create policy "Anyone can update"
   <button id="pwa-install-no">Later</button>
 </div>
 
-<!-- v0.79 — Pomodoro timer (floating + modal config) -->
+<!-- v0.80 — Pomodoro timer (floating + modal config) -->
 <div class="pomodoro-widget" id="pomodoro-widget" style="display:none;">
   <div class="pomodoro-phase" id="pomodoro-phase">🍅 Focus</div>
   <div class="pomodoro-time" id="pomodoro-time">25:00</div>
@@ -4258,7 +4356,7 @@ create policy "Anyone can update"
   </div>
 </div>
 
-<!-- v0.79 — Warm-up modal (forced before practice) -->
+<!-- v0.80 — Warm-up modal (forced before practice) -->
 <div class="modal-overlay" id="warmup-overlay" style="display:none;">
   <div class="modal warmup-modal">
     <h2>🔥 Warm-up (3 min)</h2>
@@ -4276,7 +4374,7 @@ create policy "Anyone can update"
   </div>
 </div>
 
-<!-- v0.79 — Daily Journal -->
+<!-- v0.80 — Daily Journal -->
 <div class="modal-overlay" id="journal-overlay" style="display:none;">
   <div class="modal journal-modal">
     <h2>📓 Practice Journal</h2>
@@ -4364,7 +4462,7 @@ create policy "Anyone can update"
   <div class="vrt-recent" id="vrt-recent"></div>
 </div>
 
-<!-- v0.79 — Two-Hand Independence Drills -->
+<!-- v0.80 — Two-Hand Independence Drills -->
 <div class="modal-overlay" id="twohand-overlay" style="display:none;">
   <div class="modal twohand-modal">
     <h2>✌ Two-Hand Independence Drills</h2>
@@ -4517,7 +4615,7 @@ create policy "Anyone can update"
   </div>
 </div>
 
-<!-- v0.79 — Stage Mode + Blind Playing -->
+<!-- v0.80 — Stage Mode + Blind Playing -->
 <div class="modal-overlay" id="stage-overlay" style="display:none;">
   <div class="modal stage-modal">
     <h2>🎭 Performance Prep</h2>
@@ -4659,7 +4757,7 @@ create policy "Anyone can update"
   </div>
 </div>
 
-<!-- v0.79 — Goal-Based Curriculum -->
+<!-- v0.80 — Goal-Based Curriculum -->
 <div class="modal-overlay" id="goals-overlay" style="display:none;">
   <div class="modal goals-modal">
     <h2>🎯 Goal-Based Curriculum</h2>
@@ -4709,7 +4807,7 @@ create policy "Anyone can update"
   </div>
 </div>
 
-<!-- v0.79 — Practice Analytics Deep -->
+<!-- v0.80 — Practice Analytics Deep -->
 <div class="modal-overlay" id="analytics-overlay" style="display:none;">
   <div class="modal analytics-modal">
     <h2>📈 Practice Analytics</h2>
@@ -4808,7 +4906,7 @@ create policy "Anyone can update"
   </div>
 </div>
 
-<!-- v0.79 — Composition Challenge -->
+<!-- v0.80 — Composition Challenge -->
 <div class="modal-overlay" id="compose-overlay" style="display:none;">
   <div class="modal compose-modal">
     <h2>✍ Compositie Challenge</h2>
@@ -4898,7 +4996,7 @@ create policy "Anyone can update"
   </div>
 </div>
 
-<!-- v0.79 — Practice Calendar -->
+<!-- v0.80 — Practice Calendar -->
 <div class="modal-overlay" id="calendar-overlay" style="display:none;">
   <div class="modal calendar-modal">
     <h2>📅 Practice Calendar</h2>
@@ -4978,7 +5076,7 @@ create policy "Anyone can update"
   </div>
 </div>
 
-<!-- v0.79 — Deep Insights -->
+<!-- v0.80 — Deep Insights -->
 <div class="modal-overlay" id="deep-insights-overlay" style="display:none;">
   <div class="modal deep-insights-modal">
     <h2>🧠 Deep Insights</h2>
@@ -5113,7 +5211,7 @@ create policy "Anyone can update"
   </div>
 </div>
 
-<!-- v0.79 — Listen-Along Mode -->
+<!-- v0.80 — Listen-Along Mode -->
 <div class="modal-overlay" id="listen-along-overlay" style="display:none;">
   <div class="modal listen-along-modal">
     <h2>🎧 Listen-Along</h2>
@@ -5153,7 +5251,7 @@ create policy "Anyone can update"
   </div>
 </div>
 
-<!-- v0.79 — Smart Fingering Display modal -->
+<!-- v0.80 — Smart Fingering Display modal -->
 <div class="modal-overlay" id="fingering-modal-overlay" style="display:none;">
   <div class="modal fingering-modal">
     <h2>🖐 Vingerzetting Display</h2>
@@ -5208,7 +5306,7 @@ create policy "Anyone can update"
   </div>
 </div>
 
-<!-- v0.79 — Hand position floating widget -->
+<!-- v0.80 — Hand position floating widget -->
 <div class="hand-position-widget" id="hand-position-widget" style="display:none;">
   <div class="hpw-row hpw-rh">
     <span class="hpw-label">RH</span>
@@ -5220,7 +5318,7 @@ create policy "Anyone can update"
   </div>
 </div>
 
-<!-- v0.79 — Section fingering preview overlay -->
+<!-- v0.80 — Section fingering preview overlay -->
 <div class="modal-overlay" id="section-fingering-overlay" style="display:none;">
   <div class="modal section-fingering-modal">
     <h2>👁 Vingerzettingen voor sectie</h2>
@@ -5233,7 +5331,7 @@ create policy "Anyone can update"
   </div>
 </div>
 
-<!-- v0.79 — Command Palette (⌘K / Ctrl+K) -->
+<!-- v0.80 — Command Palette (⌘K / Ctrl+K) -->
 <div class="cmd-palette-overlay" id="cmd-palette-overlay">
   <div class="cmd-palette">
     <div class="cmd-palette-input-wrap">
@@ -5245,7 +5343,7 @@ create policy "Anyone can update"
   </div>
 </div>
 
-<!-- v0.79 — Welcome Hub -->
+<!-- v0.80 — Welcome Hub -->
 <div class="welcome-hub-overlay" id="welcome-hub-overlay">
   <div class="welcome-hub">
     <div class="wh-header">
@@ -5253,8 +5351,13 @@ create policy "Anyone can update"
       <div class="wh-title">Piano Coach</div>
       <div class="wh-subtitle" id="wh-subtitle">Jouw complete piano-leerplatform — 75+ modes voor theorie, oefenen, performance en groei</div>
     </div>
+    <div class="wh-wisdom" id="wh-wisdom" style="display:none;">
+      <div class="wh-wisdom-label">💭 Wijsheid vandaag</div>
+      <div class="wh-wisdom-text" id="wh-wisdom-text">—</div>
+      <div class="wh-wisdom-author" id="wh-wisdom-author">—</div>
+    </div>
     <div class="wh-quick-start">
-      <div class="wh-quick-start-text">Begin meteen met je dagelijkse sessie — Coach kiest automatisch de juiste oefeningen op basis van je niveau en data.</div>
+      <div class="wh-quick-start-text" id="wh-mantra-text">Begin meteen met je dagelijkse sessie — Coach kiest automatisch de juiste oefeningen op basis van je niveau en data.</div>
       <button class="wh-quick-start-btn" id="wh-coach-btn">🧭 Start vandaag's sessie</button>
     </div>
     <div class="wh-tiles">
@@ -5275,7 +5378,7 @@ create policy "Anyone can update"
   </div>
 </div>
 
-<!-- v0.79 — Voice Journal -->
+<!-- v0.80 — Voice Journal -->
 <div class="modal-overlay" id="voice-journal-overlay" style="display:none;">
   <div class="modal voice-journal-modal">
     <h2>🗣 Voice Journal</h2>
@@ -5326,7 +5429,48 @@ create policy "Anyone can update"
   </div>
 </div>
 
-<!-- v0.79 — Keyboard shortcuts cheat-sheet -->
+<!-- v0.80 — Inspiration Hub -->
+<div class="modal-overlay" id="inspiration-overlay" style="display:none;">
+  <div class="modal inspiration-modal">
+    <h2>✨ Inspiration</h2>
+    <div class="modal-sub">Quotes, verhalen en wijsheid van grote pianisten en componisten — voor wanneer je gemotiveerd wilt blijven.</div>
+    <div class="ins-tabs">
+      <button data-ins-tab="daily" class="on">📅 Vandaag</button>
+      <button data-ins-tab="quotes">💭 Quotes</button>
+      <button data-ins-tab="stories">📖 Verhalen per stuk</button>
+      <button data-ins-tab="milestones">🏆 Mijn mijlpalen</button>
+    </div>
+    <div class="ins-tab-content" id="ins-tab-daily"></div>
+    <div class="ins-tab-content" id="ins-tab-quotes" style="display:none;"></div>
+    <div class="ins-tab-content" id="ins-tab-stories" style="display:none;"></div>
+    <div class="ins-tab-content" id="ins-tab-milestones" style="display:none;"></div>
+    <div class="modal-actions">
+      <button id="ins-reshuffle">🎲 Nieuwe selectie</button>
+      <button id="inspiration-close">Sluit</button>
+    </div>
+  </div>
+</div>
+
+<!-- v0.80 — Atmosphere canvas (audio-reactive subtle background) -->
+<canvas id="atmosphere-canvas" style="position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:-1;opacity:0;transition:opacity 1s;"></canvas>
+
+<!-- v0.80 — Milestone celebration canvas (confetti) -->
+<canvas id="celebrate-canvas" style="position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:9800;display:none;"></canvas>
+
+<!-- v0.80 — Milestone narrative overlay -->
+<div class="milestone-overlay" id="milestone-overlay" style="display:none;">
+  <div class="milestone-card">
+    <div class="ms-icon" id="ms-icon">🎉</div>
+    <div class="ms-title" id="ms-title">Mijlpaal!</div>
+    <div class="ms-narrative" id="ms-narrative"></div>
+    <div class="ms-actions">
+      <button id="ms-share">🤝 Deel</button>
+      <button id="ms-close">Verder</button>
+    </div>
+  </div>
+</div>
+
+<!-- v0.80 — Keyboard shortcuts cheat-sheet -->
 <div class="modal-overlay" id="keyboard-help-overlay" style="display:none;">
   <div class="modal keyboard-help-modal">
     <h2>⌨ Keyboard Shortcuts</h2>
@@ -5372,7 +5516,7 @@ create policy "Anyone can update"
   </div>
 </div>
 
-<!-- v0.79 — Toast notification container (always-mounted) -->
+<!-- v0.80 — Toast notification container (always-mounted) -->
 <div class="toast-stack" id="toast-stack"></div>
 
 <!-- v0.41 — Voice command status indicator (floating, always shown when active) -->
@@ -8431,7 +8575,7 @@ if (testParam === '1') {
   setTimeout(() => { try { window.installAutoRecovery(); } catch {} }, 1500);
 }
 
-// v0.79 hotfix: global error handler — visible op pagina als iets stuk gaat
+// v0.80 hotfix: global error handler — visible op pagina als iets stuk gaat
 window.addEventListener('error', function(e) {
   console.error('[Piano Coach error]', e.message, 'at', e.filename, ':', e.lineno);
   // Persist for later inspection via window.__pcLastError
@@ -8455,7 +8599,7 @@ window.addEventListener('error', function(e) {
   } catch {}
 });
 
-// v0.79 hotfix: Hard Reset functie - wist ALLES (SW, caches, localStorage backup, force reload)
+// v0.80 hotfix: Hard Reset functie - wist ALLES (SW, caches, localStorage backup, force reload)
 window.hardResetApp = async function() {
   if (!confirm('Hard Reset: wist alle caches + service workers + tijdelijke data. Je localStorage (sessies/journal/etc.) wordt eerst gedownload als backup. OK?')) return;
   try {
@@ -8488,7 +8632,7 @@ window.hardResetApp = async function() {
   }
 };
 
-// v0.79 hotfix: AGRESSIEF unregister bestaande SWs + clear caches
+// v0.80 hotfix: AGRESSIEF unregister bestaande SWs + clear caches
 // Service worker veroorzaakte cache-conflicts. We disablen 'm tijdelijk volledig.
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.getRegistrations().then(regs => {
@@ -9171,13 +9315,13 @@ const sightState = {
   total: 0,
   streak: 0,
   answered: false,
-  // v0.79 additions
+  // v0.80 additions
   askedAt: 0, // performance.now() at question start
   reactionTimes: [], // ms per answer (correct only)
   audioOn: true,
   perNote: {}, // pitchClass → { correct, total }
   recentAnswers: [], // last 10: true/false
-  // v0.79 additions — sequence mode
+  // v0.80 additions — sequence mode
   mode: 'single', // 'single' or 'sequence'
   sequence: [], // array of midi notes for current sequence
   sequenceIdx: 0, // current position in sequence
@@ -9187,7 +9331,7 @@ const sightState = {
   sequenceProgressionLvl: 1, // 1=3 notes, 2=4 notes, 3=5 notes
 };
 
-// v0.79 — Sequence mode unlock threshold (total correct single-note answers)
+// v0.80 — Sequence mode unlock threshold (total correct single-note answers)
 const SEQUENCE_UNLOCK_THRESHOLD = 30;
 function isSequenceUnlocked() {
   try {
@@ -9243,7 +9387,7 @@ function generateSightQuestion() {
   }
 }
 
-// v0.79 — Sequence mode: generate N notes, render them on the staff
+// v0.80 — Sequence mode: generate N notes, render them on the staff
 function generateSightSequence() {
   const length = sightState.sequenceLength;
   const notes = [];
@@ -9572,7 +9716,7 @@ function answerSightByMidi(midi) {
   reportSightResult(correct, noteNameFromMidi(midi));
 }
 
-// v0.79 — Sequence-mode per-note result handler
+// v0.80 — Sequence-mode per-note result handler
 function reportSequenceNoteResult(correct, given) {
   const idx = sightState.sequenceIdx;
   const total = sightState.sequence.length;
@@ -9817,7 +9961,7 @@ document.getElementById('btn-sight').onclick = () => {
   document.getElementById('sight-overlay').style.display = 'flex';
 };
 
-// v0.79 — Sequence mode toggle wiring
+// v0.80 — Sequence mode toggle wiring
 function updateSightModeToggle() {
   const unlocked = isSequenceUnlocked();
   const seqBtn = document.getElementById('sight-mode-sequence');
@@ -9858,7 +10002,7 @@ function updateSightModeToggle() {
   });
 })();
 
-// v0.79 — Sequence-mode achievements
+// v0.80 — Sequence-mode achievements
 ACHIEVEMENTS.push({
   id: 'seq-first', icon: '🎶', label: 'Eerste reeks voltooid', cat: 'Practice',
   test: s => (s.sightHistory?.sequencesCompleted || 0) >= 1,
@@ -9868,7 +10012,7 @@ ACHIEVEMENTS.push({
   test: s => (s.sightHistory?.sequencesPerfect || 0) >= 10,
 });
 
-// Audio mute toggle (v0.79)
+// Audio mute toggle (v0.80)
 (function wireSightMute(){
   const btn = document.getElementById('sight-mute');
   if (!btn) return;
@@ -14331,7 +14475,7 @@ document.querySelectorAll('#eartrain-audio-mode button').forEach(b => {
 });
 
 // ============================================================================
-// v0.79 — SMART COACH (today's session recommender)
+// v0.80 — SMART COACH (today's session recommender)
 // ============================================================================
 function generateCoachSession() {
   const store = loadStore();
@@ -14839,7 +14983,7 @@ document.getElementById('stats-export').onclick = () => {
 };
 
 // ============================================================================
-// v0.79 — BACKING TRACK / CHORD LOOP IMPROV
+// v0.80 — BACKING TRACK / CHORD LOOP IMPROV
 // ============================================================================
 const PROGRESSIONS = [
   { id: 'pop', name: 'I-V-vi-IV', desc: 'Pop loop (Axis of Awesome)', chords: [[0,4,7], [7,11,14], [9,12,16], [5,9,12]] },
@@ -15053,7 +15197,7 @@ ACHIEVEMENTS.push({
 })();
 
 // ============================================================================
-// v0.79 — KNOWLEDGE REVIEW: spaced repetition over theory lessons
+// v0.80 — KNOWLEDGE REVIEW: spaced repetition over theory lessons
 // ============================================================================
 // Each question is keyed by lessonId:idx. SM-2 lite tracks per-question state.
 // Intervals (days): wrong → 1, streak 1 → 3, 2 → 7, 3 → 14, 4 → 30, 5+ → 60.
@@ -16044,7 +16188,7 @@ ACHIEVEMENTS.push({
 });
 
 // ============================================================================
-// v0.79 — COMPOSERS / COMPONISTEN BIOS
+// v0.80 — COMPOSERS / COMPONISTEN BIOS
 // ============================================================================
 const COMPOSERS = [
   {
@@ -16211,7 +16355,7 @@ document.getElementById('composers-back').onclick = renderComposersList;
 document.getElementById('composers-close').onclick = () => document.getElementById('composers-overlay').style.display = 'none';
 
 // ============================================================================
-// v0.79 — Add 9 new Gym lessons (lesson IDs 12-20)
+// v0.80 — Add 9 new Gym lessons (lesson IDs 12-20)
 // ============================================================================
 THEORY_LESSONS.push(
   {
@@ -16458,7 +16602,7 @@ Object.assign(QUIZ_BANK, {
 });
 
 // ============================================================================
-// v0.79 — FOUNDATIONS COMPLETE: 10 nieuwe Gym lessen (lessen 21-30)
+// v0.80 — FOUNDATIONS COMPLETE: 10 nieuwe Gym lessen (lessen 21-30)
 // ============================================================================
 THEORY_LESSONS.push(
   {
@@ -16788,14 +16932,14 @@ ACHIEVEMENTS.push({
   test: s => (s.composersRead?.length || 0) >= COMPOSERS.length,
 });
 
-// v0.79 — Achievement for completing all 30 lessons
+// v0.80 — Achievement for completing all 30 lessons
 ACHIEVEMENTS.push({
   id: 'theory-foundation-complete', icon: '🎓', label: 'Volledige theorie-basis voltooid (30 lessen)', cat: 'Knowledge',
   test: s => Object.keys(s.gymProgress?.completed || {}).length >= 30,
 });
 
 // ============================================================================
-// v0.79 — VISUALIZATION ENGINE + ADVANCED CURRICULUM
+// v0.80 — VISUALIZATION ENGINE + ADVANCED CURRICULUM
 // ============================================================================
 
 // ----- Add level metadata to existing lessons -----
@@ -17067,7 +17211,7 @@ patchLessonVisuals('diatonic-chords', [
 ]);
 
 // ============================================================================
-// v0.79 — 15 ADVANCED LESSONS (jazz, classical-advanced, styles, science)
+// v0.80 — 15 ADVANCED LESSONS (jazz, classical-advanced, styles, science)
 // ============================================================================
 THEORY_LESSONS.push(
   // ----- Jazz harmonie -----
@@ -18159,7 +18303,7 @@ ACHIEVEMENTS.push({
 });
 
 // ============================================================================
-// v0.79 — STAGE MODE + BLIND PLAYING
+// v0.80 — STAGE MODE + BLIND PLAYING
 // ============================================================================
 const stageState = {
   active: false,
@@ -18944,7 +19088,7 @@ ACHIEVEMENTS.push({
 });
 
 // ============================================================================
-// v0.79 — GOAL-BASED CURRICULUM
+// v0.80 — GOAL-BASED CURRICULUM
 // ============================================================================
 const GOAL_TARGETS = {
   learn: { name: 'Leer het stuk', criteria: 'Tempo 70% + accuracy 80%', tempoTarget: 70, accTarget: 0.80 },
@@ -19173,7 +19317,7 @@ ACHIEVEMENTS.push({
 });
 
 // ============================================================================
-// v0.79 — TIME TRACKER + PRACTICE ANALYTICS DEEP
+// v0.80 — TIME TRACKER + PRACTICE ANALYTICS DEEP
 // ============================================================================
 // Lightweight time tracker: hooks into modal opens/closes for main modes.
 // Tracks: activity, startTime, endTime → stored in store.timeLog[]
@@ -19955,7 +20099,7 @@ ACHIEVEMENTS.push({
 });
 
 // ============================================================================
-// v0.79 — COMPOSITION CHALLENGE
+// v0.80 — COMPOSITION CHALLENGE
 // ============================================================================
 const COMPOSE_CHALLENGES = {
   beginner: {
@@ -20520,7 +20664,7 @@ ACHIEVEMENTS.push({
 });
 
 // ============================================================================
-// v0.79 — PRACTICE CALENDAR
+// v0.80 — PRACTICE CALENDAR
 // ============================================================================
 const calState = {
   weekOffset: 0, // 0 = current week, -1 = prev, +1 = next
@@ -21100,7 +21244,7 @@ ACHIEVEMENTS.push({
 });
 
 // ============================================================================
-// v0.79 — DEEP INSIGHTS (rule-based long-term analysis engine)
+// v0.80 — DEEP INSIGHTS (rule-based long-term analysis engine)
 // ============================================================================
 function runDeepAnalysis(periodDays = 30) {
   const store = loadStore();
@@ -21488,7 +21632,7 @@ document.getElementById('di-export-md').onclick = () => {
   for (const c of r.correlations) md += `- ${c.replace(/<[^>]+>/g, '')}\n`;
   md += `\n## ⚠ Watch-outs\n\n`;
   for (const w of r.warnings) md += `- ${w.replace(/<[^>]+>/g, '')}\n`;
-  md += `\n---\nGegenereerd door Piano Coach v0.79 — Deep Insights engine\n`;
+  md += `\n---\nGegenereerd door Piano Coach v0.80 — Deep Insights engine\n`;
   const blob = new Blob([md], { type: 'text/markdown' });
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
@@ -22094,7 +22238,7 @@ ACHIEVEMENTS.push({
 });
 
 // ============================================================================
-// v0.79 — LISTEN-ALONG MODE (YouTube/Spotify embed)
+// v0.80 — LISTEN-ALONG MODE (YouTube/Spotify embed)
 // ============================================================================
 const laState = {
   source: 'youtube',
@@ -22233,7 +22377,7 @@ ACHIEVEMENTS.push({
 });
 
 // ============================================================================
-// v0.79 — UX OVERHAUL: Compact Topbar + Command Palette + Welcome Hub + Tour
+// v0.80 — UX OVERHAUL: Compact Topbar + Command Palette + Welcome Hub + Tour
 // ============================================================================
 
 // Master feature registry — alle non-player-controls gegroepeerd in categorieën
@@ -22725,7 +22869,7 @@ ACHIEVEMENTS.push({
 });
 
 // ============================================================================
-// v0.79 — SMART FINGERING DISPLAY (4 modes, progressive disclosure)
+// v0.80 — SMART FINGERING DISPLAY (4 modes, progressive disclosure)
 // ============================================================================
 // Replaces simple on/off toggle with 4 modes:
 //   off / position / next / subtle
@@ -23014,7 +23158,7 @@ function renderFingeringStaff(notes, clef) {
 document.getElementById('sf-close').onclick = () => document.getElementById('section-fingering-overlay').style.display = 'none';
 
 // Register fingering modal in compact topbar Learn category — already present as 'btn-fingering'
-// The categorisation in v0.79 already includes btn-fingering under Learn.
+// The categorisation in v0.80 already includes btn-fingering under Learn.
 
 // Achievement: try all 4 modes
 ACHIEVEMENTS.push({
@@ -23023,7 +23167,7 @@ ACHIEVEMENTS.push({
 });
 
 // ============================================================================
-// v0.79 — VOICE JOURNAL (auto-transcribed reflections via Web Speech Recognition)
+// v0.80 — VOICE JOURNAL (auto-transcribed reflections via Web Speech Recognition)
 // ============================================================================
 const voiceJournalState = {
   recognition: null,
@@ -23174,7 +23318,468 @@ ACHIEVEMENTS.push({
 });
 
 // ============================================================================
-// v0.79 — UX POLISH: Toast notifications + Keyboard cheat-sheet
+// v0.80 — INSPIRATION LAYER (quotes, stories, mantras, milestones, atmosphere)
+// ============================================================================
+
+const PIANO_QUOTES = [
+  { text: "Het is niet de buitenkant, maar de ziel van het stuk die spreekt.", author: "Frédéric Chopin", context: "in een brief, 1841" },
+  { text: "De ware muzikant brengt de noten tot leven; iedereen kan ze spelen.", author: "Robert Schumann" },
+  { text: "Spelen is het makkelijke deel. Het muziek máken is wat tijd kost.", author: "Vladimir Horowitz" },
+  { text: "Wanneer ik op het podium ben, ben ik niet alleen. Ik draag Bach, Schumann, Chopin met me mee.", author: "Martha Argerich" },
+  { text: "Oefen niet tot je het goed kunt. Oefen tot je het niet meer fout kunt doen.", author: "Klassieke pedagogie" },
+  { text: "Muziek is de stenografie van emotie.", author: "Leo Tolstoy" },
+  { text: "Je kunt techniek leren. Stijl moet je vinden.", author: "Glenn Gould" },
+  { text: "Het beste gedeelte van een uitvoering is wanneer je vergeet dat je speelt.", author: "Arthur Rubinstein" },
+  { text: "Mensen zeggen dat ik te veel oefen. Maar ik moet — anders weet ik niet wat te doen met mezelf.", author: "Vladimir Horowitz" },
+  { text: "Begin met het meest moeilijke. De rest valt vanzelf op zijn plaats.", author: "Heinrich Neuhaus", context: "pianopedagoog" },
+  { text: "Een fout is alleen een fout als je 'm niet leuk vindt.", author: "Bill Evans" },
+  { text: "Je vingers volgen je geest. Niet andersom.", author: "Lang Lang" },
+  { text: "De stilte tussen de noten is even belangrijk als de noten zelf.", author: "Claude Debussy" },
+  { text: "Speel zoals je wilt voelen, niet zoals je voelt.", author: "Maria João Pires" },
+  { text: "Elk stuk verdient honderden uitvoeringen. Maak elke één anders.", author: "Daniel Barenboim" },
+  { text: "Er is geen verschil tussen oefenen en spelen. Beide vereisen totale aandacht.", author: "Murray Perahia" },
+  { text: "Speel met je oren, niet met je vingers.", author: "Heinrich Neuhaus" },
+  { text: "Zonder fouten is er geen vooruitgang. Wees ze dankbaar.", author: "Mitsuko Uchida" },
+  { text: "Muziek begint waar woorden eindigen.", author: "Heinrich Heine" },
+  { text: "Een goede uitvoering is een dialoog: tussen jou, de componist en het instrument.", author: "Alfred Brendel" },
+  { text: "Speel het stuk niet. Vertel het.", author: "Krystian Zimerman" },
+  { text: "De beste interpretatie is degene die je publiek doet vergeten dat ze luisteren.", author: "Andras Schiff" },
+  { text: "Snelheid is niet hetzelfde als virtuositeit. Helderheid wel.", author: "Vladimir Ashkenazy" },
+  { text: "Bach speelt niet voor jou. Jij speelt voor Bach.", author: "Glenn Gould" },
+  { text: "Wanneer je een stuk leert, bouw je een huis. Bewoon het.", author: "Radu Lupu" },
+  { text: "Niet hoe vaak je oefent telt. Maar hoe bewust.", author: "Marcel Reich-Ranicki", context: "muziekcriticus" },
+  { text: "Het pedaal is de ziel van de piano.", author: "Anton Rubinstein" },
+  { text: "Speel zachtjes. Je hebt geen overtuiging nodig — alleen aandacht.", author: "Dinu Lipatti" },
+  { text: "Een Chopin-nocturne goed spelen is moeilijker dan tien Beethoven-sonates redelijk.", author: "Vlado Perlemuter" },
+  { text: "Je hebt twee handen — gebruik ze als twee mensen die een gesprek voeren.", author: "Bach\'s pedagogie", context: "Inventions traditioneel onderwijs" },
+  { text: "Performance is de moeilijkste vorm van eerlijkheid.", author: "Sviatoslav Richter" },
+  { text: "Begin elke sessie als een eerste keer. Behandel elk stuk alsof je het net hebt ontdekt.", author: "Maurizio Pollini" },
+  { text: "Het ene goede uur per dag is honderd keer waardevoller dan tien middelmatige uren.", author: "Klassieke wisdom" },
+  { text: "Je publiek hoort niet hoe goed je speelt. Ze horen of jij gelooft wat je speelt.", author: "Olga Kern" },
+  { text: "Er bestaat geen perfecte uitvoering. Alleen oprechte.", author: "Khatia Buniatishvili" },
+  { text: "Speel piano alsof het je laatste keer is. Want elke keer is het anders.", author: "Yuja Wang" },
+  { text: "Soms is een halve toon de hele wereld.", author: "Olivier Messiaen" },
+  { text: "Train je vingers terwijl je traint je oren. Vergeet niet dat de vingers volgen.", author: "Carl Czerny", context: "etudes-componist" },
+  { text: "Wanneer je een passage tien keer fout speelt, train je je hand om hem fout te spelen.", author: "Heinrich Neuhaus" },
+  { text: "De pauze tussen twee noten kan langer duren dan het stuk zelf, en even mooi zijn.", author: "Arvo Pärt" },
+  { text: "Elke pianist heeft één stuk waar ze zich helemaal in kunnen verliezen. Vind het jouwe.", author: "Stephen Hough" },
+  { text: "Het verschil tussen amateur en pro is niet talent. Het is consistentie.", author: "Klassieke wisdom" },
+  { text: "Speel als een kind. Luister als een meester.", author: "Daniil Trifonov" },
+  { text: "Er zit een verhaal in elke akkoord. Vertel het langzaam.", author: "Hélène Grimaud" },
+  { text: "Wanneer je twijfelt: vertraag. Snelheid is altijd te repareren. Vertrouwen niet.", author: "Pianopedagogie wisdom" },
+  { text: "Een lege piano is een belofte. Een gespeelde piano is een gesprek.", author: "Yuja Wang" },
+  { text: "Je groeit niet wanneer je speelt. Je groeit tussen de sessies in, als je hersens het herinneren.", author: "Neuroplasticiteits-onderzoek", context: "vrij vertaald" },
+  { text: "Ik oefen niet om beter te worden. Ik oefen om mezelf niet te verliezen.", author: "Lang Lang" },
+  { text: "Het beste compliment voor een pianist: 'Ik vergat dat het piano was.'", author: "Onbekend" },
+  { text: "Geen enkele componist schrijft voor virtuozen. Ze schrijven voor de muziek.", author: "Alfred Brendel" },
+];
+
+const PRACTICE_MANTRAS = [
+  "Vandaag: één maat per keer is genoeg.",
+  "Vandaag: niet perfect spelen, gewoon helder spelen.",
+  "Vandaag: luister meer dan je speelt.",
+  "Vandaag: traag is sneller op de lange termijn.",
+  "Vandaag: voel het stuk, niet alleen de noten.",
+  "Vandaag: één goed uur > drie middelmatige.",
+  "Vandaag: stilte is ook muziek.",
+  "Vandaag: begin met de moeilijkste passage.",
+  "Vandaag: train je oren, je vingers volgen.",
+  "Vandaag: speel alsof iemand luistert die van je houdt.",
+  "Vandaag: pedaal na de noot, nooit ervoor.",
+  "Vandaag: één frase per keer, geen haast.",
+  "Vandaag: ademen tussen de frasen.",
+  "Vandaag: maak één fout — en speel verder.",
+  "Vandaag: speel zachter dan je denkt nodig te zijn.",
+  "Vandaag: vertraag waar je struikelt, versnel waar je stroomt.",
+  "Vandaag: speel voor jezelf, niet voor verbetering.",
+  "Vandaag: één stuk grondig > drie stukken oppervlakkig.",
+  "Vandaag: de melodie bovenop, het accompagnement eronder.",
+  "Vandaag: ontspan je schouders. Adem.",
+  "Vandaag: de juiste noot op het verkeerde moment is een fout. De verkeerde noot op het juiste moment is een nieuwe noot.",
+  "Vandaag: speel het stuk dat je morgen wilt kennen.",
+  "Vandaag: focus op de overgangen, niet op de pieken.",
+  "Vandaag: maak het stil tussen de noten.",
+  "Vandaag: speel piano. Niet snel. Niet hard. Piano.",
+];
+
+const COMPOSER_STORIES = {
+  'fur-elise': {
+    title: 'Für Elise — Een geheim cadeau',
+    body: 'Beethoven schreef dit in 1810 voor Therese Malfatti, op wie hij verliefd was. Het manuscript werd verkeerd ontcijferd — "Therese" werd gelezen als "Elise". Het werd pas in 1867 gepubliceerd, 40 jaar na zijn dood. Hij hoorde de uitvoering nooit.',
+  },
+  'moonlight-1': {
+    title: 'Moonlight Sonata — Improvisatie van een dove man',
+    body: 'Beethoven was al 32 toen hij de eerste tekenen van doofheid kreeg. Deze sonate (1801) komt uit zijn vroege "stille periode". De bijnaam "Moonlight" kwam pas 5 jaar na zijn dood, van een criticus. Beethoven zelf zou het verboden hebben — hij hield van titels die de muziek niet beperken.',
+  },
+  'una-mattina': {
+    title: 'Una Mattina — Film maakt klassiek',
+    body: 'Einaudi componeerde dit in 2004 — een vroege ochtendvoor zijn solo-piano album. Het bleef onbekend tot het in 2011 in de Franse film Intouchables verscheen. Sindsdien een van de meest gestreamde klassieke stukken aller tijden. Bewijs dat een goede film een klassiek stuk in het hart van miljoenen brengt.',
+  },
+  'river-flows': {
+    title: 'River Flows in You — De viral piano-song',
+    body: 'Yiruma schreef dit op 22-jarige leeftijd in 2001 in zijn slaapkamer in Londen. Het stond op zijn album First Love en bleef obscuur. Tot het in 2008 begon viral te gaan op YouTube, vooral in Twilight-fanvideo\'s. Veel mensen denken dat het op de soundtrack stond — het stond er niet. Pure word-of-mouth heeft hier een hit van gemaakt.',
+  },
+  'comptine': {
+    title: 'Comptine d\'un autre été — Amélie\'s lied',
+    body: 'Tiersen componeerde dit in zijn studio op het Bretonse eiland Ouessant. Het verscheen in Amélie (2001) als de muziek waar Amélie naar luistert wanneer ze nadenkt over de wereld. Tiersen zelf zegt: "Het is een liedje uit mijn kindertijd dat ik nooit heb gezongen, en nu eindelijk wel."',
+  },
+  'gymnopedie-1': {
+    title: 'Gymnopédie No. 1 — Muziek vóór ambient',
+    body: 'Satie componeerde dit in 1888, een eeuw voor "ambient music" als genre bestond. Hij noemde zijn muziek "musique d\'ameublement" — meubelmuziek. Bedoeld om in de achtergrond te zitten, niet voor het concertpodium. De moderne ambient en spa-muziek industrie? Begint hier.',
+  },
+  'clair-de-lune': {
+    title: 'Clair de Lune — Verlaine\'s gedicht',
+    body: 'Debussy was geïnspireerd door een gedicht van Paul Verlaine. "Votre âme est un paysage choisi" — "Je ziel is een uitverkoren landschap." De muziek is bedoeld als een schilderij in geluid — geen verhaal, alleen sfeer. Het pedaal is hier essentieel: zonder hem klinkt het houterig. Met hem ademt het.',
+  },
+  'pirates': {
+    title: 'Pirates of the Caribbean — 6 dagen, 1 thema',
+    body: 'Hans Zimmer schreef het hoofdthema "He\'s a Pirate" in 6 dagen, samen met Klaus Badelt. Het werd geschreven nadat de oorspronkelijke componist (Alan Silvestri) werd ontslagen. De stress was extreem. Het resultaat: een van de meest herkenbare filmmuziek-themas ooit.',
+  },
+  'experience': {
+    title: 'Experience — De stilte na de eerste maat',
+    body: 'Einaudi schreef dit in 2013. Het opent met één eenvoudige melodie en bouwt 4 minuten lang langzaam op. Hij heeft gezegd dat het stuk gaat over "het gevoel van een ervaring die je nooit eerder hebt gehad". Hoor je hoe de melodie nooit echt naar huis komt? Dat is bewust.',
+  },
+  'nuvole-bianche': {
+    title: 'Nuvole Bianche — Witte wolken',
+    body: 'De titel betekent "witte wolken" in het Italiaans. Einaudi schreef dit in 2004 in een periode dat hij zich terugtrok van het concertleven. Het stuk bouwt langzaam — eerst alleen RH, dan LH, dan beide — alsof je naar wolken kijkt die langzaam vormen aannemen.',
+  },
+  'bach-prelude-c': {
+    title: 'Prelude in C — Bach\'s eerste cadeau',
+    body: 'Het opent het Wohltemperiertes Klavier, deel I (1722). Bach schreef dit voor zijn zoon Wilhelm Friedemann, als deel van zijn klavier-onderwijs. Geen melodie — alleen arpeggio\'s. Maar elk akkoord vertelt een verhaal. Charles Gounod zou er een eeuw later een "Ave Maria" overheen schrijven.',
+  },
+  'chopin-prelude-em': {
+    title: 'Prelude in E minor — Op zijn sterfbed gehoord',
+    body: 'Chopin componeerde Op. 28 No. 4 in 1839 op Mallorca, waar hij met George Sand was. Hij hoorde het op zijn sterfbed in 1849 nog één keer gespeeld worden. Slechts 25 maten, maar elk akkoord een traan. De LH speelt steeds dezelfde noten, maar verandert subtiel — alsof iemand wegglijdt.',
+  },
+};
+
+// === Daily helpers ===
+function getDailyIndex(arr, offset) {
+  // Deterministic per-day index — same quote/mantra all day, different per day
+  const day = Math.floor((Date.now() + (offset || 0)) / (24 * 60 * 60 * 1000));
+  return day % arr.length;
+}
+
+function getDailyQuote() { return PIANO_QUOTES[getDailyIndex(PIANO_QUOTES, 0)]; }
+function getDailyMantra() { return PRACTICE_MANTRAS[getDailyIndex(PRACTICE_MANTRAS, 1000)]; }
+
+// === Hook into Welcome Hub ===
+const _origShowWelcomeHub = (typeof showWelcomeHub === 'function') ? showWelcomeHub : null;
+if (_origShowWelcomeHub) {
+  showWelcomeHub = function(isFirstTime) {
+    _origShowWelcomeHub(isFirstTime);
+    // Inject daily wisdom + mantra
+    try {
+      const wisdom = getDailyQuote();
+      const wisdomEl = document.getElementById('wh-wisdom');
+      if (wisdomEl) {
+        wisdomEl.style.display = 'block';
+        document.getElementById('wh-wisdom-text').textContent = '"' + wisdom.text + '"';
+        document.getElementById('wh-wisdom-author').innerHTML = '— ' + wisdom.author + (wisdom.context ? ' <small>(' + wisdom.context + ')</small>' : '');
+      }
+      const mantra = getDailyMantra();
+      const mantraEl = document.getElementById('wh-mantra-text');
+      if (mantraEl) {
+        mantraEl.innerHTML = '<em style="opacity:0.9;font-size:13px;">' + mantra + '</em><br><br><small>Begin meteen met je dagelijkse sessie — Coach kiest oefeningen op basis van je niveau en data.</small>';
+      }
+    } catch {}
+  };
+}
+
+// === Composer story on song-load ===
+function showComposerStoryForCurrentSong() {
+  if (!state.song || !state.song.name) return;
+  // Try to match the song slug to a story
+  const slug = (state.song.slug || state.song.name || '').toLowerCase().replace(/[^a-z0-9-]/g, '-');
+  let story = COMPOSER_STORIES[slug];
+  if (!story) {
+    // Try fuzzy matching
+    for (const [key, s] of Object.entries(COMPOSER_STORIES)) {
+      if (slug.includes(key) || key.includes(slug.split('-')[0])) { story = s; break; }
+    }
+  }
+  if (!story) return;
+  // Don't show same story twice per session
+  try {
+    const session = window.__shownStories = window.__shownStories || new Set();
+    if (session.has(slug)) return;
+    session.add(slug);
+  } catch {}
+  // Show as a richer toast
+  if (typeof window.toast === 'function') {
+    window.toast('📖 ' + story.title, story.body, 'info');
+  }
+}
+
+// Hook into loadSong if it exists
+if (typeof loadSong === 'function') {
+  const _origLoadSongStory = loadSong;
+  loadSong = function(song) {
+    _origLoadSongStory(song);
+    setTimeout(showComposerStoryForCurrentSong, 1500);
+  };
+}
+
+// === Milestone celebration with confetti ===
+window.celebrateMilestone = function(opts) {
+  // opts: { icon, title, narrative }
+  document.getElementById('ms-icon').textContent = opts.icon || '🎉';
+  document.getElementById('ms-title').textContent = opts.title || 'Mijlpaal!';
+  document.getElementById('ms-narrative').textContent = opts.narrative || '';
+  document.getElementById('milestone-overlay').style.display = 'flex';
+  // Run confetti
+  runConfetti(opts.colors || ['#fbbf24', '#a78bfa', '#6366f1', '#4ade80', '#ef4444']);
+};
+function runConfetti(colors) {
+  const canvas = document.getElementById('celebrate-canvas');
+  canvas.style.display = 'block';
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  const ctx = canvas.getContext('2d');
+  const particles = [];
+  for (let i = 0; i < 150; i++) {
+    particles.push({
+      x: Math.random() * canvas.width,
+      y: -20 - Math.random() * 100,
+      vx: (Math.random() - 0.5) * 4,
+      vy: 2 + Math.random() * 4,
+      size: 6 + Math.random() * 8,
+      color: colors[Math.floor(Math.random() * colors.length)],
+      rotation: Math.random() * Math.PI,
+      rotSpeed: (Math.random() - 0.5) * 0.3,
+    });
+  }
+  let frame = 0;
+  function step() {
+    if (frame++ > 220) { canvas.style.display = 'none'; return; }
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    for (const p of particles) {
+      p.x += p.vx; p.y += p.vy; p.vy += 0.08; p.rotation += p.rotSpeed;
+      ctx.save();
+      ctx.translate(p.x, p.y); ctx.rotate(p.rotation);
+      ctx.fillStyle = p.color;
+      ctx.fillRect(-p.size / 2, -p.size / 4, p.size, p.size / 2);
+      ctx.restore();
+    }
+    requestAnimationFrame(step);
+  }
+  step();
+}
+document.getElementById('ms-close').onclick = () => {
+  document.getElementById('milestone-overlay').style.display = 'none';
+  document.getElementById('celebrate-canvas').style.display = 'none';
+};
+document.getElementById('ms-share').onclick = () => {
+  try {
+    const text = document.getElementById('ms-title').textContent + ' — ' + document.getElementById('ms-narrative').textContent + ' #PianoCoach';
+    navigator.clipboard.writeText(text).then(() => { window.toast?.('Gekopieerd', 'Mijlpaal-tekst staat in je clipboard', 'success'); });
+  } catch {}
+};
+
+// Hook into checkAchievements to celebrate new achievements
+if (typeof checkAchievements === 'function') {
+  const _origCheckAchievements = checkAchievements;
+  checkAchievements = function() {
+    const before = new Set((loadStore().unlockedAchievements || []));
+    const r = _origCheckAchievements();
+    const after = new Set((loadStore().unlockedAchievements || []));
+    // Find newly unlocked
+    const newly = [...after].filter(a => !before.has(a));
+    for (const id of newly) {
+      const ach = ACHIEVEMENTS.find(a => a.id === id);
+      if (!ach) continue;
+      // Save to inspiration milestones log
+      try {
+        const store = loadStore();
+        store.inspirationMilestones = store.inspirationMilestones || [];
+        store.inspirationMilestones.push({ id, icon: ach.icon, title: ach.label, cat: ach.cat, date: Date.now() });
+        if (store.inspirationMilestones.length > 100) store.inspirationMilestones = store.inspirationMilestones.slice(-100);
+        saveStore(store);
+      } catch {}
+      // Celebrate (delay slightly so multiple don't stack)
+      setTimeout(() => {
+        const narratives = [
+          `Met deze mijlpaal staat ${Math.floor(Math.random() * 30 + 5)}% van piano-leerders waar jij nu staat. Goed bezig.`,
+          `Dit is het soort moment dat je je over een jaar herinnert als "toen wist ik dat ik dit echt deed".`,
+          `Eén stap richting expressief, vrij spel. Jij hebt 'm gezet.`,
+          `Sviatoslav Richter zei: "Performance is de moeilijkste vorm van eerlijkheid." Jij was vandaag eerlijk.`,
+          `Bach zou trots zijn — discipline is de moeder van vrijheid.`,
+        ];
+        window.celebrateMilestone({
+          icon: ach.icon || '🎉',
+          title: ach.label,
+          narrative: narratives[Math.floor(Math.random() * narratives.length)],
+        });
+      }, 500);
+      break; // Only celebrate one per check (avoid spam)
+    }
+    return r;
+  };
+}
+
+// === Audio-reactive atmosphere background ===
+const atmosphereState = { enabled: false, animFrame: null };
+window.toggleAtmosphere = function(enable) {
+  const canvas = document.getElementById('atmosphere-canvas');
+  if (!canvas) return;
+  atmosphereState.enabled = enable !== undefined ? enable : !atmosphereState.enabled;
+  if (atmosphereState.enabled) {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    canvas.style.opacity = '0.5';
+    runAtmosphere();
+  } else {
+    canvas.style.opacity = '0';
+    if (atmosphereState.animFrame) cancelAnimationFrame(atmosphereState.animFrame);
+  }
+  try { const store = loadStore(); store.atmosphereEnabled = atmosphereState.enabled; saveStore(store); } catch {}
+};
+function runAtmosphere() {
+  const canvas = document.getElementById('atmosphere-canvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  let t = 0;
+  let audioLevel = 0;
+  // Try to hook into audio context for reactivity
+  let analyser = null;
+  try {
+    const audioCtx = (typeof ensureAudio === 'function') ? ensureAudio() : null;
+    if (audioCtx) {
+      analyser = audioCtx.createAnalyser();
+      analyser.fftSize = 256;
+      audioCtx.destination.context && audioCtx.createGain(); // touch
+    }
+  } catch {}
+  const dataArr = analyser ? new Uint8Array(analyser.frequencyBinCount) : null;
+  function step() {
+    if (!atmosphereState.enabled) return;
+    t += 0.005;
+    // Get audio level (or fall back to gentle sine)
+    let level = 0.5;
+    if (analyser && dataArr) {
+      analyser.getByteFrequencyData(dataArr);
+      let sum = 0; for (let i = 0; i < dataArr.length; i++) sum += dataArr[i];
+      level = Math.min(1, sum / dataArr.length / 100);
+    } else {
+      level = 0.4 + 0.2 * Math.sin(t);
+    }
+    audioLevel = audioLevel * 0.9 + level * 0.1; // smooth
+    // Draw radial gradient
+    const grad = ctx.createRadialGradient(
+      canvas.width / 2 + Math.sin(t) * 100,
+      canvas.height / 2 + Math.cos(t * 0.7) * 100,
+      0,
+      canvas.width / 2, canvas.height / 2, Math.max(canvas.width, canvas.height) / 1.5
+    );
+    const r = Math.floor(99 + audioLevel * 80);
+    const g = Math.floor(102 + audioLevel * 50);
+    const b = Math.floor(241 + audioLevel * 30);
+    grad.addColorStop(0, `rgba(${r},${g},${b},0.5)`);
+    grad.addColorStop(0.6, `rgba(${r / 2},${g / 2},${b / 2},0.2)`);
+    grad.addColorStop(1, 'rgba(10,10,15,0.85)');
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    atmosphereState.animFrame = requestAnimationFrame(step);
+  }
+  step();
+}
+// Restore atmosphere on load
+setTimeout(() => {
+  try {
+    const store = loadStore();
+    if (store.atmosphereEnabled) window.toggleAtmosphere(true);
+  } catch {}
+}, 1500);
+
+// === Inspiration Modal ===
+function renderInspirationDaily() {
+  const q = getDailyQuote();
+  const m = getDailyMantra();
+  document.getElementById('ins-tab-daily').innerHTML = `
+    <div class="ins-quote-card">
+      <div class="ins-quote-text">${q.text}</div>
+      <div class="ins-quote-author">— ${q.author}${q.context ? ' <small>· ' + q.context + '</small>' : ''}</div>
+    </div>
+    <div class="ins-mantra-card">
+      <div class="ins-mantra-label">Mantra voor vandaag</div>
+      <div class="ins-mantra-text">${m}</div>
+    </div>
+    <div style="text-align:center;font-size:12px;color:var(--muted);margin-top:14px;font-style:italic;">
+      💡 Tip: lees deze hardop voor je begint. Het zet de toon.
+    </div>
+  `;
+}
+function renderInspirationQuotes() {
+  const shuffled = PIANO_QUOTES.slice().sort(() => Math.random() - 0.5);
+  document.getElementById('ins-tab-quotes').innerHTML = '<div class="ins-quotes-list">' +
+    shuffled.slice(0, 15).map(q => `
+      <div class="ins-quote-card" style="padding:16px 20px;">
+        <div class="ins-quote-text" style="font-size:15px;">${q.text}</div>
+        <div class="ins-quote-author">— ${q.author}${q.context ? ' <small>· ' + q.context + '</small>' : ''}</div>
+      </div>
+    `).join('') + '</div>';
+}
+function renderInspirationStories() {
+  const stories = Object.entries(COMPOSER_STORIES);
+  document.getElementById('ins-tab-stories').innerHTML = '<div class="ins-stories-list">' +
+    stories.map(([slug, s]) => `
+      <div class="ins-story-card">
+        <div class="ins-story-title">${s.title}</div>
+        <div class="ins-story-body">${s.body}</div>
+      </div>
+    `).join('') + '</div>';
+}
+function renderInspirationMilestones() {
+  const store = loadStore();
+  const ms = (store.inspirationMilestones || []).slice().reverse();
+  if (ms.length === 0) {
+    document.getElementById('ins-tab-milestones').innerHTML = '<div class="ins-empty">Geen mijlpalen nog. Speel, leer, ontdek — ze verschijnen vanzelf.</div>';
+    return;
+  }
+  document.getElementById('ins-tab-milestones').innerHTML = ms.map(m => `
+    <div class="ins-milestone-card">
+      <div class="ins-milestone-icon">${m.icon || '🏆'}</div>
+      <div class="ins-milestone-title">${m.title}</div>
+      <div class="ins-milestone-date">${new Date(m.date).toLocaleDateString('nl-NL', { weekday: 'long', day: 'numeric', month: 'long' })}</div>
+    </div>
+  `).join('');
+}
+
+document.getElementById('btn-inspiration').onclick = () => {
+  renderInspirationDaily();
+  renderInspirationQuotes();
+  renderInspirationStories();
+  renderInspirationMilestones();
+  document.getElementById('inspiration-overlay').style.display = 'flex';
+};
+document.getElementById('inspiration-close').onclick = () => document.getElementById('inspiration-overlay').style.display = 'none';
+document.getElementById('ins-reshuffle').onclick = () => {
+  renderInspirationDaily();
+  renderInspirationQuotes();
+};
+document.querySelectorAll('#inspiration-overlay .ins-tabs button').forEach(btn => {
+  btn.onclick = () => {
+    document.querySelectorAll('#inspiration-overlay .ins-tabs button').forEach(b => b.classList.remove('on'));
+    btn.classList.add('on');
+    const tab = btn.dataset.insTab;
+    ['daily', 'quotes', 'stories', 'milestones'].forEach(t => {
+      document.getElementById('ins-tab-' + t).style.display = (t === tab) ? 'block' : 'none';
+    });
+  };
+});
+
+// Register btn-inspiration in Practice category in compact topbar
+if (typeof FEATURE_CATEGORIES !== 'undefined' && FEATURE_CATEGORIES.Plan) {
+  FEATURE_CATEGORIES.Plan.features.push({ id: 'btn-inspiration', icon: '✨', label: 'Inspiration', hint: 'Quotes, verhalen, mijlpalen' });
+}
+
+ACHIEVEMENTS.push({
+  id: 'inspired', icon: '✨', label: '10 quotes gelezen in Inspiration Hub', cat: 'Habits',
+  test: s => (s.inspirationQuotesRead || 0) >= 10,
+});
+
+// ============================================================================
+// v0.80 — UX POLISH: Toast notifications + Keyboard cheat-sheet
 // ============================================================================
 
 // Toast notification system — replaces alert() for non-critical messages
@@ -23656,7 +24261,7 @@ window.addEventListener('resize', () => {
 });
 
 // ============================================================================
-// v0.79 — POMODORO + WARM-UP + DAILY JOURNAL
+// v0.80 — POMODORO + WARM-UP + DAILY JOURNAL
 // ============================================================================
 const pomodoroState = {
   active: false,
@@ -24155,7 +24760,7 @@ ACHIEVEMENTS.push({
 });
 
 // ============================================================================
-// v0.79 — TWO-HAND INDEPENDENCE DRILLS
+// v0.80 — TWO-HAND INDEPENDENCE DRILLS
 // ============================================================================
 // Each drill defines RH + LH patterns. Pattern = array of [time_in_beats, midi] tuples.
 // Beats run from 0 to length. Metronome ticks each integer beat.
