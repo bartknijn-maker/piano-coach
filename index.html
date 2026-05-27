@@ -11459,7 +11459,12 @@ function setStreakFreezes(n) {
 function awardFreezeIfEarned() {
   const weekStart = getWeekStartKey();
   const goals = loadGoals();
-  const allDone = goals.items.every(g => computeGoalProgress(g) >= g.target);
+  // Defensive: v0.60 loadGoals() returns Array
+  const items = Array.isArray(goals) ? goals : (goals?.items || []);
+  // Skip if items don't have the old shape (new v0.60 goals have .song not .target as number)
+  const oldShapeItems = items.filter(g => g && typeof g.target === 'number' && typeof g.icon === 'string');
+  if (oldShapeItems.length === 0) return; // no old-format goals to track
+  const allDone = oldShapeItems.every(g => computeGoalProgress(g) >= g.target);
   // Re-load store AFTER goals to get the freshest state
   const store = loadStore();
   if (allDone && store.freezeAwardedWeek !== weekStart) {
