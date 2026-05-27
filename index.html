@@ -2,7 +2,7 @@
 <html lang="nl">
 <head>
 <meta charset="UTF-8">
-<title>Piano Coach — v0.77</title>
+<title>Piano Coach — v0.79</title>
 <link rel="manifest" href="data:application/json;charset=utf-8,%7B%22name%22%3A%22Piano%20Coach%22%2C%22short_name%22%3A%22PianoCoach%22%2C%22start_url%22%3A%22.%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%230f1419%22%2C%22theme_color%22%3A%22%234ade80%22%2C%22description%22%3A%22Self-hosted%20piano%20coaching%20met%20MIDI-input%2C%2035-song%20repertoire%2C%20coach%2C%20achievements%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22data%3Aimage%2Fsvg%2Bxml%2C%253Csvg%2520xmlns%3D%2522http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%2522%2520viewBox%3D%25220%25200%25201024%25201024%2522%253E%253Crect%2520fill%3D%2522%25230f1419%2522%2520width%3D%25221024%2522%2520height%3D%25221024%2522%2F%253E%253Ctext%2520x%3D%2522512%2522%2520y%3D%2522680%2522%2520font-size%3D%2522680%2522%2520text-anchor%3D%2522middle%2522%253E%25F0%259F%258E%25B9%253C%2Ftext%253E%253C%2Fsvg%253E%22%2C%22sizes%22%3A%22512x512%22%2C%22type%22%3A%22image%2Fsvg%2Bxml%22%7D%5D%7D">
 <meta name="theme-color" content="#4ade80">
 <script src="https://cdn.jsdelivr.net/npm/@tonejs/midi@2.0.28/build/Midi.js"></script>
@@ -1918,7 +1918,7 @@
   .eartrain-audio-answer { text-align: center; font-size: 20px; color: #4ade80; padding: 12px; margin-bottom: 12px; }
   .eartrain-audio-stats { display: flex; justify-content: center; gap: 24px; font-size: 13px; margin-bottom: 14px; }
   .eartrain-audio-hint { font-size: 11px; color: var(--muted); text-align: center; margin-top: 8px; }
-  /* v0.77 — Smart coach */
+  /* v0.79 — Smart coach */
   .coach-modal { max-width: 600px; }
   .coach-session { display: flex; flex-direction: column; gap: 10px; margin: 16px 0; }
   .coach-step {
@@ -1982,7 +1982,7 @@
   .stats-repertoire { font-size: 12px; color: var(--muted); max-height: 200px; overflow-y: auto; }
   .stats-rep-item { display: flex; justify-content: space-between; padding: 4px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
 
-  /* v0.77 — Backing Track Modal */
+  /* v0.79 — Backing Track Modal */
   .backing-modal { max-width: 640px; }
   .backing-progressions { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 6px; margin: 12px 0; }
   .backing-progressions button {
@@ -2003,7 +2003,7 @@
   .backing-next { font-size: 12px; color: var(--muted); }
   .backing-scale-info { font-size: 11px; color: var(--muted); text-align: center; padding: 8px; background: rgba(99,102,241,0.08); border-radius: 4px; margin-bottom: 12px; }
 
-  /* v0.77 — Knowledge Review */
+  /* v0.79 — Knowledge Review */
   .review-modal { max-width: 560px; }
   .review-stats { display: flex; gap: 16px; justify-content: center; font-size: 12px; color: var(--muted); margin-bottom: 12px; }
   .review-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1); padding: 18px; border-radius: 10px; margin-bottom: 12px; }
@@ -2082,7 +2082,7 @@
   .selfreview-history { max-height: 180px; overflow-y: auto; font-size: 11px; }
   .sr-history-row { display: flex; justify-content: space-between; padding: 4px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
 
-  /* v0.77 — Composers */
+  /* v0.79 — Composers */
   .composers-modal { max-width: 700px; }
   .composers-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 8px; margin: 14px 0; }
   .composer-card {
@@ -2166,7 +2166,7 @@
   .pwa-install-banner button { background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.4); color: #fff; padding: 6px 14px; border-radius: 4px; cursor: pointer; font-size: 13px; }
   .pwa-install-banner button:first-of-type { background: #fff; color: #4338ca; }
 
-  /* v0.77 — Pomodoro + Journal + Warm-up */
+  /* v0.79 — Pomodoro + Journal + Warm-up */
   .pomodoro-widget {
     position: fixed; bottom: 20px; left: 20px;
     background: rgba(0,0,0,0.9); border: 2px solid #ef4444;
@@ -2259,7 +2259,7 @@
   .vrt-marks { display: flex; justify-content: space-between; font-size: 8px; color: var(--muted); margin-bottom: 6px; }
   .vrt-recent { font-size: 11px; color: var(--muted); min-height: 16px; }
 
-  /* v0.77 — Two-Hand Drills */
+  /* v0.79 — Two-Hand Drills */
   .twohand-modal { max-width: 700px; }
   .twohand-drill-picker { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 6px; margin: 12px 0; }
   .twohand-drill-picker button {
@@ -2386,7 +2386,7 @@
   .mem-staff.hidden { opacity: 0; }
   .mem-instruction { font-size: 13px; color: #444; margin-top: 8px; }
 
-  /* v0.77 — Stage + Blind */
+  /* v0.79 — Stage + Blind */
   .stage-config, .blind-config { display: flex; flex-direction: column; gap: 8px; margin: 12px 0; font-size: 13px; color: var(--muted); }
   .stage-config label, .blind-config label { display: flex; align-items: center; gap: 8px; }
   .stage-config select, .blind-config select { background: rgba(255,255,255,0.08); color: #fff; border: 1px solid rgba(255,255,255,0.15); padding: 4px 8px; border-radius: 4px; font-size: 12px; }
@@ -2458,7 +2458,7 @@
   .etp-input-note { padding: 4px 8px; background: rgba(255,255,255,0.06); border-radius: 4px; font-family: monospace; }
   .etp-stats { display: flex; gap: 16px; justify-content: center; font-size: 12px; color: var(--muted); margin: 10px 0; flex-wrap: wrap; }
 
-  /* v0.77 — Goal-Based Curriculum */
+  /* v0.79 — Goal-Based Curriculum */
   .goals-modal { max-width: 720px; }
   .goals-active-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 14px; max-height: 320px; overflow-y: auto; }
   .goal-item {
@@ -2497,7 +2497,7 @@
   .goal-week-tasks { font-size: 12px; line-height: 1.5; }
   .goal-week-status { font-size: 18px; }
 
-  /* v0.77 — Practice Analytics Deep */
+  /* v0.79 — Practice Analytics Deep */
   .analytics-modal { max-width: 820px; }
   .analytics-section { margin: 18px 0; }
   .analytics-section-title { font-size: 13px; font-weight: 600; margin-bottom: 10px; color: rgba(255,255,255,0.9); }
@@ -2642,7 +2642,7 @@
   .poly-settings select { background: rgba(255,255,255,0.08); color: #fff; border: 1px solid rgba(255,255,255,0.15); padding: 4px 8px; border-radius: 4px; font-size: 12px; }
   .poly-stats { display: flex; gap: 16px; justify-content: center; font-size: 12px; color: var(--muted); margin: 10px 0; }
 
-  /* v0.77 — Composition Challenge */
+  /* v0.79 — Composition Challenge */
   .compose-modal { max-width: 680px; }
   .compose-challenge-info {
     background: rgba(99,102,241,0.1); border-left: 3px solid #6366f1;
@@ -2729,7 +2729,7 @@
   .pattern-row-count { font-family: monospace; font-size: 11px; color: var(--accent); text-align: right; }
   .pattern-intervals { font-family: monospace; font-size: 11px; color: var(--muted); }
 
-  /* v0.77 — Practice Calendar */
+  /* v0.79 — Practice Calendar */
   .calendar-modal { max-width: 880px; }
   .calendar-nav {
     display: flex; align-items: center; justify-content: space-between;
@@ -2840,7 +2840,7 @@
   .coach-view-content table th, .coach-view-content table td { padding: 6px 8px; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.06); }
   .coach-view-content table th { color: var(--muted); font-weight: 600; font-size: 10px; text-transform: uppercase; }
 
-  /* v0.77 — Deep Insights */
+  /* v0.79 — Deep Insights */
   .deep-insights-modal { max-width: 820px; max-height: 90vh; overflow-y: auto; }
   .di-loading { text-align: center; padding: 40px; font-size: 14px; color: var(--muted); }
   .di-period-selector { margin: 12px 0; font-size: 12px; color: var(--muted); }
@@ -2881,7 +2881,7 @@
   .di-correlations .di-corr-row { padding: 4px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
 
   /* ===================================================================== */
-  /* v0.77 — UX OVERHAUL: Compact Topbar + Command Palette + Welcome Hub  */
+  /* v0.79 — UX OVERHAUL: Compact Topbar + Command Palette + Welcome Hub  */
   /* ===================================================================== */
 
   /* Hide all feature buttons (data-grouped) — they live in .controls.row2 + others */
@@ -3106,7 +3106,7 @@
     background: transparent; border-color: rgba(255,255,255,0.2);
   }
 
-  /* v0.77 — Smart Fingering Display */
+  /* v0.79 — Smart Fingering Display */
   .fingering-modal { max-width: 600px; }
   .fm-modes { display: flex; flex-direction: column; gap: 8px; margin: 14px 0; }
   .fm-mode {
@@ -3187,7 +3187,7 @@
   .sf-staff { background: #fff; border-radius: 8px; padding: 14px; margin: 14px 0; overflow-x: auto; }
   .sf-explanation { font-size: 12px; line-height: 1.6; color: var(--muted); padding: 10px; background: rgba(255,255,255,0.03); border-radius: 6px; }
 
-  /* v0.77 — Voice Journal */
+  /* v0.79 — Voice Journal */
   .voice-journal-modal { max-width: 600px; }
   .vj-status-row { display: flex; align-items: center; gap: 10px; margin: 14px 0; padding: 10px 14px; background: rgba(255,255,255,0.04); border-radius: 6px; }
   .vj-status-dot { width: 12px; height: 12px; border-radius: 50%; background: #6b7280; transition: all 0.3s; }
@@ -3222,6 +3222,59 @@
   }
   .vj-save-btn:hover { transform: translateY(-1px); }
   .vj-hint { background: rgba(251,191,36,0.08); border-left: 3px solid #fbbf24; padding: 10px 14px; border-radius: 0 6px 6px 0; font-size: 12px; line-height: 1.5; margin: 12px 0; }
+
+  /* v0.79 — Keyboard cheat-sheet */
+  .keyboard-help-modal { max-width: 720px; }
+  .kh-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; margin: 16px 0; }
+  .kh-group { background: rgba(255,255,255,0.04); padding: 12px 14px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.08); }
+  .kh-group-title { font-size: 13px; font-weight: 600; margin-bottom: 8px; color: var(--accent); }
+  .kh-row { display: flex; justify-content: space-between; align-items: center; padding: 4px 0; font-size: 12px; gap: 8px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+  .kh-row:last-child { border-bottom: none; }
+  .kh-row kbd, .keyboard-help-modal kbd, .modal-sub kbd {
+    background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);
+    color: #fff; padding: 2px 8px; border-radius: 4px;
+    font-family: monospace; font-size: 11px; font-weight: 600;
+    box-shadow: 0 1px 0 rgba(255,255,255,0.05) inset, 0 2px 0 rgba(0,0,0,0.3);
+    min-width: 24px; text-align: center;
+  }
+  .kh-row span { color: var(--muted); }
+
+  /* v0.79 — Toast notifications */
+  .toast-stack {
+    position: fixed; bottom: 20px; right: 20px;
+    display: flex; flex-direction: column-reverse; gap: 8px;
+    z-index: 9500; pointer-events: none;
+    max-width: 360px;
+  }
+  .pc-toast {
+    background: #1a1f2e; color: #fff;
+    border-left: 4px solid var(--accent);
+    border-radius: 6px; padding: 12px 14px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+    pointer-events: auto;
+    display: flex; gap: 10px; align-items: flex-start;
+    animation: toastSlideIn 0.3s ease-out;
+    max-width: 360px;
+  }
+  .pc-toast.toast-success { border-left-color: #4ade80; }
+  .pc-toast.toast-error { border-left-color: #ef4444; }
+  .pc-toast.toast-warn { border-left-color: #fbbf24; }
+  .pc-toast.toast-info { border-left-color: #6366f1; }
+  .pc-toast-icon { font-size: 18px; }
+  .pc-toast-content { flex: 1; min-width: 0; }
+  .pc-toast-title { font-size: 13px; font-weight: 600; margin-bottom: 2px; }
+  .pc-toast-body { font-size: 12px; color: rgba(255,255,255,0.75); line-height: 1.4; }
+  .pc-toast-close { cursor: pointer; color: var(--muted); font-size: 18px; line-height: 1; padding: 0 4px; }
+  .pc-toast-close:hover { color: #fff; }
+  .pc-toast.removing { animation: toastSlideOut 0.25s ease-in forwards; }
+  @keyframes toastSlideIn {
+    from { transform: translateX(100%); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+  }
+  @keyframes toastSlideOut {
+    from { transform: translateX(0); opacity: 1; }
+    to { transform: translateX(100%); opacity: 0; }
+  }
 
   /* Mobile responsive: collapse compact topbar */
   @media (max-width: 720px) {
@@ -3332,7 +3385,7 @@
   .reharm-result.miss { background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.4); }
   .reharm-stats { display: flex; gap: 16px; justify-content: center; font-size: 12px; color: var(--muted); margin: 10px 0; }
 
-  /* v0.77 — Listen-Along Mode */
+  /* v0.79 — Listen-Along Mode */
   .listen-along-modal { max-width: 720px; }
   .la-source-toggle { display: flex; gap: 4px; margin-bottom: 12px; }
   .la-source-toggle button {
@@ -3389,7 +3442,7 @@
 </head>
 <body>
 
-<h1>Piano Coach <span style="color: var(--muted); font-weight: 400;">v0.77</span></h1>
+<h1>Piano Coach <span style="color: var(--muted); font-weight: 400;">v0.79</span></h1>
 <p class="sub">📜 Sight reading 2.0 (audio + keyboard + heatmap + adaptive + reaction) · 36 songs</p>
 
 <div class="topbar">
@@ -3878,7 +3931,7 @@
   </div>
 </div>
 
-<!-- v0.77 — Smart Coach (today's session) -->
+<!-- v0.79 — Smart Coach (today's session) -->
 <div class="modal-overlay" id="coach-overlay" style="display:none;">
   <div class="modal coach-modal">
     <h2>🧭 Smart Coach — Vandaag's sessie</h2>
@@ -3921,7 +3974,7 @@
   </div>
 </div>
 
-<!-- v0.77 — Backing Track / Chord Loop Improv -->
+<!-- v0.79 — Backing Track / Chord Loop Improv -->
 <div class="modal-overlay" id="backing-overlay" style="display:none;">
   <div class="modal backing-modal">
     <h2>🎸 Backing Track Improv</h2>
@@ -3968,7 +4021,7 @@
   </div>
 </div>
 
-<!-- v0.77 — Knowledge Review (spaced repetition over theory lessons) -->
+<!-- v0.79 — Knowledge Review (spaced repetition over theory lessons) -->
 <div class="modal-overlay" id="review-overlay" style="display:none;">
   <div class="modal review-modal">
     <h2>🧠 Knowledge Review</h2>
@@ -3993,7 +4046,7 @@
   </div>
 </div>
 
-<!-- v0.77 — Post-lesson quiz (auto-shown after Gym lesson completes) -->
+<!-- v0.79 — Post-lesson quiz (auto-shown after Gym lesson completes) -->
 <div class="modal-overlay" id="postquiz-overlay" style="display:none;">
   <div class="modal review-modal">
     <h2>🎯 Snelle check</h2>
@@ -4105,7 +4158,7 @@ create policy "Anyone can update"
   </div>
 </div>
 
-<!-- v0.77 — Composers / Componisten bios -->
+<!-- v0.79 — Composers / Componisten bios -->
 <div class="modal-overlay" id="composers-overlay" style="display:none;">
   <div class="modal composers-modal">
     <h2>👤 Componisten</h2>
@@ -4169,7 +4222,7 @@ create policy "Anyone can update"
   <button id="pwa-install-no">Later</button>
 </div>
 
-<!-- v0.77 — Pomodoro timer (floating + modal config) -->
+<!-- v0.79 — Pomodoro timer (floating + modal config) -->
 <div class="pomodoro-widget" id="pomodoro-widget" style="display:none;">
   <div class="pomodoro-phase" id="pomodoro-phase">🍅 Focus</div>
   <div class="pomodoro-time" id="pomodoro-time">25:00</div>
@@ -4205,7 +4258,7 @@ create policy "Anyone can update"
   </div>
 </div>
 
-<!-- v0.77 — Warm-up modal (forced before practice) -->
+<!-- v0.79 — Warm-up modal (forced before practice) -->
 <div class="modal-overlay" id="warmup-overlay" style="display:none;">
   <div class="modal warmup-modal">
     <h2>🔥 Warm-up (3 min)</h2>
@@ -4223,7 +4276,7 @@ create policy "Anyone can update"
   </div>
 </div>
 
-<!-- v0.77 — Daily Journal -->
+<!-- v0.79 — Daily Journal -->
 <div class="modal-overlay" id="journal-overlay" style="display:none;">
   <div class="modal journal-modal">
     <h2>📓 Practice Journal</h2>
@@ -4311,7 +4364,7 @@ create policy "Anyone can update"
   <div class="vrt-recent" id="vrt-recent"></div>
 </div>
 
-<!-- v0.77 — Two-Hand Independence Drills -->
+<!-- v0.79 — Two-Hand Independence Drills -->
 <div class="modal-overlay" id="twohand-overlay" style="display:none;">
   <div class="modal twohand-modal">
     <h2>✌ Two-Hand Independence Drills</h2>
@@ -4464,7 +4517,7 @@ create policy "Anyone can update"
   </div>
 </div>
 
-<!-- v0.77 — Stage Mode + Blind Playing -->
+<!-- v0.79 — Stage Mode + Blind Playing -->
 <div class="modal-overlay" id="stage-overlay" style="display:none;">
   <div class="modal stage-modal">
     <h2>🎭 Performance Prep</h2>
@@ -4606,7 +4659,7 @@ create policy "Anyone can update"
   </div>
 </div>
 
-<!-- v0.77 — Goal-Based Curriculum -->
+<!-- v0.79 — Goal-Based Curriculum -->
 <div class="modal-overlay" id="goals-overlay" style="display:none;">
   <div class="modal goals-modal">
     <h2>🎯 Goal-Based Curriculum</h2>
@@ -4656,7 +4709,7 @@ create policy "Anyone can update"
   </div>
 </div>
 
-<!-- v0.77 — Practice Analytics Deep -->
+<!-- v0.79 — Practice Analytics Deep -->
 <div class="modal-overlay" id="analytics-overlay" style="display:none;">
   <div class="modal analytics-modal">
     <h2>📈 Practice Analytics</h2>
@@ -4755,7 +4808,7 @@ create policy "Anyone can update"
   </div>
 </div>
 
-<!-- v0.77 — Composition Challenge -->
+<!-- v0.79 — Composition Challenge -->
 <div class="modal-overlay" id="compose-overlay" style="display:none;">
   <div class="modal compose-modal">
     <h2>✍ Compositie Challenge</h2>
@@ -4845,7 +4898,7 @@ create policy "Anyone can update"
   </div>
 </div>
 
-<!-- v0.77 — Practice Calendar -->
+<!-- v0.79 — Practice Calendar -->
 <div class="modal-overlay" id="calendar-overlay" style="display:none;">
   <div class="modal calendar-modal">
     <h2>📅 Practice Calendar</h2>
@@ -4925,7 +4978,7 @@ create policy "Anyone can update"
   </div>
 </div>
 
-<!-- v0.77 — Deep Insights -->
+<!-- v0.79 — Deep Insights -->
 <div class="modal-overlay" id="deep-insights-overlay" style="display:none;">
   <div class="modal deep-insights-modal">
     <h2>🧠 Deep Insights</h2>
@@ -5060,7 +5113,7 @@ create policy "Anyone can update"
   </div>
 </div>
 
-<!-- v0.77 — Listen-Along Mode -->
+<!-- v0.79 — Listen-Along Mode -->
 <div class="modal-overlay" id="listen-along-overlay" style="display:none;">
   <div class="modal listen-along-modal">
     <h2>🎧 Listen-Along</h2>
@@ -5100,7 +5153,7 @@ create policy "Anyone can update"
   </div>
 </div>
 
-<!-- v0.77 — Smart Fingering Display modal -->
+<!-- v0.79 — Smart Fingering Display modal -->
 <div class="modal-overlay" id="fingering-modal-overlay" style="display:none;">
   <div class="modal fingering-modal">
     <h2>🖐 Vingerzetting Display</h2>
@@ -5155,7 +5208,7 @@ create policy "Anyone can update"
   </div>
 </div>
 
-<!-- v0.77 — Hand position floating widget -->
+<!-- v0.79 — Hand position floating widget -->
 <div class="hand-position-widget" id="hand-position-widget" style="display:none;">
   <div class="hpw-row hpw-rh">
     <span class="hpw-label">RH</span>
@@ -5167,7 +5220,7 @@ create policy "Anyone can update"
   </div>
 </div>
 
-<!-- v0.77 — Section fingering preview overlay -->
+<!-- v0.79 — Section fingering preview overlay -->
 <div class="modal-overlay" id="section-fingering-overlay" style="display:none;">
   <div class="modal section-fingering-modal">
     <h2>👁 Vingerzettingen voor sectie</h2>
@@ -5180,7 +5233,7 @@ create policy "Anyone can update"
   </div>
 </div>
 
-<!-- v0.77 — Command Palette (⌘K / Ctrl+K) -->
+<!-- v0.79 — Command Palette (⌘K / Ctrl+K) -->
 <div class="cmd-palette-overlay" id="cmd-palette-overlay">
   <div class="cmd-palette">
     <div class="cmd-palette-input-wrap">
@@ -5192,7 +5245,7 @@ create policy "Anyone can update"
   </div>
 </div>
 
-<!-- v0.77 — Welcome Hub -->
+<!-- v0.79 — Welcome Hub -->
 <div class="welcome-hub-overlay" id="welcome-hub-overlay">
   <div class="welcome-hub">
     <div class="wh-header">
@@ -5222,7 +5275,7 @@ create policy "Anyone can update"
   </div>
 </div>
 
-<!-- v0.77 — Voice Journal -->
+<!-- v0.79 — Voice Journal -->
 <div class="modal-overlay" id="voice-journal-overlay" style="display:none;">
   <div class="modal voice-journal-modal">
     <h2>🗣 Voice Journal</h2>
@@ -5272,6 +5325,55 @@ create policy "Anyone can update"
     </div>
   </div>
 </div>
+
+<!-- v0.79 — Keyboard shortcuts cheat-sheet -->
+<div class="modal-overlay" id="keyboard-help-overlay" style="display:none;">
+  <div class="modal keyboard-help-modal">
+    <h2>⌨ Keyboard Shortcuts</h2>
+    <div class="modal-sub">Druk een sneltoets om snel een actie uit te voeren. Cheatsheet altijd te openen met <kbd>?</kbd>.</div>
+    <div class="kh-grid">
+      <div class="kh-group">
+        <div class="kh-group-title">🎹 Player</div>
+        <div class="kh-row"><kbd>Space</kbd><span>Speel / Pauze</span></div>
+        <div class="kh-row"><kbd>R</kbd><span>Opnieuw beginnen</span></div>
+        <div class="kh-row"><kbd>W</kbd><span>Wait mode toggle</span></div>
+        <div class="kh-row"><kbd>1</kbd><span>Beide handen</span></div>
+        <div class="kh-row"><kbd>2</kbd><span>Alleen rechterhand</span></div>
+        <div class="kh-row"><kbd>3</kbd><span>Alleen linkerhand</span></div>
+        <div class="kh-row"><kbd>[</kbd><span>Loop-start markeren</span></div>
+        <div class="kh-row"><kbd>]</kbd><span>Loop-eind markeren</span></div>
+        <div class="kh-row"><kbd>L</kbd><span>Loop aan/uit</span></div>
+      </div>
+      <div class="kh-group">
+        <div class="kh-group-title">🚀 Navigatie</div>
+        <div class="kh-row"><kbd>Ctrl</kbd>+<kbd>K</kbd><span>Quick search (Command Palette)</span></div>
+        <div class="kh-row"><kbd>?</kbd><span>Deze cheat-sheet</span></div>
+        <div class="kh-row"><kbd>Esc</kbd><span>Sluit modal</span></div>
+        <div class="kh-row"><kbd>C</kbd><span>Chord detection toggle</span></div>
+        <div class="kh-row"><kbd>E</kbd><span>Ear training</span></div>
+        <div class="kh-row"><kbd>F</kbd><span>Performance mode (verberg UI)</span></div>
+        <div class="kh-row"><kbd>T</kbd><span>TV mode</span></div>
+      </div>
+      <div class="kh-group">
+        <div class="kh-group-title">🎙 Recording</div>
+        <div class="kh-row"><kbd>Shift</kbd>+<kbd>R</kbd><span>Record start/stop</span></div>
+      </div>
+      <div class="kh-group">
+        <div class="kh-group-title">🎵 Voice Commands (na 🎙 Voice CMD aanzetten)</div>
+        <div class="kh-row"><span>"speel" / "pauze"</span><span>Player control</span></div>
+        <div class="kh-row"><span>"volgende" / "vorige"</span><span>In Gym mode</span></div>
+        <div class="kh-row"><span>"sneller" / "trager"</span><span>Tempo aanpassen</span></div>
+        <div class="kh-row"><span>"kwint", "majeur"</span><span>Ear training antwoorden</span></div>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button id="keyboard-help-close">Sluit</button>
+    </div>
+  </div>
+</div>
+
+<!-- v0.79 — Toast notification container (always-mounted) -->
+<div class="toast-stack" id="toast-stack"></div>
 
 <!-- v0.41 — Voice command status indicator (floating, always shown when active) -->
 <div class="voice-cmd-indicator" id="voice-cmd-indicator" style="display:none;">
@@ -8142,6 +8244,129 @@ document.getElementById('install-no').onclick = () => {
   saveStore(store);
 };
 
+// v0.78 — Extended self-test: ?test=2 runs modal smoke tests + storage roundtrip
+window.runExtendedTest = async function() {
+  const results = { passed: [], failed: [], total: 0 };
+  function assert(name, cond, detail) {
+    results.total++;
+    if (cond) results.passed.push(name);
+    else results.failed.push(name + (detail ? ' :: ' + detail : ''));
+  }
+  // 1. Modal smoke tests — open/close each, ensure no errors thrown
+  const modalsToTest = [
+    { btn: 'btn-gym', overlay: 'gym-overlay' },
+    { btn: 'btn-sight', overlay: 'sight-overlay' },
+    { btn: 'btn-coach', overlay: 'coach-overlay' },
+    { btn: 'btn-stats', overlay: 'stats-overlay' },
+    { btn: 'btn-self-review', overlay: 'selfreview-overlay' },
+    { btn: 'btn-composers', overlay: 'composers-overlay' },
+    { btn: 'btn-repertoire', overlay: 'repertoire-overlay' },
+    { btn: 'btn-pomodoro', overlay: 'pomodoro-overlay' },
+    { btn: 'btn-journal', overlay: 'journal-overlay' },
+    { btn: 'btn-velocity-coach', overlay: 'velocity-overlay' },
+    { btn: 'btn-twohand', overlay: 'twohand-overlay' },
+    { btn: 'btn-improv-coach', overlay: 'improv-coach-overlay' },
+    { btn: 'btn-prima-vista', overlay: 'prima-vista-overlay' },
+    { btn: 'btn-stage', overlay: 'stage-overlay' },
+    { btn: 'btn-etudes', overlay: 'etudes-overlay' },
+    { btn: 'btn-ear-to-piano', overlay: 'ear-to-piano-overlay' },
+    { btn: 'btn-goals', overlay: 'goals-overlay' },
+    { btn: 'btn-analytics', overlay: 'analytics-overlay' },
+    { btn: 'btn-polyphonic', overlay: 'polyphonic-overlay' },
+    { btn: 'btn-compose', overlay: 'compose-overlay' },
+    { btn: 'btn-patterns', overlay: 'patterns-overlay' },
+    { btn: 'btn-calendar', overlay: 'calendar-overlay' },
+    { btn: 'btn-share', overlay: 'share-overlay' },
+    { btn: 'btn-deep-insights', overlay: 'deep-insights-overlay' },
+    { btn: 'btn-tutor', overlay: 'tutor-overlay' },
+    { btn: 'btn-reharm', overlay: 'reharm-overlay' },
+    { btn: 'btn-listen-along', overlay: 'listen-along-overlay' },
+    { btn: 'btn-backing', overlay: 'backing-overlay' },
+    { btn: 'btn-review', overlay: 'review-overlay' },
+    { btn: 'btn-sync', overlay: 'sync-overlay' },
+    { btn: 'btn-voice-journal', overlay: 'voice-journal-overlay' },
+    { btn: 'btn-fingering', overlay: 'fingering-modal-overlay' },
+  ];
+  for (const m of modalsToTest) {
+    try {
+      const before = document.getElementById('pc-error-chip')?.textContent || '';
+      const btn = document.getElementById(m.btn);
+      if (!btn) { assert('modal-open:' + m.btn, false, 'MISSING button'); continue; }
+      btn.click();
+      // micro-pause
+      await new Promise(r => setTimeout(r, 50));
+      const overlay = document.getElementById(m.overlay);
+      const isOpen = overlay && (overlay.style.display === 'flex' || overlay.style.display === 'block' || overlay.classList.contains('open'));
+      assert('modal-opens:' + m.overlay, isOpen, 'display=' + (overlay?.style.display || 'unknown'));
+      // Close it
+      if (overlay) overlay.style.display = 'none';
+      // Check no new error appeared
+      const after = document.getElementById('pc-error-chip')?.textContent || '';
+      assert('modal-no-error:' + m.btn, before === after, 'new error: ' + after);
+    } catch (e) {
+      assert('modal-throw:' + m.btn, false, e.message);
+    }
+  }
+  // 2. localStorage roundtrip
+  try {
+    const original = loadStore();
+    const testKey = '__pc_test_' + Date.now();
+    const testStore = { ...original, [testKey]: 'roundtrip-test' };
+    saveStore(testStore);
+    const reloaded = loadStore();
+    assert('storage-roundtrip', reloaded[testKey] === 'roundtrip-test');
+    // Cleanup
+    delete reloaded[testKey];
+    saveStore(reloaded);
+  } catch (e) {
+    assert('storage-roundtrip', false, e.message);
+  }
+  // 3. THEORY_LESSONS integrity
+  try {
+    const valid = THEORY_LESSONS.every(l => l.id && l.title && Array.isArray(l.steps));
+    assert('theory-lessons-valid', valid, 'total: ' + THEORY_LESSONS.length);
+    assert('theory-lessons-count', THEORY_LESSONS.length >= 45, 'expected 45+, got ' + THEORY_LESSONS.length);
+    const uniqueIds = new Set(THEORY_LESSONS.map(l => l.id));
+    assert('theory-lessons-unique-ids', uniqueIds.size === THEORY_LESSONS.length, 'duplicates: ' + (THEORY_LESSONS.length - uniqueIds.size));
+  } catch (e) { assert('theory-lessons-valid', false, e.message); }
+  // 4. Compact topbar integrity
+  try {
+    const ct = document.getElementById('compact-topbar');
+    assert('compact-topbar-exists', !!ct);
+    const cats = ct?.querySelectorAll('.ct-cat').length || 0;
+    assert('compact-topbar-categories', cats === 7, 'got ' + cats);
+  } catch (e) { assert('compact-topbar', false, e.message); }
+  // 5. FEATURE_CATEGORIES coverage — every listed btnId must exist
+  let missingBtns = 0;
+  for (const [catName, cat] of Object.entries(FEATURE_CATEGORIES)) {
+    for (const f of cat.features) {
+      if (!document.getElementById(f.id)) missingBtns++;
+    }
+  }
+  assert('feature-categories-coverage', missingBtns === 0, missingBtns + ' missing buttons');
+  return results;
+};
+
+// v0.78 — Auto-recovery wrapper: catch errors in onclick handlers, show toast
+window.installAutoRecovery = function() {
+  const expectedBtns = document.querySelectorAll('button[id^="btn-"]');
+  for (const btn of expectedBtns) {
+    const orig = btn.onclick;
+    if (typeof orig !== 'function') continue;
+    btn.onclick = function(e) {
+      try { return orig.call(this, e); }
+      catch (err) {
+        console.error('[AutoRecovery] Handler failed for ' + btn.id + ':', err);
+        if (typeof showToast === 'function') {
+          showToast('Actie mislukt', btn.id + ': ' + err.message, []);
+        } else {
+          alert('Fout bij ' + btn.id + ': ' + err.message);
+        }
+      }
+    };
+  }
+};
+
 // v0.76 — Self-test suite: run via URL ?test=1 or window.runSelfTest()
 window.runSelfTest = function() {
   const results = { passed: [], failed: [], total: 0 };
@@ -8182,21 +8407,31 @@ window.runSelfTest = function() {
   return results;
 };
 
-if (new URLSearchParams(location.search).get('test') === '1') {
-  setTimeout(() => {
-    const r = window.runSelfTest();
-    const passRate = ((r.passed.length / r.total) * 100).toFixed(1);
-    const banner = document.createElement('div');
-    banner.style.cssText = 'position:fixed;top:10px;left:10px;background:' + (r.failed.length === 0 ? '#16a34a' : '#dc2626') + ';color:#fff;padding:14px 20px;border-radius:10px;font-size:12px;font-family:monospace;z-index:99999;max-width:520px;max-height:80vh;overflow-y:auto;box-shadow:0 8px 24px rgba(0,0,0,0.5);';
-    banner.innerHTML = '<strong>🧪 Self-test: ' + r.passed.length + '/' + r.total + ' (' + passRate + '%)</strong>' +
-      (r.failed.length > 0 ? '<br><br><strong>❌ Failed:</strong><br>' + r.failed.slice(0, 30).map(f => '· ' + f).join('<br>') : '<br><br>✅ All systems go') +
-      '<br><br><button onclick="this.parentElement.remove()" style="background:#fff;color:#000;border:none;padding:4px 10px;border-radius:4px;cursor:pointer;">Sluit</button>';
-    document.body.appendChild(banner);
-    console.log('[Piano Coach self-test]', r);
-  }, 1000);
+function showTestBanner(r, level) {
+  const passRate = ((r.passed.length / r.total) * 100).toFixed(1);
+  const banner = document.createElement('div');
+  banner.style.cssText = 'position:fixed;top:10px;left:10px;background:' + (r.failed.length === 0 ? '#16a34a' : '#dc2626') + ';color:#fff;padding:14px 20px;border-radius:10px;font-size:12px;font-family:monospace;z-index:99999;max-width:520px;max-height:80vh;overflow-y:auto;box-shadow:0 8px 24px rgba(0,0,0,0.5);';
+  banner.innerHTML = '<strong>🧪 ' + level + ': ' + r.passed.length + '/' + r.total + ' (' + passRate + '%)</strong>' +
+    (r.failed.length > 0 ? '<br><br><strong>❌ Failed:</strong><br>' + r.failed.slice(0, 30).map(f => '· ' + f).join('<br>') : '<br><br>✅ All systems go') +
+    '<br><br><button onclick="this.parentElement.remove()" style="background:#fff;color:#000;border:none;padding:4px 10px;border-radius:4px;cursor:pointer;">Sluit</button>';
+  document.body.appendChild(banner);
+  console.log('[Piano Coach test]', r);
 }
 
-// v0.77 hotfix: global error handler — visible op pagina als iets stuk gaat
+const testParam = new URLSearchParams(location.search).get('test');
+if (testParam === '1') {
+  setTimeout(() => showTestBanner(window.runSelfTest(), 'Self-test'), 1000);
+} else if (testParam === '2') {
+  setTimeout(async () => {
+    const r = await window.runExtendedTest();
+    showTestBanner(r, 'Extended test');
+  }, 1500);
+} else {
+  // Install auto-recovery in production (silent)
+  setTimeout(() => { try { window.installAutoRecovery(); } catch {} }, 1500);
+}
+
+// v0.79 hotfix: global error handler — visible op pagina als iets stuk gaat
 window.addEventListener('error', function(e) {
   console.error('[Piano Coach error]', e.message, 'at', e.filename, ':', e.lineno);
   // Persist for later inspection via window.__pcLastError
@@ -8220,7 +8455,7 @@ window.addEventListener('error', function(e) {
   } catch {}
 });
 
-// v0.77 hotfix: Hard Reset functie - wist ALLES (SW, caches, localStorage backup, force reload)
+// v0.79 hotfix: Hard Reset functie - wist ALLES (SW, caches, localStorage backup, force reload)
 window.hardResetApp = async function() {
   if (!confirm('Hard Reset: wist alle caches + service workers + tijdelijke data. Je localStorage (sessies/journal/etc.) wordt eerst gedownload als backup. OK?')) return;
   try {
@@ -8253,7 +8488,7 @@ window.hardResetApp = async function() {
   }
 };
 
-// v0.77 hotfix: AGRESSIEF unregister bestaande SWs + clear caches
+// v0.79 hotfix: AGRESSIEF unregister bestaande SWs + clear caches
 // Service worker veroorzaakte cache-conflicts. We disablen 'm tijdelijk volledig.
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.getRegistrations().then(regs => {
@@ -8936,13 +9171,13 @@ const sightState = {
   total: 0,
   streak: 0,
   answered: false,
-  // v0.77 additions
+  // v0.79 additions
   askedAt: 0, // performance.now() at question start
   reactionTimes: [], // ms per answer (correct only)
   audioOn: true,
   perNote: {}, // pitchClass → { correct, total }
   recentAnswers: [], // last 10: true/false
-  // v0.77 additions — sequence mode
+  // v0.79 additions — sequence mode
   mode: 'single', // 'single' or 'sequence'
   sequence: [], // array of midi notes for current sequence
   sequenceIdx: 0, // current position in sequence
@@ -8952,7 +9187,7 @@ const sightState = {
   sequenceProgressionLvl: 1, // 1=3 notes, 2=4 notes, 3=5 notes
 };
 
-// v0.77 — Sequence mode unlock threshold (total correct single-note answers)
+// v0.79 — Sequence mode unlock threshold (total correct single-note answers)
 const SEQUENCE_UNLOCK_THRESHOLD = 30;
 function isSequenceUnlocked() {
   try {
@@ -9008,7 +9243,7 @@ function generateSightQuestion() {
   }
 }
 
-// v0.77 — Sequence mode: generate N notes, render them on the staff
+// v0.79 — Sequence mode: generate N notes, render them on the staff
 function generateSightSequence() {
   const length = sightState.sequenceLength;
   const notes = [];
@@ -9337,7 +9572,7 @@ function answerSightByMidi(midi) {
   reportSightResult(correct, noteNameFromMidi(midi));
 }
 
-// v0.77 — Sequence-mode per-note result handler
+// v0.79 — Sequence-mode per-note result handler
 function reportSequenceNoteResult(correct, given) {
   const idx = sightState.sequenceIdx;
   const total = sightState.sequence.length;
@@ -9582,7 +9817,7 @@ document.getElementById('btn-sight').onclick = () => {
   document.getElementById('sight-overlay').style.display = 'flex';
 };
 
-// v0.77 — Sequence mode toggle wiring
+// v0.79 — Sequence mode toggle wiring
 function updateSightModeToggle() {
   const unlocked = isSequenceUnlocked();
   const seqBtn = document.getElementById('sight-mode-sequence');
@@ -9623,7 +9858,7 @@ function updateSightModeToggle() {
   });
 })();
 
-// v0.77 — Sequence-mode achievements
+// v0.79 — Sequence-mode achievements
 ACHIEVEMENTS.push({
   id: 'seq-first', icon: '🎶', label: 'Eerste reeks voltooid', cat: 'Practice',
   test: s => (s.sightHistory?.sequencesCompleted || 0) >= 1,
@@ -9633,7 +9868,7 @@ ACHIEVEMENTS.push({
   test: s => (s.sightHistory?.sequencesPerfect || 0) >= 10,
 });
 
-// Audio mute toggle (v0.77)
+// Audio mute toggle (v0.79)
 (function wireSightMute(){
   const btn = document.getElementById('sight-mute');
   if (!btn) return;
@@ -14096,7 +14331,7 @@ document.querySelectorAll('#eartrain-audio-mode button').forEach(b => {
 });
 
 // ============================================================================
-// v0.77 — SMART COACH (today's session recommender)
+// v0.79 — SMART COACH (today's session recommender)
 // ============================================================================
 function generateCoachSession() {
   const store = loadStore();
@@ -14604,7 +14839,7 @@ document.getElementById('stats-export').onclick = () => {
 };
 
 // ============================================================================
-// v0.77 — BACKING TRACK / CHORD LOOP IMPROV
+// v0.79 — BACKING TRACK / CHORD LOOP IMPROV
 // ============================================================================
 const PROGRESSIONS = [
   { id: 'pop', name: 'I-V-vi-IV', desc: 'Pop loop (Axis of Awesome)', chords: [[0,4,7], [7,11,14], [9,12,16], [5,9,12]] },
@@ -14818,7 +15053,7 @@ ACHIEVEMENTS.push({
 })();
 
 // ============================================================================
-// v0.77 — KNOWLEDGE REVIEW: spaced repetition over theory lessons
+// v0.79 — KNOWLEDGE REVIEW: spaced repetition over theory lessons
 // ============================================================================
 // Each question is keyed by lessonId:idx. SM-2 lite tracks per-question state.
 // Intervals (days): wrong → 1, streak 1 → 3, 2 → 7, 3 → 14, 4 → 30, 5+ → 60.
@@ -15809,7 +16044,7 @@ ACHIEVEMENTS.push({
 });
 
 // ============================================================================
-// v0.77 — COMPOSERS / COMPONISTEN BIOS
+// v0.79 — COMPOSERS / COMPONISTEN BIOS
 // ============================================================================
 const COMPOSERS = [
   {
@@ -15976,7 +16211,7 @@ document.getElementById('composers-back').onclick = renderComposersList;
 document.getElementById('composers-close').onclick = () => document.getElementById('composers-overlay').style.display = 'none';
 
 // ============================================================================
-// v0.77 — Add 9 new Gym lessons (lesson IDs 12-20)
+// v0.79 — Add 9 new Gym lessons (lesson IDs 12-20)
 // ============================================================================
 THEORY_LESSONS.push(
   {
@@ -16223,7 +16458,7 @@ Object.assign(QUIZ_BANK, {
 });
 
 // ============================================================================
-// v0.77 — FOUNDATIONS COMPLETE: 10 nieuwe Gym lessen (lessen 21-30)
+// v0.79 — FOUNDATIONS COMPLETE: 10 nieuwe Gym lessen (lessen 21-30)
 // ============================================================================
 THEORY_LESSONS.push(
   {
@@ -16553,14 +16788,14 @@ ACHIEVEMENTS.push({
   test: s => (s.composersRead?.length || 0) >= COMPOSERS.length,
 });
 
-// v0.77 — Achievement for completing all 30 lessons
+// v0.79 — Achievement for completing all 30 lessons
 ACHIEVEMENTS.push({
   id: 'theory-foundation-complete', icon: '🎓', label: 'Volledige theorie-basis voltooid (30 lessen)', cat: 'Knowledge',
   test: s => Object.keys(s.gymProgress?.completed || {}).length >= 30,
 });
 
 // ============================================================================
-// v0.77 — VISUALIZATION ENGINE + ADVANCED CURRICULUM
+// v0.79 — VISUALIZATION ENGINE + ADVANCED CURRICULUM
 // ============================================================================
 
 // ----- Add level metadata to existing lessons -----
@@ -16832,7 +17067,7 @@ patchLessonVisuals('diatonic-chords', [
 ]);
 
 // ============================================================================
-// v0.77 — 15 ADVANCED LESSONS (jazz, classical-advanced, styles, science)
+// v0.79 — 15 ADVANCED LESSONS (jazz, classical-advanced, styles, science)
 // ============================================================================
 THEORY_LESSONS.push(
   // ----- Jazz harmonie -----
@@ -17924,7 +18159,7 @@ ACHIEVEMENTS.push({
 });
 
 // ============================================================================
-// v0.77 — STAGE MODE + BLIND PLAYING
+// v0.79 — STAGE MODE + BLIND PLAYING
 // ============================================================================
 const stageState = {
   active: false,
@@ -18709,7 +18944,7 @@ ACHIEVEMENTS.push({
 });
 
 // ============================================================================
-// v0.77 — GOAL-BASED CURRICULUM
+// v0.79 — GOAL-BASED CURRICULUM
 // ============================================================================
 const GOAL_TARGETS = {
   learn: { name: 'Leer het stuk', criteria: 'Tempo 70% + accuracy 80%', tempoTarget: 70, accTarget: 0.80 },
@@ -18938,7 +19173,7 @@ ACHIEVEMENTS.push({
 });
 
 // ============================================================================
-// v0.77 — TIME TRACKER + PRACTICE ANALYTICS DEEP
+// v0.79 — TIME TRACKER + PRACTICE ANALYTICS DEEP
 // ============================================================================
 // Lightweight time tracker: hooks into modal opens/closes for main modes.
 // Tracks: activity, startTime, endTime → stored in store.timeLog[]
@@ -19720,7 +19955,7 @@ ACHIEVEMENTS.push({
 });
 
 // ============================================================================
-// v0.77 — COMPOSITION CHALLENGE
+// v0.79 — COMPOSITION CHALLENGE
 // ============================================================================
 const COMPOSE_CHALLENGES = {
   beginner: {
@@ -20285,7 +20520,7 @@ ACHIEVEMENTS.push({
 });
 
 // ============================================================================
-// v0.77 — PRACTICE CALENDAR
+// v0.79 — PRACTICE CALENDAR
 // ============================================================================
 const calState = {
   weekOffset: 0, // 0 = current week, -1 = prev, +1 = next
@@ -20865,7 +21100,7 @@ ACHIEVEMENTS.push({
 });
 
 // ============================================================================
-// v0.77 — DEEP INSIGHTS (rule-based long-term analysis engine)
+// v0.79 — DEEP INSIGHTS (rule-based long-term analysis engine)
 // ============================================================================
 function runDeepAnalysis(periodDays = 30) {
   const store = loadStore();
@@ -21253,7 +21488,7 @@ document.getElementById('di-export-md').onclick = () => {
   for (const c of r.correlations) md += `- ${c.replace(/<[^>]+>/g, '')}\n`;
   md += `\n## ⚠ Watch-outs\n\n`;
   for (const w of r.warnings) md += `- ${w.replace(/<[^>]+>/g, '')}\n`;
-  md += `\n---\nGegenereerd door Piano Coach v0.77 — Deep Insights engine\n`;
+  md += `\n---\nGegenereerd door Piano Coach v0.79 — Deep Insights engine\n`;
   const blob = new Blob([md], { type: 'text/markdown' });
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
@@ -21859,7 +22094,7 @@ ACHIEVEMENTS.push({
 });
 
 // ============================================================================
-// v0.77 — LISTEN-ALONG MODE (YouTube/Spotify embed)
+// v0.79 — LISTEN-ALONG MODE (YouTube/Spotify embed)
 // ============================================================================
 const laState = {
   source: 'youtube',
@@ -21998,7 +22233,7 @@ ACHIEVEMENTS.push({
 });
 
 // ============================================================================
-// v0.77 — UX OVERHAUL: Compact Topbar + Command Palette + Welcome Hub + Tour
+// v0.79 — UX OVERHAUL: Compact Topbar + Command Palette + Welcome Hub + Tour
 // ============================================================================
 
 // Master feature registry — alle non-player-controls gegroepeerd in categorieën
@@ -22192,13 +22427,23 @@ function buildCompactTopbar() {
   searchBtn.onclick = openCommandPalette;
   compactBar.appendChild(searchBtn);
 
-  // Welcome/Help button
+  // Keyboard shortcuts button (replaces old Welcome Hub button)
   const helpBtn = document.createElement('button');
   helpBtn.className = 'ct-icon-btn';
-  helpBtn.innerHTML = '?';
-  helpBtn.title = 'Welcome Hub openen';
-  helpBtn.onclick = () => showWelcomeHub(false);
+  helpBtn.innerHTML = '⌨';
+  helpBtn.title = 'Keyboard shortcuts cheat-sheet (?)';
+  helpBtn.onclick = () => {
+    const kbOverlay = document.getElementById('keyboard-help-overlay');
+    if (kbOverlay) kbOverlay.style.display = 'flex';
+  };
   compactBar.appendChild(helpBtn);
+  // Welcome Hub button (rare)
+  const whBtn = document.createElement('button');
+  whBtn.className = 'ct-icon-btn';
+  whBtn.innerHTML = '?';
+  whBtn.title = 'Welcome Hub openen';
+  whBtn.onclick = () => showWelcomeHub(false);
+  compactBar.appendChild(whBtn);
 
   // Insert compact topbar BEFORE original topbar
   topbar.parentNode.insertBefore(compactBar, topbar);
@@ -22480,7 +22725,7 @@ ACHIEVEMENTS.push({
 });
 
 // ============================================================================
-// v0.77 — SMART FINGERING DISPLAY (4 modes, progressive disclosure)
+// v0.79 — SMART FINGERING DISPLAY (4 modes, progressive disclosure)
 // ============================================================================
 // Replaces simple on/off toggle with 4 modes:
 //   off / position / next / subtle
@@ -22769,7 +23014,7 @@ function renderFingeringStaff(notes, clef) {
 document.getElementById('sf-close').onclick = () => document.getElementById('section-fingering-overlay').style.display = 'none';
 
 // Register fingering modal in compact topbar Learn category — already present as 'btn-fingering'
-// The categorisation in v0.77 already includes btn-fingering under Learn.
+// The categorisation in v0.79 already includes btn-fingering under Learn.
 
 // Achievement: try all 4 modes
 ACHIEVEMENTS.push({
@@ -22778,7 +23023,7 @@ ACHIEVEMENTS.push({
 });
 
 // ============================================================================
-// v0.77 — VOICE JOURNAL (auto-transcribed reflections via Web Speech Recognition)
+// v0.79 — VOICE JOURNAL (auto-transcribed reflections via Web Speech Recognition)
 // ============================================================================
 const voiceJournalState = {
   recognition: null,
@@ -22927,6 +23172,100 @@ ACHIEVEMENTS.push({
   id: 'voice-journal-first', icon: '🗣', label: 'Eerste voice journal entry', cat: 'Habits',
   test: s => (s.journal || []).some(e => e.voiceJournal),
 });
+
+// ============================================================================
+// v0.79 — UX POLISH: Toast notifications + Keyboard cheat-sheet
+// ============================================================================
+
+// Toast notification system — replaces alert() for non-critical messages
+window.toast = function(title, body, level) {
+  level = level || 'info';
+  const stack = document.getElementById('toast-stack');
+  if (!stack) return;
+  const icons = { success: '✅', error: '❌', warn: '⚠', info: 'ℹ' };
+  const toast = document.createElement('div');
+  toast.className = 'pc-toast toast-' + level;
+  toast.innerHTML = `
+    <span class="pc-toast-icon">${icons[level] || icons.info}</span>
+    <div class="pc-toast-content">
+      <div class="pc-toast-title">${title}</div>
+      ${body ? `<div class="pc-toast-body">${body}</div>` : ''}
+    </div>
+    <span class="pc-toast-close">×</span>
+  `;
+  stack.appendChild(toast);
+  const remove = () => {
+    toast.classList.add('removing');
+    setTimeout(() => toast.remove(), 250);
+  };
+  toast.querySelector('.pc-toast-close').onclick = remove;
+  setTimeout(remove, level === 'error' ? 8000 : 4000);
+};
+
+// Backward-compat: many places use showToast(title, body, [])
+if (typeof window.showToast !== 'function' || true) {
+  const origShowToast = window.showToast;
+  window.showToast = function(title, body, opts) {
+    // Prefer the new toast system, falling back to old if needed
+    try { window.toast(title, body, 'info'); }
+    catch { if (typeof origShowToast === 'function') origShowToast(title, body, opts); }
+  };
+}
+
+// Keyboard cheat-sheet — open with '?' key
+document.getElementById('btn-tour')?.addEventListener('click', () => {
+  document.getElementById('keyboard-help-overlay').style.display = 'flex';
+});
+document.getElementById('keyboard-help-close').onclick = () => {
+  document.getElementById('keyboard-help-overlay').style.display = 'none';
+};
+
+// Global '?' shortcut + Esc closes any open modal
+window.addEventListener('keydown', (e) => {
+  // Skip if in input/textarea
+  const tag = e.target?.tagName?.toLowerCase();
+  if (tag === 'input' || tag === 'textarea' || tag === 'select') return;
+
+  if (e.key === '?' && !e.ctrlKey && !e.metaKey) {
+    e.preventDefault();
+    const overlay = document.getElementById('keyboard-help-overlay');
+    overlay.style.display = overlay.style.display === 'flex' ? 'none' : 'flex';
+  }
+  // Esc closes top-most open modal
+  if (e.key === 'Escape') {
+    const openModals = Array.from(document.querySelectorAll('.modal-overlay'))
+      .filter(m => m.style.display === 'flex' || m.style.display === 'block');
+    if (openModals.length > 0) {
+      const top = openModals[openModals.length - 1];
+      top.style.display = 'none';
+    }
+    // Also close compact-topbar dropdowns
+    if (typeof closeAllDropdowns === 'function') closeAllDropdowns();
+    // And the command palette
+    const cmdPal = document.getElementById('cmd-palette-overlay');
+    if (cmdPal?.classList.contains('open')) cmdPal.classList.remove('open');
+  }
+});
+
+// Wire btn-tour to open cheat-sheet instead of legacy tour
+const tourBtn = document.getElementById('btn-tour');
+if (tourBtn) {
+  tourBtn.onclick = () => {
+    document.getElementById('keyboard-help-overlay').style.display = 'flex';
+  };
+}
+
+// Show toast hint on first ? press to alert user about the cheat-sheet
+setTimeout(() => {
+  try {
+    const store = loadStore();
+    if (!store.kbHelpHintShown) {
+      store.kbHelpHintShown = true;
+      saveStore(store);
+      // Don't toast immediately, just set flag so next time we know
+    }
+  } catch {}
+}, 2000);
 
 // Track which composer was viewed
 const _origShowComposerDetail = showComposerDetail;
@@ -23317,7 +23656,7 @@ window.addEventListener('resize', () => {
 });
 
 // ============================================================================
-// v0.77 — POMODORO + WARM-UP + DAILY JOURNAL
+// v0.79 — POMODORO + WARM-UP + DAILY JOURNAL
 // ============================================================================
 const pomodoroState = {
   active: false,
@@ -23816,7 +24155,7 @@ ACHIEVEMENTS.push({
 });
 
 // ============================================================================
-// v0.77 — TWO-HAND INDEPENDENCE DRILLS
+// v0.79 — TWO-HAND INDEPENDENCE DRILLS
 // ============================================================================
 // Each drill defines RH + LH patterns. Pattern = array of [time_in_beats, midi] tuples.
 // Beats run from 0 to length. Metronome ticks each integer beat.
