@@ -8057,7 +8057,13 @@ document.getElementById('install-no').onclick = () => {
 // v0.75 hotfix: global error handler — visible op pagina als iets stuk gaat
 window.addEventListener('error', function(e) {
   console.error('[Piano Coach error]', e.message, 'at', e.filename, ':', e.lineno);
-  // Show floating error chip if early in load (handlers might not be attached yet)
+  // Persist for later inspection via window.__pcLastError
+  const details = {
+    msg: e.message, file: e.filename, line: e.lineno, col: e.colno,
+    stack: e.error?.stack?.slice(0, 1500), at: Date.now(),
+  };
+  window.__pcLastError = details;
+  try { localStorage.setItem('pc-last-error', JSON.stringify(details)); } catch {}
   try {
     let chip = document.getElementById('pc-error-chip');
     if (!chip) {
@@ -8068,7 +8074,7 @@ window.addEventListener('error', function(e) {
       chip.onclick = function() { try { hardResetApp(); } catch {} };
       document.body && document.body.appendChild(chip);
     }
-    if (chip) chip.innerHTML = '⚠ JS Error: ' + (e.message || 'unknown').slice(0, 80) + ' <small>(klik = reset)</small>';
+    if (chip) chip.innerHTML = '⚠ ' + (e.message || 'unknown').slice(0, 60) + ' @ L' + e.lineno + ' <small>(klik = reset)</small>';
   } catch {}
 });
 
