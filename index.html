@@ -2,7 +2,7 @@
 <html lang="nl">
 <head>
 <meta charset="UTF-8">
-<title>Piano Coach — v0.80</title>
+<title>Piano Coach — v0.83</title>
 <link rel="manifest" href="data:application/json;charset=utf-8,%7B%22name%22%3A%22Piano%20Coach%22%2C%22short_name%22%3A%22PianoCoach%22%2C%22start_url%22%3A%22.%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%230f1419%22%2C%22theme_color%22%3A%22%234ade80%22%2C%22description%22%3A%22Self-hosted%20piano%20coaching%20met%20MIDI-input%2C%2035-song%20repertoire%2C%20coach%2C%20achievements%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22data%3Aimage%2Fsvg%2Bxml%2C%253Csvg%2520xmlns%3D%2522http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%2522%2520viewBox%3D%25220%25200%25201024%25201024%2522%253E%253Crect%2520fill%3D%2522%25230f1419%2522%2520width%3D%25221024%2522%2520height%3D%25221024%2522%2F%253E%253Ctext%2520x%3D%2522512%2522%2520y%3D%2522680%2522%2520font-size%3D%2522680%2522%2520text-anchor%3D%2522middle%2522%253E%25F0%259F%258E%25B9%253C%2Ftext%253E%253C%2Fsvg%253E%22%2C%22sizes%22%3A%22512x512%22%2C%22type%22%3A%22image%2Fsvg%2Bxml%22%7D%5D%7D">
 <meta name="theme-color" content="#4ade80">
 <script src="https://cdn.jsdelivr.net/npm/@tonejs/midi@2.0.28/build/Midi.js"></script>
@@ -1918,7 +1918,7 @@
   .eartrain-audio-answer { text-align: center; font-size: 20px; color: #4ade80; padding: 12px; margin-bottom: 12px; }
   .eartrain-audio-stats { display: flex; justify-content: center; gap: 24px; font-size: 13px; margin-bottom: 14px; }
   .eartrain-audio-hint { font-size: 11px; color: var(--muted); text-align: center; margin-top: 8px; }
-  /* v0.80 — Smart coach */
+  /* v0.83 — Smart coach */
   .coach-modal { max-width: 600px; }
   .coach-session { display: flex; flex-direction: column; gap: 10px; margin: 16px 0; }
   .coach-step {
@@ -1982,7 +1982,7 @@
   .stats-repertoire { font-size: 12px; color: var(--muted); max-height: 200px; overflow-y: auto; }
   .stats-rep-item { display: flex; justify-content: space-between; padding: 4px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
 
-  /* v0.80 — Backing Track Modal */
+  /* v0.83 — Backing Track Modal */
   .backing-modal { max-width: 640px; }
   .backing-progressions { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 6px; margin: 12px 0; }
   .backing-progressions button {
@@ -2003,7 +2003,7 @@
   .backing-next { font-size: 12px; color: var(--muted); }
   .backing-scale-info { font-size: 11px; color: var(--muted); text-align: center; padding: 8px; background: rgba(99,102,241,0.08); border-radius: 4px; margin-bottom: 12px; }
 
-  /* v0.80 — Knowledge Review */
+  /* v0.83 — Knowledge Review */
   .review-modal { max-width: 560px; }
   .review-stats { display: flex; gap: 16px; justify-content: center; font-size: 12px; color: var(--muted); margin-bottom: 12px; }
   .review-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1); padding: 18px; border-radius: 10px; margin-bottom: 12px; }
@@ -2082,7 +2082,7 @@
   .selfreview-history { max-height: 180px; overflow-y: auto; font-size: 11px; }
   .sr-history-row { display: flex; justify-content: space-between; padding: 4px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
 
-  /* v0.80 — Composers */
+  /* v0.83 — Composers */
   .composers-modal { max-width: 700px; }
   .composers-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 8px; margin: 14px 0; }
   .composer-card {
@@ -2166,7 +2166,7 @@
   .pwa-install-banner button { background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.4); color: #fff; padding: 6px 14px; border-radius: 4px; cursor: pointer; font-size: 13px; }
   .pwa-install-banner button:first-of-type { background: #fff; color: #4338ca; }
 
-  /* v0.80 — Pomodoro + Journal + Warm-up */
+  /* v0.83 — Pomodoro + Journal + Warm-up */
   .pomodoro-widget {
     position: fixed; bottom: 20px; left: 20px;
     background: rgba(0,0,0,0.9); border: 2px solid #ef4444;
@@ -2259,7 +2259,7 @@
   .vrt-marks { display: flex; justify-content: space-between; font-size: 8px; color: var(--muted); margin-bottom: 6px; }
   .vrt-recent { font-size: 11px; color: var(--muted); min-height: 16px; }
 
-  /* v0.80 — Two-Hand Drills */
+  /* v0.83 — Two-Hand Drills */
   .twohand-modal { max-width: 700px; }
   .twohand-drill-picker { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 6px; margin: 12px 0; }
   .twohand-drill-picker button {
@@ -2386,7 +2386,7 @@
   .mem-staff.hidden { opacity: 0; }
   .mem-instruction { font-size: 13px; color: #444; margin-top: 8px; }
 
-  /* v0.80 — Stage + Blind */
+  /* v0.83 — Stage + Blind */
   .stage-config, .blind-config { display: flex; flex-direction: column; gap: 8px; margin: 12px 0; font-size: 13px; color: var(--muted); }
   .stage-config label, .blind-config label { display: flex; align-items: center; gap: 8px; }
   .stage-config select, .blind-config select { background: rgba(255,255,255,0.08); color: #fff; border: 1px solid rgba(255,255,255,0.15); padding: 4px 8px; border-radius: 4px; font-size: 12px; }
@@ -2458,7 +2458,7 @@
   .etp-input-note { padding: 4px 8px; background: rgba(255,255,255,0.06); border-radius: 4px; font-family: monospace; }
   .etp-stats { display: flex; gap: 16px; justify-content: center; font-size: 12px; color: var(--muted); margin: 10px 0; flex-wrap: wrap; }
 
-  /* v0.80 — Goal-Based Curriculum */
+  /* v0.83 — Goal-Based Curriculum */
   .goals-modal { max-width: 720px; }
   .goals-active-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 14px; max-height: 320px; overflow-y: auto; }
   .goal-item {
@@ -2497,7 +2497,7 @@
   .goal-week-tasks { font-size: 12px; line-height: 1.5; }
   .goal-week-status { font-size: 18px; }
 
-  /* v0.80 — Practice Analytics Deep */
+  /* v0.83 — Practice Analytics Deep */
   .analytics-modal { max-width: 820px; }
   .analytics-section { margin: 18px 0; }
   .analytics-section-title { font-size: 13px; font-weight: 600; margin-bottom: 10px; color: rgba(255,255,255,0.9); }
@@ -2642,7 +2642,7 @@
   .poly-settings select { background: rgba(255,255,255,0.08); color: #fff; border: 1px solid rgba(255,255,255,0.15); padding: 4px 8px; border-radius: 4px; font-size: 12px; }
   .poly-stats { display: flex; gap: 16px; justify-content: center; font-size: 12px; color: var(--muted); margin: 10px 0; }
 
-  /* v0.80 — Composition Challenge */
+  /* v0.83 — Composition Challenge */
   .compose-modal { max-width: 680px; }
   .compose-challenge-info {
     background: rgba(99,102,241,0.1); border-left: 3px solid #6366f1;
@@ -2729,7 +2729,7 @@
   .pattern-row-count { font-family: monospace; font-size: 11px; color: var(--accent); text-align: right; }
   .pattern-intervals { font-family: monospace; font-size: 11px; color: var(--muted); }
 
-  /* v0.80 — Practice Calendar */
+  /* v0.83 — Practice Calendar */
   .calendar-modal { max-width: 880px; }
   .calendar-nav {
     display: flex; align-items: center; justify-content: space-between;
@@ -2840,7 +2840,7 @@
   .coach-view-content table th, .coach-view-content table td { padding: 6px 8px; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.06); }
   .coach-view-content table th { color: var(--muted); font-weight: 600; font-size: 10px; text-transform: uppercase; }
 
-  /* v0.80 — Deep Insights */
+  /* v0.83 — Deep Insights */
   .deep-insights-modal { max-width: 820px; max-height: 90vh; overflow-y: auto; }
   .di-loading { text-align: center; padding: 40px; font-size: 14px; color: var(--muted); }
   .di-period-selector { margin: 12px 0; font-size: 12px; color: var(--muted); }
@@ -2881,7 +2881,7 @@
   .di-correlations .di-corr-row { padding: 4px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
 
   /* ===================================================================== */
-  /* v0.80 — UX OVERHAUL: Compact Topbar + Command Palette + Welcome Hub  */
+  /* v0.83 — UX OVERHAUL: Compact Topbar + Command Palette + Welcome Hub  */
   /* ===================================================================== */
 
   /* Hide all feature buttons (data-grouped) — they live in .controls.row2 + others */
@@ -3106,7 +3106,7 @@
     background: transparent; border-color: rgba(255,255,255,0.2);
   }
 
-  /* v0.80 — Smart Fingering Display */
+  /* v0.83 — Smart Fingering Display */
   .fingering-modal { max-width: 600px; }
   .fm-modes { display: flex; flex-direction: column; gap: 8px; margin: 14px 0; }
   .fm-mode {
@@ -3187,7 +3187,7 @@
   .sf-staff { background: #fff; border-radius: 8px; padding: 14px; margin: 14px 0; overflow-x: auto; }
   .sf-explanation { font-size: 12px; line-height: 1.6; color: var(--muted); padding: 10px; background: rgba(255,255,255,0.03); border-radius: 6px; }
 
-  /* v0.80 — Voice Journal */
+  /* v0.83 — Voice Journal */
   .voice-journal-modal { max-width: 600px; }
   .vj-status-row { display: flex; align-items: center; gap: 10px; margin: 14px 0; padding: 10px 14px; background: rgba(255,255,255,0.04); border-radius: 6px; }
   .vj-status-dot { width: 12px; height: 12px; border-radius: 50%; background: #6b7280; transition: all 0.3s; }
@@ -3223,7 +3223,117 @@
   .vj-save-btn:hover { transform: translateY(-1px); }
   .vj-hint { background: rgba(251,191,36,0.08); border-left: 3px solid #fbbf24; padding: 10px 14px; border-radius: 0 6px 6px 0; font-size: 12px; line-height: 1.5; margin: 12px 0; }
 
-  /* v0.80 — Inspiration Layer */
+  /* v0.81 — Season Recap (Wrapped-style slides) */
+  .recap-modal { max-width: 720px; }
+  .recap-period-toggle { display: flex; gap: 4px; margin-bottom: 14px; }
+  .recap-period-toggle button {
+    flex: 1; padding: 8px; font-size: 12px;
+    background: rgba(255,255,255,0.06); color: var(--muted);
+    border: 1px solid rgba(255,255,255,0.15); border-radius: 6px; cursor: pointer;
+  }
+  .recap-period-toggle button.on { background: rgba(167,139,250,0.2); border-color: #a78bfa; color: #fff; }
+  .recap-story { display: flex; flex-direction: column; gap: 12px; max-height: 520px; overflow-y: auto; padding-right: 6px; }
+  .recap-slide {
+    background: linear-gradient(135deg, rgba(167,139,250,0.1), rgba(99,102,241,0.04));
+    border: 1px solid rgba(167,139,250,0.25);
+    padding: 22px 26px; border-radius: 12px;
+    animation: recapSlideIn 0.4s ease-out;
+  }
+  @keyframes recapSlideIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .recap-slide-label { font-size: 11px; color: #a78bfa; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 6px; font-weight: 600; }
+  .recap-slide-headline { font-size: 22px; font-weight: 700; line-height: 1.3; margin-bottom: 8px; }
+  .recap-slide-body { font-size: 14px; line-height: 1.55; color: rgba(255,255,255,0.85); }
+  .recap-slide-stat { font-size: 36px; font-weight: 800; color: #fbbf24; display: block; margin: 8px 0; }
+  .recap-slide.gold { background: linear-gradient(135deg, rgba(251,191,36,0.12), rgba(245,158,11,0.05)); border-color: rgba(251,191,36,0.35); }
+  .recap-slide.green { background: linear-gradient(135deg, rgba(74,222,128,0.1), rgba(34,197,94,0.04)); border-color: rgba(74,222,128,0.3); }
+  .recap-slide.red { background: linear-gradient(135deg, rgba(239,68,68,0.08), rgba(220,38,38,0.03)); border-color: rgba(239,68,68,0.25); }
+
+  /* v0.82 — Mock Concert Mode */
+  .concert-modal { max-width: 580px; }
+  .concert-config { display: flex; flex-direction: column; gap: 10px; margin: 14px 0; font-size: 13px; color: var(--muted); }
+  .concert-config label { display: flex; align-items: center; gap: 8px; }
+  .concert-config select { flex: 1; background: rgba(255,255,255,0.08); color: #fff; border: 1px solid rgba(255,255,255,0.15); padding: 6px 10px; border-radius: 4px; font-size: 13px; }
+  .concert-info { background: rgba(251,191,36,0.08); border-left: 3px solid #fbbf24; padding: 10px 14px; border-radius: 0 6px 6px 0; font-size: 12px; line-height: 1.5; margin: 12px 0; }
+  /* Concert overlay (during performance) */
+  .concert-stage-overlay {
+    position: fixed; inset: 0;
+    background: radial-gradient(circle at center top, #1a1f2e 0%, #0a0a0f 70%);
+    z-index: 8800; display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    color: #fff;
+  }
+  .concert-mc-text { font-size: 16px; font-style: italic; max-width: 600px; text-align: center; line-height: 1.6; padding: 0 24px; }
+  .concert-countdown {
+    font-size: 120px; font-weight: 700; color: #fbbf24;
+    text-shadow: 0 0 40px rgba(251,191,36,0.5);
+    margin-top: 20px;
+  }
+  .concert-applause-overlay {
+    position: fixed; inset: 0;
+    background: radial-gradient(circle at center, rgba(251,191,36,0.3), rgba(0,0,0,0.95));
+    z-index: 8800; display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    color: #fff;
+  }
+  .concert-bravo { font-size: 80px; font-weight: 800; color: #fbbf24; animation: bravoBounce 0.6s ease-out; }
+  @keyframes bravoBounce {
+    0% { transform: scale(0.5); opacity: 0; }
+    60% { transform: scale(1.1); opacity: 1; }
+    100% { transform: scale(1); opacity: 1; }
+  }
+  .concert-thanks { font-size: 18px; color: rgba(255,255,255,0.8); margin: 20px 0; text-align: center; }
+  .concert-end-btn { background: #fbbf24; color: #1a1a1a; border: none; padding: 12px 28px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; }
+
+  /* v0.83 — Pianist Personas */
+  .personas-modal { max-width: 720px; }
+  .personas-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px; margin: 14px 0; }
+  .persona-card {
+    background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1);
+    padding: 16px 14px; border-radius: 10px; cursor: pointer;
+    transition: all 0.2s; text-align: center;
+  }
+  .persona-card:hover { background: rgba(255,255,255,0.08); border-color: var(--accent); transform: translateY(-2px); }
+  .persona-card.active { background: rgba(167,139,250,0.15); border-color: #a78bfa; }
+  .persona-emoji { font-size: 40px; margin-bottom: 8px; }
+  .persona-name { font-size: 14px; font-weight: 600; margin-bottom: 2px; }
+  .persona-years { font-size: 10px; color: var(--muted); }
+  .persona-style { font-size: 11px; color: #a78bfa; margin-top: 6px; font-style: italic; }
+  .personas-detail { padding: 14px 0; }
+  .persona-hero {
+    background: linear-gradient(135deg, rgba(167,139,250,0.1), rgba(99,102,241,0.04));
+    padding: 24px; border-radius: 12px; text-align: center; margin-bottom: 16px;
+  }
+  .persona-hero-emoji { font-size: 80px; margin-bottom: 10px; }
+  .persona-hero-name { font-size: 24px; font-weight: 700; }
+  .persona-hero-tagline { font-size: 13px; color: #a78bfa; font-style: italic; margin: 4px 0 8px; }
+  .persona-hero-years { font-size: 11px; color: var(--muted); }
+  .persona-section { background: rgba(255,255,255,0.03); padding: 12px 16px; border-radius: 8px; margin-bottom: 10px; }
+  .persona-section-title { font-size: 11px; color: var(--accent); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 6px; font-weight: 600; }
+  .persona-section-body { font-size: 13px; line-height: 1.6; }
+  .persona-quote { font-style: italic; font-family: Georgia, serif; padding: 10px 14px; background: rgba(0,0,0,0.2); border-left: 3px solid #a78bfa; border-radius: 0 6px 6px 0; margin: 8px 0; }
+  .persona-feedback {
+    background: linear-gradient(135deg, rgba(74,222,128,0.08), rgba(34,197,94,0.03));
+    border-left: 3px solid #4ade80; padding: 12px 16px; border-radius: 0 6px 6px 0;
+    font-size: 13px; line-height: 1.55; margin: 12px 0;
+  }
+  .persona-activate-btn {
+    width: 100%; padding: 12px;
+    background: linear-gradient(135deg, #6366f1, #a78bfa); color: #fff;
+    border: none; border-radius: 8px; cursor: pointer; font-size: 14px; font-weight: 600;
+    margin-top: 10px;
+  }
+  .persona-active-banner {
+    position: fixed; top: 80px; left: 50%; transform: translateX(-50%);
+    background: rgba(0,0,0,0.85); color: #fff;
+    border: 1px solid #a78bfa; padding: 8px 18px; border-radius: 20px;
+    font-size: 12px; z-index: 1200; display: none;
+  }
+  .persona-active-banner.show { display: block; }
+
+  /* v0.83 — Inspiration Layer */
   .inspiration-modal { max-width: 720px; }
   .ins-tabs { display: flex; gap: 4px; margin-bottom: 16px; flex-wrap: wrap; }
   .ins-tabs button {
@@ -3320,7 +3430,7 @@
   }
   .ms-actions button:first-child { background: #fbbf24; color: #1a1a1a; font-weight: 600; }
 
-  /* v0.80 — Keyboard cheat-sheet */
+  /* v0.83 — Keyboard cheat-sheet */
   .keyboard-help-modal { max-width: 720px; }
   .kh-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; margin: 16px 0; }
   .kh-group { background: rgba(255,255,255,0.04); padding: 12px 14px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.08); }
@@ -3336,7 +3446,7 @@
   }
   .kh-row span { color: var(--muted); }
 
-  /* v0.80 — Toast notifications */
+  /* v0.83 — Toast notifications */
   .toast-stack {
     position: fixed; bottom: 20px; right: 20px;
     display: flex; flex-direction: column-reverse; gap: 8px;
@@ -3482,7 +3592,7 @@
   .reharm-result.miss { background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.4); }
   .reharm-stats { display: flex; gap: 16px; justify-content: center; font-size: 12px; color: var(--muted); margin: 10px 0; }
 
-  /* v0.80 — Listen-Along Mode */
+  /* v0.83 — Listen-Along Mode */
   .listen-along-modal { max-width: 720px; }
   .la-source-toggle { display: flex; gap: 4px; margin-bottom: 12px; }
   .la-source-toggle button {
@@ -3539,7 +3649,7 @@
 </head>
 <body>
 
-<h1>Piano Coach <span style="color: var(--muted); font-weight: 400;">v0.80</span></h1>
+<h1>Piano Coach <span style="color: var(--muted); font-weight: 400;">v0.83</span></h1>
 <p class="sub">📜 Sight reading 2.0 (audio + keyboard + heatmap + adaptive + reaction) · 36 songs</p>
 
 <div class="topbar">
@@ -3710,6 +3820,9 @@
   <button id="btn-deep-insights" title="Deep Insights — AI-gedreven langetermijn-analyse: trends, voorspellingen, gepersonaliseerde aanbevelingen">🧠 Deep Insights</button>
   <button id="btn-voice-journal" title="Voice Journal — spreek je reflecties in, auto-transcript naar je journal">🗣 Voice Journal</button>
   <button id="btn-inspiration" title="Inspiration Hub — quotes, verhalen, mijlpalen van legendarische pianisten">✨ Inspiration</button>
+  <button id="btn-recap" title="Season Recap — Spotify Wrapped-stijl narratief over je maand/jaar">🎬 Recap</button>
+  <button id="btn-concert" title="Mock Concert Mode — speel met publiek-applaus, intro, podium-druk simulatie">🎭 Concert</button>
+  <button id="btn-personas" title="Pianist Personas — spar met Horowitz, Argerich, Gould of Lang Lang als stijl-coach">🎩 Personas</button>
   <button id="btn-tutor" title="AI Tutor Chat — stel vragen over je oefen-data, theorie, of wat je moet oefenen">💬 Tutor</button>
   <button id="btn-reharm" title="Reharmonization Drills — vervang akkoorden in progressies (jazz/klassiek harmonie training)">🔄 Reharm</button>
   <button id="btn-listen-along" title="Listen-Along — luister naar echte uitvoering (Spotify/YouTube) naast je MIDI">🎧 Listen-Along</button>
@@ -4029,7 +4142,7 @@
   </div>
 </div>
 
-<!-- v0.80 — Smart Coach (today's session) -->
+<!-- v0.83 — Smart Coach (today's session) -->
 <div class="modal-overlay" id="coach-overlay" style="display:none;">
   <div class="modal coach-modal">
     <h2>🧭 Smart Coach — Vandaag's sessie</h2>
@@ -4072,7 +4185,7 @@
   </div>
 </div>
 
-<!-- v0.80 — Backing Track / Chord Loop Improv -->
+<!-- v0.83 — Backing Track / Chord Loop Improv -->
 <div class="modal-overlay" id="backing-overlay" style="display:none;">
   <div class="modal backing-modal">
     <h2>🎸 Backing Track Improv</h2>
@@ -4119,7 +4232,7 @@
   </div>
 </div>
 
-<!-- v0.80 — Knowledge Review (spaced repetition over theory lessons) -->
+<!-- v0.83 — Knowledge Review (spaced repetition over theory lessons) -->
 <div class="modal-overlay" id="review-overlay" style="display:none;">
   <div class="modal review-modal">
     <h2>🧠 Knowledge Review</h2>
@@ -4144,7 +4257,7 @@
   </div>
 </div>
 
-<!-- v0.80 — Post-lesson quiz (auto-shown after Gym lesson completes) -->
+<!-- v0.83 — Post-lesson quiz (auto-shown after Gym lesson completes) -->
 <div class="modal-overlay" id="postquiz-overlay" style="display:none;">
   <div class="modal review-modal">
     <h2>🎯 Snelle check</h2>
@@ -4256,7 +4369,7 @@ create policy "Anyone can update"
   </div>
 </div>
 
-<!-- v0.80 — Composers / Componisten bios -->
+<!-- v0.83 — Composers / Componisten bios -->
 <div class="modal-overlay" id="composers-overlay" style="display:none;">
   <div class="modal composers-modal">
     <h2>👤 Componisten</h2>
@@ -4320,7 +4433,7 @@ create policy "Anyone can update"
   <button id="pwa-install-no">Later</button>
 </div>
 
-<!-- v0.80 — Pomodoro timer (floating + modal config) -->
+<!-- v0.83 — Pomodoro timer (floating + modal config) -->
 <div class="pomodoro-widget" id="pomodoro-widget" style="display:none;">
   <div class="pomodoro-phase" id="pomodoro-phase">🍅 Focus</div>
   <div class="pomodoro-time" id="pomodoro-time">25:00</div>
@@ -4356,7 +4469,7 @@ create policy "Anyone can update"
   </div>
 </div>
 
-<!-- v0.80 — Warm-up modal (forced before practice) -->
+<!-- v0.83 — Warm-up modal (forced before practice) -->
 <div class="modal-overlay" id="warmup-overlay" style="display:none;">
   <div class="modal warmup-modal">
     <h2>🔥 Warm-up (3 min)</h2>
@@ -4374,7 +4487,7 @@ create policy "Anyone can update"
   </div>
 </div>
 
-<!-- v0.80 — Daily Journal -->
+<!-- v0.83 — Daily Journal -->
 <div class="modal-overlay" id="journal-overlay" style="display:none;">
   <div class="modal journal-modal">
     <h2>📓 Practice Journal</h2>
@@ -4462,7 +4575,7 @@ create policy "Anyone can update"
   <div class="vrt-recent" id="vrt-recent"></div>
 </div>
 
-<!-- v0.80 — Two-Hand Independence Drills -->
+<!-- v0.83 — Two-Hand Independence Drills -->
 <div class="modal-overlay" id="twohand-overlay" style="display:none;">
   <div class="modal twohand-modal">
     <h2>✌ Two-Hand Independence Drills</h2>
@@ -4615,7 +4728,7 @@ create policy "Anyone can update"
   </div>
 </div>
 
-<!-- v0.80 — Stage Mode + Blind Playing -->
+<!-- v0.83 — Stage Mode + Blind Playing -->
 <div class="modal-overlay" id="stage-overlay" style="display:none;">
   <div class="modal stage-modal">
     <h2>🎭 Performance Prep</h2>
@@ -4757,7 +4870,7 @@ create policy "Anyone can update"
   </div>
 </div>
 
-<!-- v0.80 — Goal-Based Curriculum -->
+<!-- v0.83 — Goal-Based Curriculum -->
 <div class="modal-overlay" id="goals-overlay" style="display:none;">
   <div class="modal goals-modal">
     <h2>🎯 Goal-Based Curriculum</h2>
@@ -4807,7 +4920,7 @@ create policy "Anyone can update"
   </div>
 </div>
 
-<!-- v0.80 — Practice Analytics Deep -->
+<!-- v0.83 — Practice Analytics Deep -->
 <div class="modal-overlay" id="analytics-overlay" style="display:none;">
   <div class="modal analytics-modal">
     <h2>📈 Practice Analytics</h2>
@@ -4906,7 +5019,7 @@ create policy "Anyone can update"
   </div>
 </div>
 
-<!-- v0.80 — Composition Challenge -->
+<!-- v0.83 — Composition Challenge -->
 <div class="modal-overlay" id="compose-overlay" style="display:none;">
   <div class="modal compose-modal">
     <h2>✍ Compositie Challenge</h2>
@@ -4996,7 +5109,7 @@ create policy "Anyone can update"
   </div>
 </div>
 
-<!-- v0.80 — Practice Calendar -->
+<!-- v0.83 — Practice Calendar -->
 <div class="modal-overlay" id="calendar-overlay" style="display:none;">
   <div class="modal calendar-modal">
     <h2>📅 Practice Calendar</h2>
@@ -5076,7 +5189,7 @@ create policy "Anyone can update"
   </div>
 </div>
 
-<!-- v0.80 — Deep Insights -->
+<!-- v0.83 — Deep Insights -->
 <div class="modal-overlay" id="deep-insights-overlay" style="display:none;">
   <div class="modal deep-insights-modal">
     <h2>🧠 Deep Insights</h2>
@@ -5211,7 +5324,7 @@ create policy "Anyone can update"
   </div>
 </div>
 
-<!-- v0.80 — Listen-Along Mode -->
+<!-- v0.83 — Listen-Along Mode -->
 <div class="modal-overlay" id="listen-along-overlay" style="display:none;">
   <div class="modal listen-along-modal">
     <h2>🎧 Listen-Along</h2>
@@ -5251,7 +5364,7 @@ create policy "Anyone can update"
   </div>
 </div>
 
-<!-- v0.80 — Smart Fingering Display modal -->
+<!-- v0.83 — Smart Fingering Display modal -->
 <div class="modal-overlay" id="fingering-modal-overlay" style="display:none;">
   <div class="modal fingering-modal">
     <h2>🖐 Vingerzetting Display</h2>
@@ -5306,7 +5419,7 @@ create policy "Anyone can update"
   </div>
 </div>
 
-<!-- v0.80 — Hand position floating widget -->
+<!-- v0.83 — Hand position floating widget -->
 <div class="hand-position-widget" id="hand-position-widget" style="display:none;">
   <div class="hpw-row hpw-rh">
     <span class="hpw-label">RH</span>
@@ -5318,7 +5431,7 @@ create policy "Anyone can update"
   </div>
 </div>
 
-<!-- v0.80 — Section fingering preview overlay -->
+<!-- v0.83 — Section fingering preview overlay -->
 <div class="modal-overlay" id="section-fingering-overlay" style="display:none;">
   <div class="modal section-fingering-modal">
     <h2>👁 Vingerzettingen voor sectie</h2>
@@ -5331,7 +5444,7 @@ create policy "Anyone can update"
   </div>
 </div>
 
-<!-- v0.80 — Command Palette (⌘K / Ctrl+K) -->
+<!-- v0.83 — Command Palette (⌘K / Ctrl+K) -->
 <div class="cmd-palette-overlay" id="cmd-palette-overlay">
   <div class="cmd-palette">
     <div class="cmd-palette-input-wrap">
@@ -5343,7 +5456,7 @@ create policy "Anyone can update"
   </div>
 </div>
 
-<!-- v0.80 — Welcome Hub -->
+<!-- v0.83 — Welcome Hub -->
 <div class="welcome-hub-overlay" id="welcome-hub-overlay">
   <div class="welcome-hub">
     <div class="wh-header">
@@ -5378,7 +5491,7 @@ create policy "Anyone can update"
   </div>
 </div>
 
-<!-- v0.80 — Voice Journal -->
+<!-- v0.83 — Voice Journal -->
 <div class="modal-overlay" id="voice-journal-overlay" style="display:none;">
   <div class="modal voice-journal-modal">
     <h2>🗣 Voice Journal</h2>
@@ -5429,7 +5542,73 @@ create policy "Anyone can update"
   </div>
 </div>
 
-<!-- v0.80 — Inspiration Hub -->
+<!-- v0.81 — Season Recap (Wrapped-style narrative) -->
+<div class="modal-overlay" id="recap-overlay" style="display:none;">
+  <div class="modal recap-modal">
+    <h2>🎬 Season Recap</h2>
+    <div class="modal-sub" id="recap-sub">Jouw piano-jaar in 8 momenten.</div>
+    <div class="recap-period-toggle">
+      <button data-period="month" class="on">📅 Deze maand</button>
+      <button data-period="quarter">🍂 Kwartaal</button>
+      <button data-period="year">🌍 Heel jaar</button>
+    </div>
+    <div class="recap-story" id="recap-story"></div>
+    <div class="modal-actions">
+      <button id="recap-share">🤝 Deel als verhaal</button>
+      <button id="recap-export">📥 Download recap</button>
+      <button id="recap-close">Sluit</button>
+    </div>
+  </div>
+</div>
+
+<!-- v0.82 — Mock Concert Mode -->
+<div class="modal-overlay" id="concert-overlay" style="display:none;">
+  <div class="modal concert-modal">
+    <h2>🎭 Mock Concert</h2>
+    <div class="modal-sub">Speel een volledig stuk alsof er een publiek is. Applaus, podium-druk, intro, recording — alles inclusief.</div>
+
+    <div class="concert-config">
+      <label>Stuk: <select id="concert-song"></select></label>
+      <label>Venue:
+        <select id="concert-venue">
+          <option value="livingroom">🏠 Living Room (intiem, 5 personen)</option>
+          <option value="recital" selected>🎓 Conservatorium recital (50 personen)</option>
+          <option value="hall">🎼 Concertzaal (200 personen)</option>
+          <option value="carnegie">🏛 Carnegie Hall (2800 personen)</option>
+        </select>
+      </label>
+      <label><input type="checkbox" id="concert-intro" checked> 🎤 MC-intro voor je begint</label>
+      <label><input type="checkbox" id="concert-applause" checked> 👏 Applaus na afloop</label>
+      <label><input type="checkbox" id="concert-noise"> 🤫 Subtle publieksgeluiden tijdens (gehoest, papier)</label>
+      <label><input type="checkbox" id="concert-record"> 🎥 Audio recording downloaden achteraf</label>
+    </div>
+
+    <div class="concert-info">
+      <strong>💡 Tip:</strong> Speel door foutjes heen. In een concert kun je niet stoppen. App pauzeert pas wanneer je Esc drukt.
+    </div>
+
+    <div class="modal-actions">
+      <button id="concert-start" class="gym-playpause-btn" style="font-size:14px !important;padding:10px 24px !important;min-width:auto !important;min-height:auto !important;border-radius:6px !important;">🎭 Start performance</button>
+      <button id="concert-close">Sluit</button>
+    </div>
+  </div>
+</div>
+
+<!-- v0.83 — Pianist Personas -->
+<div class="modal-overlay" id="personas-overlay" style="display:none;">
+  <div class="modal personas-modal">
+    <h2>🎩 Pianist Personas</h2>
+    <div class="modal-sub">Kies een legendarische pianist als sparring-partner. Krijg feedback in hun stijl, met hun karakteristieke focus + quotes.</div>
+    <div class="personas-grid" id="personas-grid"></div>
+    <div class="personas-detail" id="personas-detail" style="display:none;"></div>
+    <div class="modal-actions">
+      <button id="personas-back" style="display:none;">← Terug naar lijst</button>
+      <button id="personas-close">Sluit</button>
+    </div>
+  </div>
+</div>
+
+<!-- v0.83 — Inspiration Hub -->
 <div class="modal-overlay" id="inspiration-overlay" style="display:none;">
   <div class="modal inspiration-modal">
     <h2>✨ Inspiration</h2>
@@ -5451,13 +5630,13 @@ create policy "Anyone can update"
   </div>
 </div>
 
-<!-- v0.80 — Atmosphere canvas (audio-reactive subtle background) -->
+<!-- v0.83 — Atmosphere canvas (audio-reactive subtle background) -->
 <canvas id="atmosphere-canvas" style="position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:-1;opacity:0;transition:opacity 1s;"></canvas>
 
-<!-- v0.80 — Milestone celebration canvas (confetti) -->
+<!-- v0.83 — Milestone celebration canvas (confetti) -->
 <canvas id="celebrate-canvas" style="position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:9800;display:none;"></canvas>
 
-<!-- v0.80 — Milestone narrative overlay -->
+<!-- v0.83 — Milestone narrative overlay -->
 <div class="milestone-overlay" id="milestone-overlay" style="display:none;">
   <div class="milestone-card">
     <div class="ms-icon" id="ms-icon">🎉</div>
@@ -5470,7 +5649,7 @@ create policy "Anyone can update"
   </div>
 </div>
 
-<!-- v0.80 — Keyboard shortcuts cheat-sheet -->
+<!-- v0.83 — Keyboard shortcuts cheat-sheet -->
 <div class="modal-overlay" id="keyboard-help-overlay" style="display:none;">
   <div class="modal keyboard-help-modal">
     <h2>⌨ Keyboard Shortcuts</h2>
@@ -5516,7 +5695,7 @@ create policy "Anyone can update"
   </div>
 </div>
 
-<!-- v0.80 — Toast notification container (always-mounted) -->
+<!-- v0.83 — Toast notification container (always-mounted) -->
 <div class="toast-stack" id="toast-stack"></div>
 
 <!-- v0.41 — Voice command status indicator (floating, always shown when active) -->
@@ -8575,7 +8754,7 @@ if (testParam === '1') {
   setTimeout(() => { try { window.installAutoRecovery(); } catch {} }, 1500);
 }
 
-// v0.80 hotfix: global error handler — visible op pagina als iets stuk gaat
+// v0.83 hotfix: global error handler — visible op pagina als iets stuk gaat
 window.addEventListener('error', function(e) {
   console.error('[Piano Coach error]', e.message, 'at', e.filename, ':', e.lineno);
   // Persist for later inspection via window.__pcLastError
@@ -8599,7 +8778,7 @@ window.addEventListener('error', function(e) {
   } catch {}
 });
 
-// v0.80 hotfix: Hard Reset functie - wist ALLES (SW, caches, localStorage backup, force reload)
+// v0.83 hotfix: Hard Reset functie - wist ALLES (SW, caches, localStorage backup, force reload)
 window.hardResetApp = async function() {
   if (!confirm('Hard Reset: wist alle caches + service workers + tijdelijke data. Je localStorage (sessies/journal/etc.) wordt eerst gedownload als backup. OK?')) return;
   try {
@@ -8632,7 +8811,7 @@ window.hardResetApp = async function() {
   }
 };
 
-// v0.80 hotfix: AGRESSIEF unregister bestaande SWs + clear caches
+// v0.83 hotfix: AGRESSIEF unregister bestaande SWs + clear caches
 // Service worker veroorzaakte cache-conflicts. We disablen 'm tijdelijk volledig.
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.getRegistrations().then(regs => {
@@ -9315,13 +9494,13 @@ const sightState = {
   total: 0,
   streak: 0,
   answered: false,
-  // v0.80 additions
+  // v0.83 additions
   askedAt: 0, // performance.now() at question start
   reactionTimes: [], // ms per answer (correct only)
   audioOn: true,
   perNote: {}, // pitchClass → { correct, total }
   recentAnswers: [], // last 10: true/false
-  // v0.80 additions — sequence mode
+  // v0.83 additions — sequence mode
   mode: 'single', // 'single' or 'sequence'
   sequence: [], // array of midi notes for current sequence
   sequenceIdx: 0, // current position in sequence
@@ -9331,7 +9510,7 @@ const sightState = {
   sequenceProgressionLvl: 1, // 1=3 notes, 2=4 notes, 3=5 notes
 };
 
-// v0.80 — Sequence mode unlock threshold (total correct single-note answers)
+// v0.83 — Sequence mode unlock threshold (total correct single-note answers)
 const SEQUENCE_UNLOCK_THRESHOLD = 30;
 function isSequenceUnlocked() {
   try {
@@ -9387,7 +9566,7 @@ function generateSightQuestion() {
   }
 }
 
-// v0.80 — Sequence mode: generate N notes, render them on the staff
+// v0.83 — Sequence mode: generate N notes, render them on the staff
 function generateSightSequence() {
   const length = sightState.sequenceLength;
   const notes = [];
@@ -9716,7 +9895,7 @@ function answerSightByMidi(midi) {
   reportSightResult(correct, noteNameFromMidi(midi));
 }
 
-// v0.80 — Sequence-mode per-note result handler
+// v0.83 — Sequence-mode per-note result handler
 function reportSequenceNoteResult(correct, given) {
   const idx = sightState.sequenceIdx;
   const total = sightState.sequence.length;
@@ -9961,7 +10140,7 @@ document.getElementById('btn-sight').onclick = () => {
   document.getElementById('sight-overlay').style.display = 'flex';
 };
 
-// v0.80 — Sequence mode toggle wiring
+// v0.83 — Sequence mode toggle wiring
 function updateSightModeToggle() {
   const unlocked = isSequenceUnlocked();
   const seqBtn = document.getElementById('sight-mode-sequence');
@@ -10002,7 +10181,7 @@ function updateSightModeToggle() {
   });
 })();
 
-// v0.80 — Sequence-mode achievements
+// v0.83 — Sequence-mode achievements
 ACHIEVEMENTS.push({
   id: 'seq-first', icon: '🎶', label: 'Eerste reeks voltooid', cat: 'Practice',
   test: s => (s.sightHistory?.sequencesCompleted || 0) >= 1,
@@ -10012,7 +10191,7 @@ ACHIEVEMENTS.push({
   test: s => (s.sightHistory?.sequencesPerfect || 0) >= 10,
 });
 
-// Audio mute toggle (v0.80)
+// Audio mute toggle (v0.83)
 (function wireSightMute(){
   const btn = document.getElementById('sight-mute');
   if (!btn) return;
@@ -14475,7 +14654,7 @@ document.querySelectorAll('#eartrain-audio-mode button').forEach(b => {
 });
 
 // ============================================================================
-// v0.80 — SMART COACH (today's session recommender)
+// v0.83 — SMART COACH (today's session recommender)
 // ============================================================================
 function generateCoachSession() {
   const store = loadStore();
@@ -14983,7 +15162,7 @@ document.getElementById('stats-export').onclick = () => {
 };
 
 // ============================================================================
-// v0.80 — BACKING TRACK / CHORD LOOP IMPROV
+// v0.83 — BACKING TRACK / CHORD LOOP IMPROV
 // ============================================================================
 const PROGRESSIONS = [
   { id: 'pop', name: 'I-V-vi-IV', desc: 'Pop loop (Axis of Awesome)', chords: [[0,4,7], [7,11,14], [9,12,16], [5,9,12]] },
@@ -15197,7 +15376,7 @@ ACHIEVEMENTS.push({
 })();
 
 // ============================================================================
-// v0.80 — KNOWLEDGE REVIEW: spaced repetition over theory lessons
+// v0.83 — KNOWLEDGE REVIEW: spaced repetition over theory lessons
 // ============================================================================
 // Each question is keyed by lessonId:idx. SM-2 lite tracks per-question state.
 // Intervals (days): wrong → 1, streak 1 → 3, 2 → 7, 3 → 14, 4 → 30, 5+ → 60.
@@ -16188,7 +16367,7 @@ ACHIEVEMENTS.push({
 });
 
 // ============================================================================
-// v0.80 — COMPOSERS / COMPONISTEN BIOS
+// v0.83 — COMPOSERS / COMPONISTEN BIOS
 // ============================================================================
 const COMPOSERS = [
   {
@@ -16355,7 +16534,7 @@ document.getElementById('composers-back').onclick = renderComposersList;
 document.getElementById('composers-close').onclick = () => document.getElementById('composers-overlay').style.display = 'none';
 
 // ============================================================================
-// v0.80 — Add 9 new Gym lessons (lesson IDs 12-20)
+// v0.83 — Add 9 new Gym lessons (lesson IDs 12-20)
 // ============================================================================
 THEORY_LESSONS.push(
   {
@@ -16602,7 +16781,7 @@ Object.assign(QUIZ_BANK, {
 });
 
 // ============================================================================
-// v0.80 — FOUNDATIONS COMPLETE: 10 nieuwe Gym lessen (lessen 21-30)
+// v0.83 — FOUNDATIONS COMPLETE: 10 nieuwe Gym lessen (lessen 21-30)
 // ============================================================================
 THEORY_LESSONS.push(
   {
@@ -16932,14 +17111,14 @@ ACHIEVEMENTS.push({
   test: s => (s.composersRead?.length || 0) >= COMPOSERS.length,
 });
 
-// v0.80 — Achievement for completing all 30 lessons
+// v0.83 — Achievement for completing all 30 lessons
 ACHIEVEMENTS.push({
   id: 'theory-foundation-complete', icon: '🎓', label: 'Volledige theorie-basis voltooid (30 lessen)', cat: 'Knowledge',
   test: s => Object.keys(s.gymProgress?.completed || {}).length >= 30,
 });
 
 // ============================================================================
-// v0.80 — VISUALIZATION ENGINE + ADVANCED CURRICULUM
+// v0.83 — VISUALIZATION ENGINE + ADVANCED CURRICULUM
 // ============================================================================
 
 // ----- Add level metadata to existing lessons -----
@@ -17211,7 +17390,7 @@ patchLessonVisuals('diatonic-chords', [
 ]);
 
 // ============================================================================
-// v0.80 — 15 ADVANCED LESSONS (jazz, classical-advanced, styles, science)
+// v0.83 — 15 ADVANCED LESSONS (jazz, classical-advanced, styles, science)
 // ============================================================================
 THEORY_LESSONS.push(
   // ----- Jazz harmonie -----
@@ -18303,7 +18482,7 @@ ACHIEVEMENTS.push({
 });
 
 // ============================================================================
-// v0.80 — STAGE MODE + BLIND PLAYING
+// v0.83 — STAGE MODE + BLIND PLAYING
 // ============================================================================
 const stageState = {
   active: false,
@@ -19088,7 +19267,7 @@ ACHIEVEMENTS.push({
 });
 
 // ============================================================================
-// v0.80 — GOAL-BASED CURRICULUM
+// v0.83 — GOAL-BASED CURRICULUM
 // ============================================================================
 const GOAL_TARGETS = {
   learn: { name: 'Leer het stuk', criteria: 'Tempo 70% + accuracy 80%', tempoTarget: 70, accTarget: 0.80 },
@@ -19317,7 +19496,7 @@ ACHIEVEMENTS.push({
 });
 
 // ============================================================================
-// v0.80 — TIME TRACKER + PRACTICE ANALYTICS DEEP
+// v0.83 — TIME TRACKER + PRACTICE ANALYTICS DEEP
 // ============================================================================
 // Lightweight time tracker: hooks into modal opens/closes for main modes.
 // Tracks: activity, startTime, endTime → stored in store.timeLog[]
@@ -20099,7 +20278,7 @@ ACHIEVEMENTS.push({
 });
 
 // ============================================================================
-// v0.80 — COMPOSITION CHALLENGE
+// v0.83 — COMPOSITION CHALLENGE
 // ============================================================================
 const COMPOSE_CHALLENGES = {
   beginner: {
@@ -20664,7 +20843,7 @@ ACHIEVEMENTS.push({
 });
 
 // ============================================================================
-// v0.80 — PRACTICE CALENDAR
+// v0.83 — PRACTICE CALENDAR
 // ============================================================================
 const calState = {
   weekOffset: 0, // 0 = current week, -1 = prev, +1 = next
@@ -21244,7 +21423,7 @@ ACHIEVEMENTS.push({
 });
 
 // ============================================================================
-// v0.80 — DEEP INSIGHTS (rule-based long-term analysis engine)
+// v0.83 — DEEP INSIGHTS (rule-based long-term analysis engine)
 // ============================================================================
 function runDeepAnalysis(periodDays = 30) {
   const store = loadStore();
@@ -21632,7 +21811,7 @@ document.getElementById('di-export-md').onclick = () => {
   for (const c of r.correlations) md += `- ${c.replace(/<[^>]+>/g, '')}\n`;
   md += `\n## ⚠ Watch-outs\n\n`;
   for (const w of r.warnings) md += `- ${w.replace(/<[^>]+>/g, '')}\n`;
-  md += `\n---\nGegenereerd door Piano Coach v0.80 — Deep Insights engine\n`;
+  md += `\n---\nGegenereerd door Piano Coach v0.83 — Deep Insights engine\n`;
   const blob = new Blob([md], { type: 'text/markdown' });
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
@@ -22238,7 +22417,7 @@ ACHIEVEMENTS.push({
 });
 
 // ============================================================================
-// v0.80 — LISTEN-ALONG MODE (YouTube/Spotify embed)
+// v0.83 — LISTEN-ALONG MODE (YouTube/Spotify embed)
 // ============================================================================
 const laState = {
   source: 'youtube',
@@ -22377,7 +22556,7 @@ ACHIEVEMENTS.push({
 });
 
 // ============================================================================
-// v0.80 — UX OVERHAUL: Compact Topbar + Command Palette + Welcome Hub + Tour
+// v0.83 — UX OVERHAUL: Compact Topbar + Command Palette + Welcome Hub + Tour
 // ============================================================================
 
 // Master feature registry — alle non-player-controls gegroepeerd in categorieën
@@ -22869,7 +23048,7 @@ ACHIEVEMENTS.push({
 });
 
 // ============================================================================
-// v0.80 — SMART FINGERING DISPLAY (4 modes, progressive disclosure)
+// v0.83 — SMART FINGERING DISPLAY (4 modes, progressive disclosure)
 // ============================================================================
 // Replaces simple on/off toggle with 4 modes:
 //   off / position / next / subtle
@@ -23158,7 +23337,7 @@ function renderFingeringStaff(notes, clef) {
 document.getElementById('sf-close').onclick = () => document.getElementById('section-fingering-overlay').style.display = 'none';
 
 // Register fingering modal in compact topbar Learn category — already present as 'btn-fingering'
-// The categorisation in v0.80 already includes btn-fingering under Learn.
+// The categorisation in v0.83 already includes btn-fingering under Learn.
 
 // Achievement: try all 4 modes
 ACHIEVEMENTS.push({
@@ -23167,7 +23346,7 @@ ACHIEVEMENTS.push({
 });
 
 // ============================================================================
-// v0.80 — VOICE JOURNAL (auto-transcribed reflections via Web Speech Recognition)
+// v0.83 — VOICE JOURNAL (auto-transcribed reflections via Web Speech Recognition)
 // ============================================================================
 const voiceJournalState = {
   recognition: null,
@@ -23318,7 +23497,7 @@ ACHIEVEMENTS.push({
 });
 
 // ============================================================================
-// v0.80 — INSPIRATION LAYER (quotes, stories, mantras, milestones, atmosphere)
+// v0.83 — INSPIRATION LAYER (quotes, stories, mantras, milestones, atmosphere)
 // ============================================================================
 
 const PIANO_QUOTES = [
@@ -23779,7 +23958,658 @@ ACHIEVEMENTS.push({
 });
 
 // ============================================================================
-// v0.80 — UX POLISH: Toast notifications + Keyboard cheat-sheet
+// v0.81 — SEASON RECAP (Spotify-Wrapped style narrative)
+// ============================================================================
+function buildRecapSlides(period) {
+  // period: 'month' | 'quarter' | 'year'
+  const store = loadStore();
+  const now = Date.now();
+  const DAY_MS = 24 * 60 * 60 * 1000;
+  let cutoff;
+  let label;
+  if (period === 'month') { cutoff = now - 30 * DAY_MS; label = 'afgelopen maand'; }
+  else if (period === 'quarter') { cutoff = now - 90 * DAY_MS; label = 'afgelopen 3 maanden'; }
+  else { cutoff = now - 365 * DAY_MS; label = 'afgelopen jaar'; }
+
+  const timeLog = (store.timeLog || []).filter(t => t.start >= cutoff);
+  const allRecs = [];
+  for (const [song, list] of Object.entries(store.recordings || {})) {
+    for (const r of list) if (r.timestamp >= cutoff) allRecs.push({ ...r, song });
+  }
+  const journal = (store.journal || []).filter(e => e.date >= cutoff);
+  const gymCompleted = Object.keys(store.gymProgress?.completed || {});
+  const milestones = (store.inspirationMilestones || []).filter(m => m.date >= cutoff);
+
+  const totalMin = Math.round(timeLog.reduce((s, t) => s + t.duration, 0) / 60000);
+  const totalHours = Math.round(totalMin / 60 * 10) / 10;
+  const totalDays = new Set(timeLog.map(t => new Date(t.start).toDateString())).size;
+  const avgAcc = allRecs.length ? Math.round(allRecs.reduce((s, r) => s + (r.accuracy || 0), 0) / allRecs.length * 100) : 0;
+  const bestAcc = allRecs.length ? Math.round(Math.max(...allRecs.map(r => r.accuracy || 0)) * 100) : 0;
+
+  // Find most-played song
+  const songMinutes = {};
+  for (const t of timeLog) {
+    if (t.activity === 'repertoire') {
+      const song = state.song?.name || 'onbekend';
+      songMinutes[song] = (songMinutes[song] || 0) + t.duration / 60000;
+    }
+  }
+  const sortedSongs = Object.entries(songMinutes).sort((a, b) => b[1] - a[1]);
+  const topSong = sortedSongs[0]?.[0];
+
+  // Find best hour
+  const hourly = {};
+  for (const r of allRecs) {
+    const h = new Date(r.timestamp).getHours();
+    hourly[h] = hourly[h] || { sum: 0, count: 0 };
+    hourly[h].sum += r.accuracy || 0; hourly[h].count++;
+  }
+  let bestHour = -1, bestAvg = 0;
+  for (const [h, d] of Object.entries(hourly)) {
+    if (d.count >= 2 && d.sum / d.count > bestAvg) { bestHour = parseInt(h); bestAvg = d.sum / d.count; }
+  }
+
+  const slides = [];
+
+  // Opening slide
+  slides.push({
+    label: `🎬 Jouw piano-${label}`,
+    headline: `In ${totalHours} uur muziek heb je het hele oeuvre van Satie kunnen leren.`,
+    body: `Of niet — maar dat is wat ${totalHours} uur betekent in piano-tijd. ${totalDays} dagen geoefend over ${totalMin} minuten. Hoeveel pianisten zouden dit ritme volhouden?`,
+  });
+
+  // Top moment
+  if (bestAcc > 0) {
+    slides.push({
+      label: '🏆 Je beste moment',
+      headline: `${bestAcc}% accuracy.`,
+      body: `Ergens deze ${period === 'month' ? 'maand' : period === 'quarter' ? 'kwartaal' : 'jaar'} speelde je een stuk bijna perfect. Dat moment hoeft niemand af te pakken — het is van jou.`,
+      cls: 'gold',
+    });
+  }
+
+  // Top song
+  if (topSong) {
+    slides.push({
+      label: '🎹 Je top stuk',
+      headline: topSong,
+      body: `Je hebt dit stuk ${Math.round(sortedSongs[0][1])} minuten lang gespeeld. Dat is meer dan de meeste mensen Spotify per artiest luisteren.`,
+    });
+  }
+
+  // Best time
+  if (bestHour >= 0) {
+    const period_str = bestHour < 6 ? 'nacht' : bestHour < 12 ? 'ochtend' : bestHour < 18 ? 'middag' : 'avond';
+    slides.push({
+      label: '🕐 Je ontdekking',
+      headline: `${bestHour}:00 is jouw piek-uur.`,
+      body: `In de ${period_str} ben jij scherper dan andere uren. Plan de moeilijkste oefeningen hier. Wist je dat Glenn Gould pas 's nachts opnames durfde maken?`,
+      cls: 'green',
+    });
+  }
+
+  // Theory
+  if (gymCompleted.length > 0) {
+    slides.push({
+      label: '📚 Je theorie',
+      headline: `${gymCompleted.length} / 45 lessen.`,
+      body: `Op het conservatorium krijgen ze ${Math.round(gymCompleted.length / 1.5)} weken om dit te doen. Jij hebt het naast je werk gedaan.`,
+    });
+  }
+
+  // Milestones
+  if (milestones.length > 0) {
+    slides.push({
+      label: '🎉 Mijlpalen',
+      headline: `${milestones.length} achievements unlocked.`,
+      body: `Elk een moment waarop je dacht "oh — ik kan dit eigenlijk." Eerste: <em>${milestones[0]?.title || '?'}</em>. Laatste: <em>${milestones[milestones.length - 1]?.title || '?'}</em>.`,
+      cls: 'gold',
+    });
+  }
+
+  // Journal reflection
+  if (journal.length > 0) {
+    const moodSum = journal.reduce((s, e) => s + (e.mood || 3), 0);
+    const avgMood = (moodSum / journal.length).toFixed(1);
+    const moodIcons = ['', '😩', '😕', '😐', '🙂', '😄'];
+    slides.push({
+      label: '📓 Je reflecties',
+      headline: `${journal.length} journal entries. Gemiddelde stemming: ${moodIcons[Math.round(avgMood)] || '😐'}`,
+      body: `Reflectie is wat amateurs van professionals onderscheidt. Jij doet het. Continu.`,
+      cls: 'green',
+    });
+  }
+
+  // Streak vs benchmark
+  const longStreak = (store.streak?.longest || 0);
+  if (longStreak > 0) {
+    slides.push({
+      label: '🔥 Streak',
+      headline: `${longStreak} dagen op rij.`,
+      body: longStreak >= 30 ? `Boven de 30 dagen kom je in het top 5% van leerlingen. Doorgaan.` :
+            longStreak >= 14 ? `Twee weken is psychologisch het moeilijkste punt. Je bent erdoorheen.` :
+            `Elke streak begint bij dag 1. Geen schande in opnieuw starten — er is altijd morgen.`,
+    });
+  }
+
+  // Vooruitkijken
+  slides.push({
+    label: '🌟 Vooruit',
+    headline: `Volgende ${period === 'month' ? 'maand' : period === 'quarter' ? 'kwartaal' : 'jaar'}.`,
+    body: `Wat zou een 10% beter jij worden in deze periode? Niet 10× — gewoon 10%. Dat is een sessie meer per week. Drie betere maten in Chopin. Eén nieuwe Gym-les. Klein, maar het stapelt op.`,
+    cls: 'green',
+  });
+
+  return slides;
+}
+
+function renderRecap(period) {
+  const slides = buildRecapSlides(period);
+  const container = document.getElementById('recap-story');
+  container.innerHTML = slides.map(s => `
+    <div class="recap-slide ${s.cls || ''}">
+      <div class="recap-slide-label">${s.label}</div>
+      <div class="recap-slide-headline">${s.headline}</div>
+      <div class="recap-slide-body">${s.body}</div>
+    </div>
+  `).join('');
+}
+
+document.getElementById('btn-recap').onclick = () => {
+  renderRecap('month');
+  document.getElementById('recap-overlay').style.display = 'flex';
+};
+document.getElementById('recap-close').onclick = () => document.getElementById('recap-overlay').style.display = 'none';
+document.querySelectorAll('#recap-overlay .recap-period-toggle button').forEach(btn => {
+  btn.onclick = () => {
+    document.querySelectorAll('#recap-overlay .recap-period-toggle button').forEach(b => b.classList.remove('on'));
+    btn.classList.add('on');
+    renderRecap(btn.dataset.period);
+  };
+});
+document.getElementById('recap-share').onclick = () => {
+  const slides = Array.from(document.querySelectorAll('.recap-slide')).map(el =>
+    el.querySelector('.recap-slide-headline').textContent + ' — ' + el.querySelector('.recap-slide-body').textContent
+  ).join('\n\n');
+  navigator.clipboard.writeText('🎬 Mijn Piano Coach recap:\n\n' + slides + '\n\n#PianoCoach').then(() => {
+    window.toast?.('Gekopieerd', 'Je recap staat in clipboard', 'success');
+  });
+};
+document.getElementById('recap-export').onclick = () => {
+  const slides = buildRecapSlides(document.querySelector('#recap-overlay .recap-period-toggle button.on').dataset.period);
+  const md = '# Piano Coach Season Recap\n\n' + slides.map(s =>
+    `## ${s.label}\n\n**${s.headline}**\n\n${s.body.replace(/<[^>]+>/g, '')}\n`
+  ).join('\n');
+  const blob = new Blob([md], { type: 'text/markdown' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = `piano-recap-${new Date().toISOString().slice(0, 10)}.md`;
+  a.click();
+  URL.revokeObjectURL(url);
+};
+
+ACHIEVEMENTS.push({
+  id: 'recap-viewer', icon: '🎬', label: 'Eerste Season Recap bekeken', cat: 'Habits',
+  test: s => (s.recapsViewed || 0) >= 1,
+});
+
+// ============================================================================
+// v0.82 — MOCK CONCERT MODE (audience, applause, intro, stage pressure)
+// ============================================================================
+const VENUES = {
+  livingroom: { name: 'Living Room', size: 5, ambient: 0.03, applauseDur: 3, mc: 'Welkom in de huiskamer. Een klein gezelschap is er om naar je te luisteren. Geen druk — alleen plezier.' },
+  recital: { name: 'Conservatorium recital', size: 50, ambient: 0.05, applauseDur: 4, mc: 'Dames en heren, voor zijn examen-recital — een student met ambitie en discipline. Het podium is voor hem.' },
+  hall: { name: 'Concertzaal', size: 200, ambient: 0.08, applauseDur: 5, mc: 'Geachte aanwezigen, vanavond een avondvullende uitvoering door een pianist die ondanks een drukke agenda elke dag heeft geoefend. Stilte alstublieft.' },
+  carnegie: { name: 'Carnegie Hall', size: 2800, ambient: 0.1, applauseDur: 7, mc: 'Welcome to Carnegie Hall. Tonight, a debut performance. The pianist has flown in from Europe. Please welcome to the stage...' },
+};
+
+const concertState = {
+  active: false,
+  venue: null,
+  audioNodes: [],
+  ambientSource: null,
+  recordedAudio: [],
+  startTime: 0,
+};
+
+function startConcertAmbient(venue) {
+  try {
+    const ctx = ensureAudio();
+    // Generate gentle ambient noise (audience breathing/rustling)
+    const noise = ctx.createBufferSource();
+    const buf = ctx.createBuffer(1, ctx.sampleRate * 4, ctx.sampleRate);
+    const data = buf.getChannelData(0);
+    for (let i = 0; i < data.length; i++) {
+      // Low-frequency rumble + occasional clicks
+      data[i] = (Math.random() - 0.5) * 0.02 + Math.sin(i * 0.001) * 0.01;
+      if (Math.random() < 0.0001) data[i] += (Math.random() - 0.5) * 0.3; // occasional cough/click
+    }
+    noise.buffer = buf; noise.loop = true;
+    const gain = ctx.createGain();
+    gain.gain.value = venue.ambient;
+    noise.connect(gain).connect(ctx.destination);
+    noise.start();
+    concertState.ambientSource = noise;
+    concertState.audioNodes.push(noise, gain);
+  } catch {}
+}
+
+function stopConcertAmbient() {
+  for (const node of concertState.audioNodes) {
+    try { if (node.stop) node.stop(); if (node.disconnect) node.disconnect(); } catch {}
+  }
+  concertState.audioNodes = [];
+}
+
+function playApplauseSound(duration, audienceSize) {
+  try {
+    const ctx = ensureAudio();
+    const t0 = ctx.currentTime;
+    // Generate applause via filtered noise
+    const noise = ctx.createBufferSource();
+    const buf = ctx.createBuffer(1, ctx.sampleRate * duration, ctx.sampleRate);
+    const data = buf.getChannelData(0);
+    // Build up + sustain + fade
+    for (let i = 0; i < data.length; i++) {
+      const t = i / ctx.sampleRate;
+      const envelope = t < 0.5 ? t / 0.5 : t > duration - 1 ? (duration - t) : 1;
+      // White noise with clap-like density
+      const intensity = Math.min(1, audienceSize / 200);
+      const clapDensity = 0.3 + intensity * 0.5;
+      data[i] = (Math.random() - 0.5) * envelope * clapDensity;
+      // Add occasional sharper claps
+      if (Math.random() < 0.02 * intensity) data[i] += (Math.random() - 0.5) * envelope * 1.5;
+    }
+    noise.buffer = buf;
+    const filter = ctx.createBiquadFilter();
+    filter.type = 'highpass'; filter.frequency.value = 800;
+    const gain = ctx.createGain();
+    gain.gain.value = 0.4;
+    noise.connect(filter).connect(gain).connect(ctx.destination);
+    noise.start();
+    setTimeout(() => { try { noise.stop(); } catch {} }, duration * 1000);
+  } catch {}
+}
+
+function startMockConcert() {
+  const songName = document.getElementById('concert-song').value;
+  if (!songName) { alert('Selecteer een stuk.'); return; }
+  const venueId = document.getElementById('concert-venue').value;
+  const venue = VENUES[venueId];
+  const showIntro = document.getElementById('concert-intro').checked;
+  const showApplause = document.getElementById('concert-applause').checked;
+  const ambient = document.getElementById('concert-noise').checked;
+  const record = document.getElementById('concert-record').checked;
+
+  concertState.active = true;
+  concertState.venue = venue;
+  concertState.startTime = Date.now();
+  document.getElementById('concert-overlay').style.display = 'none';
+
+  // Create stage overlay
+  const stage = document.createElement('div');
+  stage.className = 'concert-stage-overlay';
+  stage.id = 'concert-stage';
+
+  if (showIntro) {
+    stage.innerHTML = `
+      <div class="concert-mc-text">🎤 ${venue.mc}</div>
+      <div class="concert-countdown" id="concert-countdown">3</div>
+    `;
+    document.body.appendChild(stage);
+    // Countdown
+    let n = 3;
+    const tick = () => {
+      const cd = document.getElementById('concert-countdown');
+      if (cd) cd.textContent = n > 0 ? n : '▶';
+      try { playClickNow(n === 0 ? 1800 : 1200); } catch {}
+      n--;
+      if (n >= 0) setTimeout(tick, 1000);
+      else setTimeout(beginConcertPlayback, 800);
+    };
+    tick();
+  } else {
+    document.body.appendChild(stage);
+    beginConcertPlayback();
+  }
+
+  function beginConcertPlayback() {
+    // Remove stage overlay
+    document.getElementById('concert-stage')?.remove();
+    // Apply stage-mode to body (hide UI)
+    document.body.classList.add('stage-mode');
+    // Start ambient
+    if (ambient) startConcertAmbient(venue);
+    // Start playback
+    try { play(); } catch {}
+    // Add escape listener
+    document.addEventListener('keydown', concertEscapeHandler);
+  }
+}
+
+function concertEscapeHandler(e) {
+  if (e.key === 'Escape') endMockConcert(true);
+}
+
+function endMockConcert(interrupted) {
+  concertState.active = false;
+  document.body.classList.remove('stage-mode');
+  document.removeEventListener('keydown', concertEscapeHandler);
+  stopConcertAmbient();
+  try { pause(); } catch {}
+
+  if (interrupted) {
+    window.toast?.('Performance afgebroken', 'In een echt concert kun je niet stoppen. Train dit door wel door te spelen.', 'warn');
+    return;
+  }
+
+  // Show applause overlay
+  const showApplause = document.getElementById('concert-applause')?.checked;
+  if (showApplause) {
+    const overlay = document.createElement('div');
+    overlay.className = 'concert-applause-overlay';
+    overlay.id = 'concert-applause-ov';
+    overlay.innerHTML = `
+      <div class="concert-bravo">BRAVO!</div>
+      <div class="concert-thanks">${concertState.venue.size} mensen hebben net geluisterd.<br>Dat ben jij geweest.</div>
+      <button class="concert-end-btn" id="concert-finish-btn">Buigen + sluit</button>
+    `;
+    document.body.appendChild(overlay);
+    playApplauseSound(concertState.venue.applauseDur, concertState.venue.size);
+    document.getElementById('concert-finish-btn').onclick = () => {
+      overlay.remove();
+      // Award XP
+      try { addXP(100, 'mock concert performed'); } catch {}
+      // Track
+      try {
+        const store = loadStore();
+        store.concertsPerformed = (store.concertsPerformed || 0) + 1;
+        saveStore(store);
+        checkAchievements();
+      } catch {}
+      window.toast?.('+100 XP', 'Eerste concert achter de rug. Volgende: grotere zaal.', 'success');
+    };
+  }
+}
+
+document.getElementById('btn-concert').onclick = () => {
+  // Populate songs
+  const sel = document.getElementById('concert-song');
+  sel.innerHTML = '<option value="">— Kies stuk —</option>';
+  try {
+    if (typeof getAllSongs === 'function') {
+      getAllSongs().forEach(name => sel.appendChild(new Option(name, name)));
+    }
+  } catch {}
+  document.getElementById('concert-overlay').style.display = 'flex';
+};
+document.getElementById('concert-close').onclick = () => document.getElementById('concert-overlay').style.display = 'none';
+document.getElementById('concert-start').onclick = startMockConcert;
+
+// Auto-end concert when song ends (heuristic: pause called externally)
+// We hook into pause if song ends naturally
+const _origPause3 = pause;
+pause = function() {
+  if (concertState.active && state.songTime >= (state.song?.duration || 999) - 1) {
+    // Song finished
+    _origPause3();
+    setTimeout(() => endMockConcert(false), 500);
+    return;
+  }
+  _origPause3();
+};
+
+ACHIEVEMENTS.push({
+  id: 'first-concert', icon: '🎭', label: 'Eerste mock concert voltooid', cat: 'Practice',
+  test: s => (s.concertsPerformed || 0) >= 1,
+});
+ACHIEVEMENTS.push({
+  id: 'carnegie-hall', icon: '🏛', label: 'Carnegie Hall performance gedaan', cat: 'Practice',
+  test: s => (s.carnegiePerformances || 0) >= 1,
+});
+
+// ============================================================================
+// v0.83 — PIANIST PERSONAS (spar met legendarische pianisten als coach)
+// ============================================================================
+const PIANIST_PERSONAS = [
+  {
+    id: 'gould',
+    name: 'Glenn Gould',
+    emoji: '🧠',
+    years: '1932–1982',
+    tagline: 'De precisionist die met de muziek vrijde',
+    bio: 'Canadees genie die Bach\'s Goldberg Variaties opnieuw uitvond. Speelde met een laag verstelde stoel, neuriede mee tijdens opnames, en stopte met live concerten op zijn 32e — het podium was voor hem een leugen. Studio was waar waarheid was.',
+    focus: 'Precisie boven alles. Helderheid van stemmen in counterpoint. Minimaal pedaal — de hand spreekt, niet het instrument.',
+    feedback: 'Ik hoorde je akkoord-arpeggios. Vergeet niet dat elke stem afzonderlijk te horen moet zijn — niet als verticale klank, maar als horizontale lijn. Speel het langzamer. Veel langzamer. Bach hoeft niet te haasten.',
+    quotes: [
+      'Bach speelt niet voor jou. Jij speelt voor Bach.',
+      'Het beste gedeelte van piano is je vergeten dat je een instrument hebt.',
+      'Tempo is een interpretatie-keuze, geen voorschrift.',
+    ],
+    style_focus: ['precision', 'counterpoint', 'minimal-pedal'],
+  },
+  {
+    id: 'horowitz',
+    name: 'Vladimir Horowitz',
+    emoji: '🔥',
+    years: '1903–1989',
+    tagline: 'Dramatische dynamiek, virtuoze octaven',
+    bio: 'Russisch-Amerikaanse virtuoos. Bekendste pianist van de 20e eeuw. Speelde met absurd grote dynamische range — van fluisterende pianissimo tot dak-afblazende fortissimo. Stopte regelmatig met concerten en kwam terug. Onverwoestbaar emotioneel.',
+    focus: 'Dynamische extremen. Octaven-passages met snelheid en kracht. Rubato dat het publiek doet zwijgen.',
+    feedback: 'Je hebt nog niet de moed om EXTREEM zacht te spelen. pp is geen suggestie — het is een uitnodiging om je publiek te dwingen voorover te buigen. Ga zachter dan je denkt veilig te zijn. Daarna weet je wat ff écht betekent.',
+    quotes: [
+      'Mensen zeggen dat ik te veel oefen. Anders weet ik niet wat te doen met mezelf.',
+      'Een pianist heeft drie dingen nodig: techniek, emotie, en de moed om beide tegelijk in te zetten.',
+      'Het verschil tussen een goede en grote pianist is wat hij durft.',
+    ],
+    style_focus: ['dynamics-extreme', 'octaves', 'rubato'],
+  },
+  {
+    id: 'argerich',
+    name: 'Martha Argerich',
+    emoji: '⚡',
+    years: '1941–',
+    tagline: 'Vuur en onvoorspelbaarheid',
+    bio: 'Argentijnse legende. Won op 24-jarige leeftijd het Chopin-concours in Warschau (1965) — en was sindsdien een van de meest spontane levende pianisten. Cancelt vaak op het laatste moment. Speelt elk concert anders. Kan een uitvoering geven die je doet huilen.',
+    focus: 'Emotionele intensiteit. Onverwachte tempi. Rubato dat aanvoelt alsof iemand de muziek voor het eerst ontdekt. Geen twee uitvoeringen hetzelfde.',
+    feedback: 'Te netjes. Te voorzichtig. Je speelt alsof je een vaas vasthoudt — los het los. Speel sneller dan veilig is. Maak een fout. Dat is waar de muziek leeft. Speel niet wat je hebt geleerd; speel wat je nu voelt.',
+    quotes: [
+      'Wanneer ik op het podium ben, ben ik niet alleen. Ik draag Bach, Schumann, Chopin met me mee.',
+      'Een uitvoering is een dialoog die jaren duurt — tussen jou en de componist.',
+      'Risico is het verschil tussen kunst en kunstigheid.',
+    ],
+    style_focus: ['emotion', 'rubato', 'risk-taking'],
+  },
+  {
+    id: 'langlang',
+    name: 'Lang Lang',
+    emoji: '🌟',
+    years: '1982–',
+    tagline: 'Showmanship + virtuose communicatie',
+    bio: 'Chinese megaster. Eerste Chinese pianist met internationale fame. Begon op 3, debuteerde op 5, speelde op 17 met Chicago Symphony — en sindsdien stopt hij niet. Stijl: theatraal, expressief, communicatief. Niet iedereen houdt van zijn gezichtsuitdrukkingen, maar het publiek wel.',
+    focus: 'Communicatie met het publiek. Gestures. Tempo-variatie als verhaal-vertelling. Snelle passages krachtig én helder.',
+    feedback: 'Je speelt voor jezelf. Speel voor iemand. Verbeeld je dat je grootmoeder achterin de zaal zit — speel zo dat ZIJ vermaakt wordt, niet alleen dat de noten kloppen. Theater is geen vies woord.',
+    quotes: [
+      'Mijn vingers volgen mijn geest. Niet andersom.',
+      'Ik oefen niet om beter te worden. Ik oefen om mezelf niet te verliezen.',
+      'Je publiek hoort niet hoe goed je speelt. Ze voelen of jij gelooft wat je speelt.',
+    ],
+    style_focus: ['showmanship', 'communication', 'speed'],
+  },
+  {
+    id: 'evans',
+    name: 'Bill Evans',
+    emoji: '🌙',
+    years: '1929–1980',
+    tagline: 'Jazz subtilliteit, ruime voicings',
+    bio: 'Amerikaanse jazz-pianist. Kind of Blue (1959) met Miles Davis — een van de bestverkochte jazz-albums ooit. Hij introduceerde rootless voicings, ruime spacing, en delicate touch in modern jazz piano. Stierf jong, alcohol + heroïne. Maar elke noot die hij speelde was eerlijk.',
+    focus: 'Jazz harmonie. Rootless voicings. Touch zo zacht dat het publiek voorover leunt. Improvisatie als gesprek met jezelf.',
+    feedback: 'Te luid. Jazz is een gesprek tussen je linker- en rechterhand, niet een speech. Speel de melodie met één vinger op pp, dan voeg je heel zacht akkoorden toe. Wanneer je niets te zeggen hebt, zwijg — een rest is even uitdrukking.',
+    quotes: [
+      `Een fout is alleen een fout als je 'm niet leuk vindt.`,
+      'Het beste jazz-spelen is wanneer je vergeet welke akkoord-changes er komen.',
+      'Spelen zonder ruimte tussen de noten is praten zonder ademen.',
+    ],
+    style_focus: ['jazz', 'voicings', 'space'],
+  },
+  {
+    id: 'satie',
+    name: 'Erik Satie',
+    emoji: '🎩',
+    years: '1866–1925',
+    tagline: 'Minimalisme + sardonische humor',
+    bio: 'Franse excentriek. Schreef stukken met instructies als "speel als een nachtegaal met kiespijn". Heeft "musique d\'ameublement" — meubelmuziek — uitgevonden, voorloper van ambient. Droeg jarenlang alleen grijze pakken. Liep elke dag van Arcueil naar Parijs en terug, met paraplu, regen of zon. Maakte muziek die je niet bewust moest beluisteren.',
+    focus: 'Minimalisme. Stilte als noot. Ironische instructies. Modale harmonie. Repetitie zonder ontwikkeling.',
+    feedback: 'Je hebt te veel noten gespeeld. Niet één extra is nodig. Speel de helft. Dan de helft daarvan. Wanneer je denkt "te leeg" — speel nog minder. Stilte is ook muziek; eigenlijk is het de enige eerlijke muziek.',
+    quotes: [
+      'Schrijf muziek alsof het je laatste dag is.',
+      'Een melodie heeft alleen nodig: een noot, een rest, een herhaling.',
+      'Ik ben gekomen op de wereld heel jong, in een tijdperk dat heel oud was.',
+    ],
+    style_focus: ['minimalism', 'silence', 'modal'],
+  },
+];
+
+const personaState = { activePersonaId: null };
+
+function renderPersonasGrid() {
+  const grid = document.getElementById('personas-grid');
+  grid.innerHTML = '';
+  document.getElementById('personas-detail').style.display = 'none';
+  grid.style.display = 'grid';
+  document.getElementById('personas-back').style.display = 'none';
+  for (const p of PIANIST_PERSONAS) {
+    const card = document.createElement('div');
+    card.className = 'persona-card' + (personaState.activePersonaId === p.id ? ' active' : '');
+    card.innerHTML = `
+      <div class="persona-emoji">${p.emoji}</div>
+      <div class="persona-name">${p.name}</div>
+      <div class="persona-years">${p.years}</div>
+      <div class="persona-style">${p.tagline}</div>
+    `;
+    card.onclick = () => showPersonaDetail(p);
+    grid.appendChild(card);
+  }
+}
+
+function showPersonaDetail(p) {
+  document.getElementById('personas-grid').style.display = 'none';
+  const detail = document.getElementById('personas-detail');
+  detail.style.display = 'block';
+  document.getElementById('personas-back').style.display = 'inline-block';
+  const quote = p.quotes[Math.floor(Math.random() * p.quotes.length)];
+  detail.innerHTML = `
+    <div class="persona-hero">
+      <div class="persona-hero-emoji">${p.emoji}</div>
+      <div class="persona-hero-name">${p.name}</div>
+      <div class="persona-hero-tagline">${p.tagline}</div>
+      <div class="persona-hero-years">${p.years}</div>
+    </div>
+    <div class="persona-section">
+      <div class="persona-section-title">📖 Bio</div>
+      <div class="persona-section-body">${p.bio}</div>
+    </div>
+    <div class="persona-section">
+      <div class="persona-section-title">🎯 Focus areas</div>
+      <div class="persona-section-body">${p.focus}</div>
+    </div>
+    <div class="persona-section">
+      <div class="persona-section-title">💬 ${p.name} reageert op jouw spel</div>
+      <div class="persona-feedback">${p.feedback}</div>
+    </div>
+    <div class="persona-section">
+      <div class="persona-section-title">📜 Karakteristieke quote</div>
+      <div class="persona-quote">"${quote}"</div>
+    </div>
+    <button class="persona-activate-btn" onclick="window.activatePersona('${p.id}')">${personaState.activePersonaId === p.id ? '✓ Geactiveerd — klik om te deactiveren' : '🎩 Activeer ' + p.name + ' als sparring-partner'}</button>
+  `;
+}
+
+window.activatePersona = function(id) {
+  if (personaState.activePersonaId === id) {
+    personaState.activePersonaId = null;
+    document.getElementById('persona-active-banner')?.remove();
+    window.toast?.('Persona gedeactiveerd', 'Je speelt nu weer voor jezelf.', 'info');
+  } else {
+    personaState.activePersonaId = id;
+    const p = PIANIST_PERSONAS.find(x => x.id === id);
+    // Show floating banner
+    let banner = document.getElementById('persona-active-banner');
+    if (!banner) {
+      banner = document.createElement('div');
+      banner.id = 'persona-active-banner';
+      banner.className = 'persona-active-banner';
+      document.body.appendChild(banner);
+    }
+    banner.innerHTML = `${p.emoji} ${p.name} kijkt mee`;
+    banner.classList.add('show');
+    window.toast?.(p.emoji + ' ' + p.name + ' geactiveerd', p.feedback.slice(0, 120) + '...', 'info');
+    // Save
+    try { const store = loadStore(); store.activePersona = id; saveStore(store); } catch {}
+  }
+  // Re-render
+  showPersonaDetail(PIANIST_PERSONAS.find(x => x.id === id) || PIANIST_PERSONAS[0]);
+};
+
+// Restore active persona on load
+setTimeout(() => {
+  try {
+    const store = loadStore();
+    if (store.activePersona) {
+      const p = PIANIST_PERSONAS.find(x => x.id === store.activePersona);
+      if (p) {
+        personaState.activePersonaId = p.id;
+        const banner = document.createElement('div');
+        banner.id = 'persona-active-banner';
+        banner.className = 'persona-active-banner show';
+        banner.innerHTML = `${p.emoji} ${p.name} kijkt mee`;
+        document.body.appendChild(banner);
+      }
+    }
+  } catch {}
+}, 1500);
+
+document.getElementById('btn-personas').onclick = () => {
+  renderPersonasGrid();
+  document.getElementById('personas-overlay').style.display = 'flex';
+};
+document.getElementById('personas-close').onclick = () => document.getElementById('personas-overlay').style.display = 'none';
+document.getElementById('personas-back').onclick = renderPersonasGrid;
+
+// After every session pause, if persona is active, deliver in-character feedback
+const _origPausePersona = pause;
+pause = function() {
+  const wasPlaying = state.playing;
+  _origPausePersona();
+  if (wasPlaying && personaState.activePersonaId && state.song) {
+    const p = PIANIST_PERSONAS.find(x => x.id === personaState.activePersonaId);
+    if (p) {
+      setTimeout(() => {
+        const tip = p.quotes[Math.floor(Math.random() * p.quotes.length)];
+        window.toast?.(p.emoji + ' ' + p.name, `"${tip}"`, 'info');
+      }, 1500);
+    }
+  }
+};
+
+// Register in Plan category
+if (typeof FEATURE_CATEGORIES !== 'undefined') {
+  FEATURE_CATEGORIES.Plan.features.push(
+    { id: 'btn-recap', icon: '🎬', label: 'Season Recap', hint: 'Spotify Wrapped-style narratief' },
+    { id: 'btn-personas', icon: '🎩', label: 'Pianist Personas', hint: 'Spar met legendes' }
+  );
+  FEATURE_CATEGORIES.Perform.features.push(
+    { id: 'btn-concert', icon: '🎭', label: 'Mock Concert', hint: 'Applaus, podium, druk' }
+  );
+}
+
+ACHIEVEMENTS.push({
+  id: 'persona-activate', icon: '🎩', label: 'Eerste pianist-persona geactiveerd', cat: 'Habits',
+  test: s => !!s.activePersona,
+});
+
+// ============================================================================
+// v0.83 — UX POLISH: Toast notifications + Keyboard cheat-sheet
 // ============================================================================
 
 // Toast notification system — replaces alert() for non-critical messages
@@ -24261,7 +25091,7 @@ window.addEventListener('resize', () => {
 });
 
 // ============================================================================
-// v0.80 — POMODORO + WARM-UP + DAILY JOURNAL
+// v0.83 — POMODORO + WARM-UP + DAILY JOURNAL
 // ============================================================================
 const pomodoroState = {
   active: false,
@@ -24760,7 +25590,7 @@ ACHIEVEMENTS.push({
 });
 
 // ============================================================================
-// v0.80 — TWO-HAND INDEPENDENCE DRILLS
+// v0.83 — TWO-HAND INDEPENDENCE DRILLS
 // ============================================================================
 // Each drill defines RH + LH patterns. Pattern = array of [time_in_beats, midi] tuples.
 // Beats run from 0 to length. Metronome ticks each integer beat.
