@@ -2,9 +2,16 @@
 <html lang="nl">
 <head>
 <meta charset="UTF-8">
-<title>Piano Coach — v0.84</title>
-<link rel="manifest" href="data:application/json;charset=utf-8,%7B%22name%22%3A%22Piano%20Coach%22%2C%22short_name%22%3A%22PianoCoach%22%2C%22start_url%22%3A%22.%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%230f1419%22%2C%22theme_color%22%3A%22%234ade80%22%2C%22description%22%3A%22Self-hosted%20piano%20coaching%20met%20MIDI-input%2C%2035-song%20repertoire%2C%20coach%2C%20achievements%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22data%3Aimage%2Fsvg%2Bxml%2C%253Csvg%2520xmlns%3D%2522http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%2522%2520viewBox%3D%25220%25200%25201024%25201024%2522%253E%253Crect%2520fill%3D%2522%25230f1419%2522%2520width%3D%25221024%2522%2520height%3D%25221024%2522%2F%253E%253Ctext%2520x%3D%2522512%2522%2520y%3D%2522680%2522%2520font-size%3D%2522680%2522%2520text-anchor%3D%2522middle%2522%253E%25F0%259F%258E%25B9%253C%2Ftext%253E%253C%2Fsvg%253E%22%2C%22sizes%22%3A%22512x512%22%2C%22type%22%3A%22image%2Fsvg%2Bxml%22%7D%5D%7D">
-<meta name="theme-color" content="#4ade80">
+<title>Piano Coach — v0.85</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, user-scalable=no">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0f1419">
+<!-- iOS PWA (standalone homescreen app) -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Piano Coach">
+<meta name="mobile-web-app-capable" content="yes">
+<link rel="apple-touch-icon" href="icon.svg">
 <script src="https://cdn.jsdelivr.net/npm/@tonejs/midi@2.0.28/build/Midi.js"></script>
 <style>
   :root {
@@ -3649,7 +3656,7 @@
 </head>
 <body>
 
-<h1>Piano Coach <span style="color: var(--muted); font-weight: 400;">v0.84</span></h1>
+<h1>Piano Coach <span style="color: var(--muted); font-weight: 400;">v0.85</span></h1>
 <p class="sub">📜 Sight reading 2.0 (audio + keyboard + heatmap + adaptive + reaction) · 36 songs</p>
 
 <div class="topbar">
@@ -3824,6 +3831,7 @@
   <button id="btn-concert" title="Mock Concert Mode — speel met publiek-applaus, intro, podium-druk simulatie">🎭 Concert</button>
   <button id="btn-personas" title="Pianist Personas — spar met Horowitz, Argerich, Gould of Lang Lang als stijl-coach">🎩 Personas</button>
   <button id="btn-adultmode" title="Volwassen-modus — directe data-feedback, framing afgestemd op leren na je 40e">🎓 Volwassen-modus</button>
+  <button id="btn-gym-mobile" title="Gym To-Go — groot-knop audio-theorie voor in de sportschool, met lock-screen bediening">📲 Gym To-Go</button>
   <button id="btn-tutor" title="AI Tutor Chat — stel vragen over je oefen-data, theorie, of wat je moet oefenen">💬 Tutor</button>
   <button id="btn-reharm" title="Reharmonization Drills — vervang akkoorden in progressies (jazz/klassiek harmonie training)">🔄 Reharm</button>
   <button id="btn-listen-along" title="Listen-Along — luister naar echte uitvoering (Spotify/YouTube) naast je MIDI">🎧 Listen-Along</button>
@@ -5708,6 +5716,36 @@ create policy "Anyone can update"
       <button id="ms-close">Verder</button>
     </div>
   </div>
+</div>
+
+<!-- v0.85 — Gym To-Go (mobiel full-screen, sportschool-modus) -->
+<div class="gymgo-screen" id="gymgo-screen" style="display:none;">
+  <div class="gymgo-header">
+    <button id="gymgo-close" class="gymgo-icon-btn" aria-label="Sluiten">✕</button>
+    <div class="gymgo-header-title">📲 Gym To-Go</div>
+    <button id="gymgo-install" class="gymgo-icon-btn" title="Installeer als app" style="display:none;">⬇</button>
+  </div>
+  <div class="gymgo-now" id="gymgo-now">
+    <div class="gymgo-now-cat" id="gymgo-now-cat">Audio muziektheorie</div>
+    <div class="gymgo-now-title" id="gymgo-now-title">Kies een les</div>
+    <div class="gymgo-now-step" id="gymgo-now-step"></div>
+    <div class="gymgo-progress"><div class="gymgo-progress-fill" id="gymgo-progress-fill"></div></div>
+  </div>
+  <div class="gymgo-transport">
+    <button id="gymgo-prev" class="gymgo-tbtn" aria-label="Vorige stap">⏮</button>
+    <button id="gymgo-back15" class="gymgo-tbtn small" aria-label="Terug">⏪</button>
+    <button id="gymgo-play" class="gymgo-tbtn play" aria-label="Afspelen">▶</button>
+    <button id="gymgo-fwd15" class="gymgo-tbtn small" aria-label="Vooruit">⏩</button>
+    <button id="gymgo-next" class="gymgo-tbtn" aria-label="Volgende stap">⏭</button>
+  </div>
+  <div class="gymgo-quick">
+    <button id="gymgo-ear" class="gymgo-quick-btn">👂 Ear Training</button>
+    <button id="gymgo-voice" class="gymgo-quick-btn">🎙 Stem-bediening</button>
+    <button id="gymgo-autonext" class="gymgo-quick-btn on">🔁 Auto-next aan</button>
+  </div>
+  <div class="gymgo-list-label">Lessen — tik om te starten</div>
+  <div class="gymgo-list" id="gymgo-list"></div>
+  <div class="gymgo-tip">💡 Telefoon in armband, koptelefoon in. Bedien play/skip vanaf je koptelefoon of lock-screen.</div>
 </div>
 
 <!-- v0.83 — Keyboard shortcuts cheat-sheet -->
@@ -8872,89 +8910,35 @@ window.hardResetApp = async function() {
   }
 };
 
-// v0.83 hotfix: AGRESSIEF unregister bestaande SWs + clear caches
-// Service worker veroorzaakte cache-conflicts. We disablen 'm tijdelijk volledig.
+// v0.85 — Eenmalige migratie: ruim ALLEEN de oude kapotte blob-URL service worker op.
+// De nieuwe sw.js (hieronder geregistreerd) blijft staan en regelt offline-cache.
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.getRegistrations().then(regs => {
     for (const reg of regs) {
-      console.log('[Piano Coach] Unregistering old service worker');
-      reg.unregister();
+      const url = reg.active?.scriptURL || reg.installing?.scriptURL || reg.waiting?.scriptURL || '';
+      if (url.startsWith('blob:')) {
+        console.log('[Piano Coach] Removing old blob-URL service worker');
+        reg.unregister();
+      }
     }
   }).catch(() => {});
-  if (window.caches) {
-    caches.keys().then(names => {
-      for (const name of names) {
-        console.log('[Piano Coach] Deleting old cache:', name);
-        caches.delete(name);
-      }
-    }).catch(() => {});
-  }
 }
 
-// Register service worker for offline support (DISABLED — see hotfix above)
-if (false && 'serviceWorker' in navigator) {
-  const swCode = `
-    const CACHE = 'piano-coach-v75';
-    const ASSETS = [
-      '/',
-      '/index.html',
-      'https://cdn.jsdelivr.net/npm/@tonejs/midi@2.0.28/build/Midi.js',
-    ];
-    self.addEventListener('install', e => {
-      self.skipWaiting();
-      e.waitUntil(caches.open(CACHE).then(c => c.addAll(ASSETS)));
-    });
-    self.addEventListener('activate', e => {
-      e.waitUntil(Promise.all([
-        // Delete old caches
-        caches.keys().then(names => Promise.all(names.filter(n => n !== CACHE).map(n => caches.delete(n)))),
-        // Claim clients immediately
-        self.clients.claim()
-      ]));
-    });
-    self.addEventListener('fetch', e => {
-      const url = new URL(e.request.url);
-      // Network-first for HTML (index.html) so updates land immediately
-      if (e.request.mode === 'navigate' || url.pathname === '/' || url.pathname.endsWith('.html')) {
-        e.respondWith(
-          fetch(e.request).then(resp => {
-            const clone = resp.clone();
-            caches.open(CACHE).then(c => c.put(e.request, clone)).catch(() => {});
-            return resp;
-          }).catch(() => caches.match(e.request))
-        );
-        return;
-      }
-      // Cache-first for everything else (MIDIs, CDN libs)
-      e.respondWith(caches.match(e.request).then(r => r || fetch(e.request).then(resp => {
-        if (resp.ok) {
-          const clone = resp.clone();
-          caches.open(CACHE).then(c => c.put(e.request, clone)).catch(() => {});
-        }
-        return resp;
-      })));
-    });
-    self.addEventListener('message', e => {
-      if (e.data === 'SKIP_WAITING') self.skipWaiting();
-    });
-  `;
-  const blob = new Blob([swCode], { type: 'application/javascript' });
-  const swUrl = URL.createObjectURL(blob);
-  navigator.serviceWorker.register(swUrl).then(reg => {
-    // Force update check on load
-    reg.update();
-    // When new SW found and waiting, activate it immediately
-    reg.addEventListener('updatefound', () => {
-      const newWorker = reg.installing;
-      if (newWorker) {
-        newWorker.addEventListener('statechange', () => {
-          if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-            newWorker.postMessage('SKIP_WAITING');
-          }
+// v0.85 — Service Worker re-enabled: echte sw.js (relatieve scope, werkt op
+// localhost-root én GitHub-Pages-subpad). Network-first HTML zodat updates landen,
+// cache-first runtime zodat de app + lessen offline werken in de sportschool.
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('sw.js').then(reg => {
+      reg.update();
+      reg.addEventListener('updatefound', () => {
+        const nw = reg.installing;
+        if (nw) nw.addEventListener('statechange', () => {
+          if (nw.state === 'installed' && navigator.serviceWorker.controller) nw.postMessage('SKIP_WAITING');
         });
-      }
-    });
-  }).catch(() => {});
+      });
+    }).catch((e) => console.warn('SW register failed:', e));
+  });
 }
 
 // ===========================================================================
@@ -25232,6 +25216,257 @@ ACHIEVEMENTS.push({
   test: s => {
     try { return getAllSongs().some(n => computeSongMastery(n).rhythmStars >= 5); } catch { return false; }
   },
+});
+
+// ============================================================================
+// v0.85 — GYM TO-GO (mobiele sportschool-modus + Media Session + offline)
+// ============================================================================
+
+// ── CSS (zelf-ingespoten) ──
+(function injectGymGoCss() {
+  const css = `
+  .gymgo-screen {
+    position:fixed; inset:0; z-index:8600;
+    background:linear-gradient(180deg,#0d1220 0%,#0a0a0f 100%);
+    color:#fff; display:flex; flex-direction:column;
+    padding:max(12px,env(safe-area-inset-top)) 16px max(16px,env(safe-area-inset-bottom));
+    overflow-y:auto; -webkit-overflow-scrolling:touch;
+  }
+  .gymgo-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; }
+  .gymgo-header-title { font-size:15px; font-weight:600; }
+  .gymgo-icon-btn { width:44px; height:44px; border-radius:50%; background:rgba(255,255,255,0.08);
+    border:1px solid rgba(255,255,255,0.15); color:#fff; font-size:18px; cursor:pointer; }
+  .gymgo-now { text-align:center; padding:18px 12px; background:rgba(255,255,255,0.04);
+    border-radius:16px; margin-bottom:18px; }
+  .gymgo-now-cat { font-size:11px; color:#4ade80; text-transform:uppercase; letter-spacing:0.08em; }
+  .gymgo-now-title { font-size:22px; font-weight:700; margin:8px 0; line-height:1.25; }
+  .gymgo-now-step { font-size:13px; color:rgba(255,255,255,0.6); min-height:36px; line-height:1.4; }
+  .gymgo-progress { height:6px; background:rgba(255,255,255,0.1); border-radius:3px; overflow:hidden; margin-top:12px; }
+  .gymgo-progress-fill { height:100%; width:0%; background:linear-gradient(90deg,#4ade80,#22c55e); transition:width .3s; }
+  .gymgo-transport { display:flex; align-items:center; justify-content:center; gap:10px; margin-bottom:20px; }
+  .gymgo-tbtn { width:60px; height:60px; border-radius:50%; background:rgba(255,255,255,0.08);
+    border:1px solid rgba(255,255,255,0.18); color:#fff; font-size:22px; cursor:pointer;
+    display:flex; align-items:center; justify-content:center; transition:transform .1s; }
+  .gymgo-tbtn:active { transform:scale(0.92); }
+  .gymgo-tbtn.small { width:50px; height:50px; font-size:16px; }
+  .gymgo-tbtn.play { width:84px; height:84px; font-size:34px;
+    background:linear-gradient(135deg,#4ade80,#22c55e); border:none; color:#06281a;
+    box-shadow:0 6px 24px rgba(74,222,128,0.4); }
+  .gymgo-quick { display:flex; gap:8px; margin-bottom:18px; }
+  .gymgo-quick-btn { flex:1; padding:13px 8px; border-radius:12px; font-size:12px;
+    background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.15); color:#fff; cursor:pointer; }
+  .gymgo-quick-btn.on { background:rgba(74,222,128,0.18); border-color:#4ade80; }
+  .gymgo-list-label { font-size:11px; color:rgba(255,255,255,0.5); text-transform:uppercase;
+    letter-spacing:0.06em; margin-bottom:8px; }
+  .gymgo-list { display:flex; flex-direction:column; gap:8px; flex:1; }
+  .gymgo-lesson { display:flex; align-items:center; gap:12px; padding:15px 16px; border-radius:12px;
+    background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.08); cursor:pointer;
+    min-height:56px; box-sizing:border-box; }
+  .gymgo-lesson:active { background:rgba(255,255,255,0.1); }
+  .gymgo-lesson.playing { border-color:#4ade80; background:rgba(74,222,128,0.1); }
+  .gymgo-lesson.done { opacity:0.6; }
+  .gymgo-lesson-num { font-family:monospace; color:rgba(255,255,255,0.4); min-width:26px; font-size:13px; }
+  .gymgo-lesson-body { flex:1; min-width:0; }
+  .gymgo-lesson-title { font-size:14px; font-weight:600; }
+  .gymgo-lesson-meta { font-size:11px; color:rgba(255,255,255,0.5); margin-top:2px; }
+  .gymgo-lesson-status { font-size:18px; }
+  .gymgo-tip { font-size:11px; color:rgba(255,255,255,0.45); text-align:center; padding:14px 8px 4px; line-height:1.5; }
+  /* Prominente plek op mobiel: maak de topbar-knop opvallend */
+  @media (max-width:720px) {
+    #btn-gym-mobile { background:linear-gradient(135deg,#4ade80,#22c55e) !important; color:#06281a !important; font-weight:600; }
+  }`;
+  const s = document.createElement('style'); s.textContent = css; document.head.appendChild(s);
+})();
+
+// ── Media Session: lock-screen + koptelefoon-bediening ──
+function gymSetupMediaSession() {
+  if (!('mediaSession' in navigator)) return;
+  try {
+    navigator.mediaSession.setActionHandler('play', () => { if (!gymState.playing) gymPlayPause(); });
+    navigator.mediaSession.setActionHandler('pause', () => { if (gymState.playing) gymPlayPause(); });
+    navigator.mediaSession.setActionHandler('previoustrack', () => gymGoPrevLesson());
+    navigator.mediaSession.setActionHandler('nexttrack', () => gymGoNextLesson());
+    navigator.mediaSession.setActionHandler('seekbackward', () => gymSkipSteps(-3));
+    navigator.mediaSession.setActionHandler('seekforward', () => gymSkipSteps(3));
+  } catch {}
+}
+function gymUpdateMediaMetadata(lesson) {
+  if (!('mediaSession' in navigator) || !lesson) return;
+  try {
+    navigator.mediaSession.metadata = new MediaMetadata({
+      title: lesson.title,
+      artist: 'Piano Coach — Gym',
+      album: lesson.category || 'Muziektheorie',
+      artwork: [
+        { src: 'icon.svg', sizes: '512x512', type: 'image/svg+xml' },
+        { src: 'icon-maskable.svg', sizes: '512x512', type: 'image/svg+xml' },
+      ],
+    });
+  } catch {}
+}
+function gymUpdateMediaPlayback() {
+  if (!('mediaSession' in navigator)) return;
+  try { navigator.mediaSession.playbackState = gymState.playing ? 'playing' : 'paused'; } catch {}
+}
+
+// ── Hooks in de bestaande gym-engine → spiegel naar mobiel scherm + media session ──
+const _origOpenGymLessonMobile = openGymLesson;
+openGymLesson = function(lesson) {
+  _origOpenGymLessonMobile(lesson);
+  gymUpdateMediaMetadata(lesson);
+  gymGoSyncNow();
+  gymSetupMediaSession();
+};
+const _origSetGymPlayingMobile = setGymPlaying;
+setGymPlaying = function(playing) {
+  _origSetGymPlayingMobile(playing);
+  const pb = document.getElementById('gymgo-play');
+  if (pb) pb.textContent = playing ? '⏸' : '▶';
+  gymUpdateMediaPlayback();
+};
+const _origRunGymStepMobile = runGymStep;
+runGymStep = function() {
+  _origRunGymStepMobile();
+  gymGoSyncNow();
+};
+
+function gymGoSyncNow() {
+  // Spiegel de (verborgen) desktop-gym-DOM naar het mobiele scherm
+  const screen = document.getElementById('gymgo-screen');
+  if (!screen || screen.style.display === 'none') return;
+  const lesson = gymState.currentLesson;
+  if (lesson) {
+    document.getElementById('gymgo-now-cat').textContent = lesson.category || 'Muziektheorie';
+    document.getElementById('gymgo-now-title').textContent = lesson.title;
+  }
+  document.getElementById('gymgo-now-step').textContent = document.getElementById('gym-now-playing')?.textContent || '';
+  document.getElementById('gymgo-progress-fill').style.width = document.getElementById('gym-progress-fill')?.style.width || '0%';
+  document.getElementById('gymgo-play').textContent = gymState.playing ? '⏸' : '▶';
+  // Markeer de spelende les in de lijst
+  document.querySelectorAll('.gymgo-lesson').forEach(el => {
+    el.classList.toggle('playing', lesson && el.dataset.lessonId === lesson.id);
+  });
+}
+
+function gymGoNextLesson() {
+  const idx = THEORY_LESSONS.findIndex(l => l.id === gymState.currentLesson?.id);
+  if (idx >= 0 && idx < THEORY_LESSONS.length - 1) {
+    openGymLesson(THEORY_LESSONS[idx + 1]);
+    setGymPlaying(true); runGymStep();
+  }
+}
+function gymGoPrevLesson() {
+  const idx = THEORY_LESSONS.findIndex(l => l.id === gymState.currentLesson?.id);
+  if (idx > 0) { openGymLesson(THEORY_LESSONS[idx - 1]); setGymPlaying(true); runGymStep(); }
+}
+
+// ── Render de lessenlijst in het mobiele scherm ──
+function renderGymGoList() {
+  loadGymProgress?.();
+  const container = document.getElementById('gymgo-list');
+  container.innerHTML = '';
+  THEORY_LESSONS.forEach((lesson, i) => {
+    const done = gymState.completed?.[lesson.id];
+    const el = document.createElement('div');
+    el.className = 'gymgo-lesson' + (done ? ' done' : '') + (gymState.currentLesson?.id === lesson.id ? ' playing' : '');
+    el.dataset.lessonId = lesson.id;
+    el.innerHTML = `
+      <span class="gymgo-lesson-num">${String(i + 1).padStart(2, '0')}</span>
+      <div class="gymgo-lesson-body">
+        <div class="gymgo-lesson-title">${lesson.title}</div>
+        <div class="gymgo-lesson-meta">${lesson.category} · ±${formatTime(estimateLessonDuration(lesson))}${done ? ' · ✓' : ''}</div>
+      </div>
+      <span class="gymgo-lesson-status">${done ? '✅' : '▶'}</span>`;
+    el.onclick = () => { openGymLesson(lesson); setGymPlaying(true); runGymStep(); gymGoSyncNow(); };
+    container.appendChild(el);
+  });
+}
+
+// ── Open/sluit Gym To-Go ──
+function openGymGo() {
+  try { ensureAudio(); } catch {}        // ontgrendel audio op tik
+  try { const s = loadStore(); if (!s.gymGoUsed) { s.gymGoUsed = true; saveStore(s); } } catch {}
+  loadGymProgress?.();
+  renderGymGoList();
+  gymGoSyncNow();
+  gymSetupMediaSession();
+  // Resume-hint
+  if (gymState.currentLesson) {
+    document.getElementById('gymgo-now-cat').textContent = gymState.currentLesson.category || 'Muziektheorie';
+    document.getElementById('gymgo-now-title').textContent = gymState.currentLesson.title;
+  }
+  document.getElementById('gymgo-screen').style.display = 'flex';
+  // Install-knop tonen als install beschikbaar
+  const ib = document.getElementById('gymgo-install');
+  if (ib && typeof deferredInstallPrompt !== 'undefined' && deferredInstallPrompt) ib.style.display = 'block';
+}
+function closeGymGo() {
+  document.getElementById('gymgo-screen').style.display = 'none';
+}
+
+document.getElementById('btn-gym-mobile').onclick = openGymGo;
+document.getElementById('gymgo-close').onclick = closeGymGo;
+document.getElementById('gymgo-play').onclick = () => {
+  try { ensureAudio(); } catch {}
+  if (!gymState.currentLesson && THEORY_LESSONS.length) { openGymLesson(THEORY_LESSONS[0]); }
+  gymPlayPause(); gymGoSyncNow();
+};
+document.getElementById('gymgo-next').onclick = () => { gymGoNextLesson(); };
+document.getElementById('gymgo-prev').onclick = () => { gymGoPrevLesson(); };
+document.getElementById('gymgo-fwd15').onclick = () => { gymSkipSteps(3); gymGoSyncNow(); };
+document.getElementById('gymgo-back15').onclick = () => { gymSkipSteps(-3); gymGoSyncNow(); };
+document.getElementById('gymgo-ear').onclick = () => { closeGymGo(); try { document.getElementById('btn-eartrain-audio').click(); } catch {} };
+document.getElementById('gymgo-voice').onclick = (e) => {
+  try { document.getElementById('btn-voice-cmd').click(); } catch {}
+  e.currentTarget.classList.toggle('on');
+};
+document.getElementById('gymgo-autonext').onclick = (e) => {
+  if (typeof gymState !== 'undefined') gymState.autoplay = !gymState.autoplay;
+  e.currentTarget.classList.toggle('on', gymState.autoplay);
+  e.currentTarget.textContent = gymState.autoplay ? '🔁 Auto-next aan' : '🔁 Auto-next uit';
+};
+document.getElementById('gymgo-install')?.addEventListener('click', () => {
+  if (typeof deferredInstallPrompt !== 'undefined' && deferredInstallPrompt) {
+    deferredInstallPrompt.prompt();
+    deferredInstallPrompt.userChoice.finally(() => { deferredInstallPrompt = null; document.getElementById('gymgo-install').style.display = 'none'; });
+  }
+});
+
+// ── Periodieke sync zodat lock-screen + scherm meelopen met de engine ──
+setInterval(() => {
+  const screen = document.getElementById('gymgo-screen');
+  if (screen && screen.style.display !== 'none') gymGoSyncNow();
+}, 600);
+
+// ── PWA-snelkoppeling: ?screen=gym-mobile of ?screen=ear-audio ──
+(function handleScreenParam() {
+  try {
+    const p = new URLSearchParams(location.search).get('screen');
+    if (p === 'gym-mobile') setTimeout(openGymGo, 600);
+    else if (p === 'ear-audio') setTimeout(() => { try { document.getElementById('btn-eartrain-audio').click(); } catch {} }, 600);
+  } catch {}
+})();
+
+// ── Mobiel: bij eerste bezoek een hint tonen ──
+setTimeout(() => {
+  try {
+    const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent) || window.innerWidth < 720;
+    const store = loadStore();
+    if (isMobile && !store.gymGoHintShown) {
+      store.gymGoHintShown = true; saveStore(store);
+      window.toast?.('📲 Naar de sportschool?', 'Tik op "Gym To-Go" voor groot-knop audio-theorie met lock-screen bediening.', 'info');
+    }
+  } catch {}
+}, 4000);
+
+// Registreer in Learn-categorie van de compacte topbar
+if (typeof FEATURE_CATEGORIES !== 'undefined') {
+  FEATURE_CATEGORIES.Learn?.features.unshift({ id: 'btn-gym-mobile', icon: '📲', label: 'Gym To-Go', hint: 'Sportschool-modus: groot, hands-free, lock-screen' });
+}
+
+ACHIEVEMENTS.push({
+  id: 'gymgo-used', icon: '📲', label: 'Gym To-Go gebruikt', cat: 'Habits',
+  test: s => !!s.gymGoUsed,
 });
 
 // ============================================================================
