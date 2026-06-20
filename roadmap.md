@@ -879,7 +879,26 @@ Update real-time elke 100ms. Detecteert min/max midi van komende 4 sec aan noten
 
 Achievement: `🖐 Vingerzetting-modes verkend (3+ modes geprobeerd)`
 
-### v0.76+ — Toekomstige ideeën
+### v0.77-0.83 ✅ — Voice Journal · UX overhaul · Stability/test-suite · Inspiration Layer · Season Recap · Mock Concert · Pianist Personas
+(Zie git-history + HANDOVER.md voor details. Compacte topbar met 7 categorie-dropdowns + ⌘K command palette, self-test suite via ?test=1/?test=2, 50 quotes + confetti + atmosphere, Wrapped-stijl recap, 4 concert-venues, 6 pianist-personas.)
+
+### v0.84 ✅ — Adult Learner Layer (40+ coaching-framework, alle 13 auditpunten)
+Doorvoering van een audit tegen een 40+ coaching-rubric. Per punt:
+- **#1 Ritme-mastery los van tempo** — `computeSongMastery` krijgt `rhythmStars` (♪♪♪) die alleen nauwkeurigheid + timing beloont, géén tempo-gate. Zichtbaar naast de polish-sterren in Repertoire.
+- **#2 Hand-synchronisatie-diagnose** — Self-Review meet per maat het LH↔RH timing-verschil, flagt maten >60ms uit elkaar (de #1 volwassen-bottleneck).
+- **#3 Piece-linked theorie** — `🎼 Dit stuk` paneel: structuur + gekoppelde concepten + directe link naar de juiste Gym-les, per stuk.
+- **#4 Timing- vs noot-fouten apart** — diagnose splitst "RITME-probleem" vs "NOTEN-probleem" vs "gemengd" met passend advies.
+- **#5 Moeilijkheid gedecomponeerd** — per stuk: hand-onafhankelijkheid (zwaarst gewogen) > tempo > stretch > akkoorden, + aanbevolen leervolgorde (RH-melodie/simpele LH eerst).
+- **#6 Coach eindigt op beheerst stuk** — laatste sessie-stap = victory lap op een 3★+ stuk, niet op een struikelpunt.
+- **#7 Warm-up met beheerst stuk** — knop in warm-up modal: speel iets dat in je vingers zit i.p.v. Hanon.
+- **#8 Normalisatie hand-onafhankelijkheid** — expliciete framing in Self-Review: "dit is voor volwassenen by design lastiger, niet omdat je iets fout doet."
+- **#9 Auto micro-segment** — fout-clusters worden gedetecteerd → "Oefen maat X-Y geïsoleerd" met één-klik loop (2-4 maten).
+- **#10 Recap zonder generieke benchmarks** — "top 5% van leerlingen" / "conservatorium" herschreven naar eigen-baseline.
+- **#11 Volwassen-modus** — toggle: vervangt confetti-aanmoediging door concrete voortgangsdata.
+- **#12 Structurele primer** — bij laden van een stuk verschijnt de structuur als toast ("AABA, A keert 3× terug — leer A eerst").
+- **#13 Express-sessie (10 min)** — knop in Coach: warm-up beheerst stuk → 1 micro-segment → afsluiten op succes.
+
+### v0.85+ — Toekomstige ideeën
 - 🎼 Sheet music alternative view (VexFlow integratie)
 - 🆚 Audio recording met diff naar expected (via MediaRecorder)
 - 🌍 Multi-user / cloud sync via Supabase
