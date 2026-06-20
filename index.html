@@ -2,7 +2,7 @@
 <html lang="nl">
 <head>
 <meta charset="UTF-8">
-<title>Piano Coach — v0.83</title>
+<title>Piano Coach — v0.84</title>
 <link rel="manifest" href="data:application/json;charset=utf-8,%7B%22name%22%3A%22Piano%20Coach%22%2C%22short_name%22%3A%22PianoCoach%22%2C%22start_url%22%3A%22.%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%230f1419%22%2C%22theme_color%22%3A%22%234ade80%22%2C%22description%22%3A%22Self-hosted%20piano%20coaching%20met%20MIDI-input%2C%2035-song%20repertoire%2C%20coach%2C%20achievements%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22data%3Aimage%2Fsvg%2Bxml%2C%253Csvg%2520xmlns%3D%2522http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%2522%2520viewBox%3D%25220%25200%25201024%25201024%2522%253E%253Crect%2520fill%3D%2522%25230f1419%2522%2520width%3D%25221024%2522%2520height%3D%25221024%2522%2F%253E%253Ctext%2520x%3D%2522512%2522%2520y%3D%2522680%2522%2520font-size%3D%2522680%2522%2520text-anchor%3D%2522middle%2522%253E%25F0%259F%258E%25B9%253C%2Ftext%253E%253C%2Fsvg%253E%22%2C%22sizes%22%3A%22512x512%22%2C%22type%22%3A%22image%2Fsvg%2Bxml%22%7D%5D%7D">
 <meta name="theme-color" content="#4ade80">
 <script src="https://cdn.jsdelivr.net/npm/@tonejs/midi@2.0.28/build/Midi.js"></script>
@@ -3649,7 +3649,7 @@
 </head>
 <body>
 
-<h1>Piano Coach <span style="color: var(--muted); font-weight: 400;">v0.83</span></h1>
+<h1>Piano Coach <span style="color: var(--muted); font-weight: 400;">v0.84</span></h1>
 <p class="sub">📜 Sight reading 2.0 (audio + keyboard + heatmap + adaptive + reaction) · 36 songs</p>
 
 <div class="topbar">
@@ -3823,6 +3823,7 @@
   <button id="btn-recap" title="Season Recap — Spotify Wrapped-stijl narratief over je maand/jaar">🎬 Recap</button>
   <button id="btn-concert" title="Mock Concert Mode — speel met publiek-applaus, intro, podium-druk simulatie">🎭 Concert</button>
   <button id="btn-personas" title="Pianist Personas — spar met Horowitz, Argerich, Gould of Lang Lang als stijl-coach">🎩 Personas</button>
+  <button id="btn-adultmode" title="Volwassen-modus — directe data-feedback, framing afgestemd op leren na je 40e">🎓 Volwassen-modus</button>
   <button id="btn-tutor" title="AI Tutor Chat — stel vragen over je oefen-data, theorie, of wat je moet oefenen">💬 Tutor</button>
   <button id="btn-reharm" title="Reharmonization Drills — vervang akkoorden in progressies (jazz/klassiek harmonie training)">🔄 Reharm</button>
   <button id="btn-listen-along" title="Listen-Along — luister naar echte uitvoering (Spotify/YouTube) naast je MIDI">🎧 Listen-Along</button>
@@ -4151,6 +4152,9 @@
     <div class="coach-stats" id="coach-stats"></div>
     <div class="modal-actions">
       <button id="coach-regen">🔄 Andere sessie</button>
+      <button id="coach-express" title="Korte sessie voor dagen met weinig tijd">⚡ Express (10 min)</button>
+      <button id="coach-full" style="display:none;">🧭 Volledige sessie</button>
+      <button id="coach-piece-theory" title="Theorie + structuur van je huidige stuk">🎼 Dit stuk</button>
       <button id="coach-close">Sluit</button>
     </div>
   </div>
@@ -4482,7 +4486,64 @@ create policy "Anyone can update"
     </div>
     <div class="modal-actions">
       <button id="warmup-next">Volgende</button>
-      <button id="warmup-skip">Sla over (niet aanbevolen)</button>
+      <button id="warmup-mastered" title="Speel een stuk dat je beheerst als warming-up">🎹 Liever een beheerst stuk</button>
+      <button id="warmup-skip">Sla over</button>
+    </div>
+  </div>
+</div>
+
+<!-- v0.84 — Piece Theory + Structure (why-before-how, #3/#5/#12) -->
+<div class="modal-overlay" id="piece-theory-overlay" style="display:none;">
+  <div class="modal piece-theory-modal">
+    <h2>🎼 <span id="pt-title">Dit stuk</span></h2>
+    <div class="modal-sub">Begrijp het stuk vóór je het speelt — waarom het werkt, en wat het van je vraagt.</div>
+    <div class="pt-section" id="pt-structure-section">
+      <div class="pt-section-title">🏛 Structuur — leer dit eerst</div>
+      <div class="pt-body" id="pt-structure"></div>
+    </div>
+    <div class="pt-section" id="pt-theory-section">
+      <div class="pt-section-title">🎓 Theorie in dit stuk</div>
+      <div class="pt-body" id="pt-theory"></div>
+      <button id="pt-open-lesson" class="pt-lesson-btn" style="display:none;">🏋 Open de bijbehorende Gym-les</button>
+    </div>
+    <div class="pt-section">
+      <div class="pt-section-title">🎯 Moeilijkheid — gedecomponeerd</div>
+      <div class="pt-difficulty" id="pt-difficulty"></div>
+      <div class="pt-diff-note">Volwassen leerlingen: hand-onafhankelijkheid weegt het zwaarst en kost het langst. Tempo komt vanzelf.</div>
+    </div>
+    <div class="pt-section">
+      <div class="pt-section-title">📋 Aanbevolen leervolgorde (RH-melodie + simpele LH eerst)</div>
+      <div class="pt-order" id="pt-order"></div>
+    </div>
+    <div class="modal-actions">
+      <button id="piece-theory-close">Sluit</button>
+    </div>
+  </div>
+</div>
+
+<!-- v0.84 — Adult Mode quick-toggle (floating settings access) -->
+<div class="modal-overlay" id="adultmode-overlay" style="display:none;">
+  <div class="modal adultmode-modal">
+    <h2>🎓 Volwassen-modus</h2>
+    <div class="modal-sub">Afgestemd op leren na je 40e: geen betuttelende viering, directe data-feedback, framing die struikelen normaliseert.</div>
+    <label class="am-toggle">
+      <input type="checkbox" id="am-enabled">
+      <div>
+        <div class="am-toggle-title">Volwassen-modus aan</div>
+        <div class="am-toggle-desc">Vervangt confetti-teksten ("Bach zou trots zijn") door concrete voortgangsdata. Mijlpalen blijven, maar nuchter gebracht.</div>
+      </div>
+    </label>
+    <div class="am-info">
+      <strong>Wat verandert er:</strong>
+      <ul>
+        <li>Mijlpaal-vieringen tonen je eigen cijfers i.p.v. aanmoediging</li>
+        <li>Self-Review benoemt hand-onafhankelijkheid expliciet als normaal-lastig</li>
+        <li>Recap vergelijkt je alleen met je eigen baseline, nooit met "andere leerlingen"</li>
+        <li>Coach eindigt elke sessie op een stuk dat je beheerst</li>
+      </ul>
+    </div>
+    <div class="modal-actions">
+      <button id="adultmode-close">Sluit</button>
     </div>
   </div>
 </div>
@@ -14731,14 +14792,79 @@ function generateCoachSession() {
     action: 'song',
   });
 
-  // 6) Cool-down
-  session.push({
-    icon: '🧘', title: 'Cool-down (2 min)',
-    desc: 'Speel improvisatie in C-majeur over een I-V-vi-IV loop. Geen druk, alleen luisteren.',
-    action: 'improv',
-  });
+  // 6) AFSLUITER — eindig op een stuk dat je BEHEERST (#6)
+  // Framework: "Always end on something the learner can play successfully — not on a struggle point."
+  const masteredPiece = (() => {
+    try {
+      if (typeof getAllSongs !== 'function' || typeof computeSongMastery !== 'function') return null;
+      const candidates = getAllSongs()
+        .map(n => ({ name: n, m: computeSongMastery(n) }))
+        .filter(x => x.m.rhythmStars >= 3 || x.m.stars >= 3)
+        .sort((a, b) => (b.m.rhythmStars || b.m.stars) - (a.m.rhythmStars || a.m.stars));
+      return candidates[0]?.name || null;
+    } catch { return null; }
+  })();
+  if (masteredPiece) {
+    session.push({
+      icon: '🏁', title: `Afsluiter: speel "${masteredPiece}" (2-3 min)`,
+      desc: 'Eindig op iets dat je beheerst — op jouw tempo, voor het plezier. Een sessie hoort op een succes te eindigen, niet op een struikelpunt.',
+      action: 'song', payload: masteredPiece,
+    });
+  } else {
+    session.push({
+      icon: '🏁', title: 'Afsluiter (2 min)',
+      desc: 'Speel een stuk dat je al kent op jouw eigen tempo. Eindig op een succes — dat is wat morgen makkelijker maakt.',
+      action: 'song',
+    });
+  }
 
   return { session, weakPcs, sightTotalCorrect, gymCompleted, seqUnlocked };
+}
+
+// v0.84 #13 — EXPRESS-SESSIE (10 min) voor dagen met weinig tijd
+// Framework: "Limited practice time · consistency over duration · end on success."
+function generateExpressSession() {
+  const session = [];
+  const masteredPiece = (() => {
+    try {
+      const c = getAllSongs().map(n => ({ name: n, m: computeSongMastery(n) }))
+        .filter(x => (x.m.rhythmStars || 0) >= 3 || (x.m.stars || 0) >= 3)
+        .sort((a, b) => (b.m.rhythmStars || b.m.stars) - (a.m.rhythmStars || a.m.stars));
+      return c[0]?.name || null;
+    } catch { return null; }
+  })();
+  // Zwakste stuk met een mistake-cluster (voor het micro-segment)
+  const focusPiece = (() => {
+    try {
+      const store = loadStore();
+      const heat = store.mistakeHeatmaps || {};
+      let worst = null, worstScore = 0;
+      for (const [name, h] of Object.entries(heat)) {
+        const s = Object.values(h).reduce((a, m) => a + (m.missed * 2 + m.late), 0);
+        if (s > worstScore) { worstScore = s; worst = name; }
+      }
+      return worst;
+    } catch { return null; }
+  })();
+  // 1) Warm-up op beheerst stuk
+  session.push({
+    icon: '🔥', title: masteredPiece ? `Warm-up: "${masteredPiece}" (2 min)` : 'Warm-up (2 min)',
+    desc: 'Start met iets dat in je vingers zit. Geen technische oefening — gewoon vertrouwen opbouwen.',
+    action: 'song', payload: masteredPiece || undefined,
+  });
+  // 2) Eén micro-segment van het zwakste stuk
+  session.push({
+    icon: '🔍', title: focusPiece ? `Micro-segment: "${focusPiece}" (5 min)` : 'Focus-segment (5 min)',
+    desc: focusPiece ? 'Open Self-Review, klik op de zwakste maat-cluster, loop hem op laag tempo. 5 minuten gericht.' : 'Loop één lastige passage van je huidige stuk op laag tempo.',
+    action: 'self-review',
+  });
+  // 3) Afsluiter op succes
+  session.push({
+    icon: '🏁', title: masteredPiece ? `Afsluiter: "${masteredPiece}" volledig (3 min)` : 'Afsluiter (3 min)',
+    desc: 'Speel je beheerste stuk één keer helemaal door. Eindig op een goed gevoel.',
+    action: 'song', payload: masteredPiece || undefined,
+  });
+  return { session, express: true };
 }
 
 // v0.74 cleanup: renamed from renderCoach() to avoid conflict with v0.21's renderCoach()
@@ -16174,6 +16300,72 @@ function analyzeRecording() {
     noteCount: matched.length,
   };
 
+  // ── v0.84 #4 — TIMING- vs TOONHOOGTE-fouten apart diagnosticeren ──
+  // Framework: "Distinguish between timing errors (rhythm) and pitch errors (notes) separately."
+  const lateNotes = matched.filter(m => Math.abs(m.dt) > 0.12).length; // ritme-fouten
+  const pitchErrors = missed.length + extra.length;                     // noot-fouten
+  const totalErr = lateNotes + pitchErrors;
+  let errorDominant = 'none';
+  if (totalErr >= 3) {
+    if (lateNotes > pitchErrors * 1.4) errorDominant = 'rhythm';
+    else if (pitchErrors > lateNotes * 1.4) errorDominant = 'pitch';
+    else errorDominant = 'mixed';
+  }
+  const errorTypes = { lateNotes, pitchErrors, dominant: errorDominant };
+
+  // ── v0.84 #2 — HAND-SYNCHRONISATIE per maat ──
+  // Framework: "Flag hand synchronization issues — this is the #1 adult learner bottleneck."
+  const barHands = {}; // bar → { lhDts: [], rhDts: [] }
+  for (const m of matched) {
+    const bar = Math.floor(m.exp.time / secPerBar);
+    barHands[bar] = barHands[bar] || { lh: [], rh: [] };
+    if (m.exp.hand === 'L') barHands[bar].lh.push(m.dt);
+    else if (m.exp.hand === 'R') barHands[bar].rh.push(m.dt);
+  }
+  const handSyncBars = []; // { bar, deltaMs }
+  let handSyncSumMs = 0, handSyncCount = 0;
+  for (const [bar, h] of Object.entries(barHands)) {
+    if (h.lh.length === 0 || h.rh.length === 0) continue; // beide handen nodig
+    const meanLh = h.lh.reduce((s, v) => s + v, 0) / h.lh.length;
+    const meanRh = h.rh.reduce((s, v) => s + v, 0) / h.rh.length;
+    const deltaMs = Math.round(Math.abs(meanLh - meanRh) * 1000);
+    handSyncSumMs += deltaMs; handSyncCount++;
+    if (deltaMs >= 60) handSyncBars.push({ bar: parseInt(bar), deltaMs });
+  }
+  handSyncBars.sort((a, b) => b.deltaMs - a.deltaMs);
+  const handSync = {
+    avgDeltaMs: handSyncCount ? Math.round(handSyncSumMs / handSyncCount) : 0,
+    worstBars: handSyncBars.slice(0, 5),
+    measurable: handSyncCount > 0,
+  };
+
+  // ── v0.84 #9 — FOUT-CLUSTERS → micro-segment (2-4 maten) automatisch ──
+  // Framework: "Suggest micro-segments (2-4 bars) when errors cluster."
+  const errorBars = Object.entries(barMistakes)
+    .filter(([_, m]) => (m.missed * 2 + m.late) >= 2)
+    .map(([b]) => parseInt(b)).sort((a, b) => a - b);
+  const clusters = [];
+  let run = [];
+  for (let i = 0; i < errorBars.length; i++) {
+    if (run.length === 0 || errorBars[i] - run[run.length - 1] <= 1) run.push(errorBars[i]);
+    else { clusters.push(run); run = [errorBars[i]]; }
+  }
+  if (run.length) clusters.push(run);
+  // Beste micro-segment: het zwaarste cluster, uitgebreid tot 2-4 maten
+  let microSegment = null;
+  if (clusters.length > 0) {
+    const weighted = clusters.map(c => ({
+      bars: c,
+      weight: c.reduce((s, b) => s + (barMistakes[b].missed * 2 + barMistakes[b].late), 0),
+    })).sort((a, b) => b.weight - a.weight);
+    let segStart = weighted[0].bars[0];
+    let segEnd = weighted[0].bars[weighted[0].bars.length - 1];
+    // Uitbreiden tot minimaal 2, maximaal 4 maten
+    while ((segEnd - segStart + 1) < 2) segEnd++;
+    while ((segEnd - segStart + 1) > 4) segEnd--;
+    microSegment = { startBar: segStart, endBar: segEnd, weight: weighted[0].weight };
+  }
+
   const result = {
     songName: analysisRec.songName,
     timestamp: Date.now(),
@@ -16186,6 +16378,9 @@ function analyzeRecording() {
     barMistakes,
     secPerBar,
     velocityStats,
+    errorTypes,      // #4
+    handSync,        // #2
+    microSegment,    // #9
   };
   analysisRec.lastReview = result;
 
@@ -16254,6 +16449,67 @@ function renderSelfReview(review) {
   const sEl = document.getElementById('sr-score');
   sEl.textContent = review.score;
   sEl.className = 'srstat-value ' + (review.score >= 80 ? 'good' : review.score >= 60 ? 'warn' : 'bad');
+
+  // ── v0.84 — ADULT DIAGNOSE-PANEEL (#2/#4/#8/#9) ──
+  // Geïnjecteerd boven de heatmap; geen HTML-wijziging nodig.
+  (function renderAdultDiagnosis() {
+    let panel = document.getElementById('sr-adult-diagnosis');
+    if (!panel) {
+      panel = document.createElement('div');
+      panel.id = 'sr-adult-diagnosis';
+      panel.className = 'sr-adult-diagnosis';
+      const heatmapEl = document.getElementById('selfreview-heatmap');
+      heatmapEl?.parentNode?.insertBefore(panel, heatmapEl);
+    }
+    const parts = [];
+
+    // #4 — Timing vs toonhoogte
+    const et = review.errorTypes;
+    if (et && et.dominant !== 'none') {
+      if (et.dominant === 'rhythm') {
+        parts.push(`<div class="sr-diag-row rhythm"><span class="sr-diag-icon">🥁</span><div><strong>Dit is vooral een RITME-probleem.</strong> ${et.lateNotes} noten op het verkeerde moment, ${et.pitchErrors} verkeerde noten. <em>Speel langzamer met de metronoom — toonhoogte zit al goed.</em></div></div>`);
+      } else if (et.dominant === 'pitch') {
+        parts.push(`<div class="sr-diag-row pitch"><span class="sr-diag-icon">🎯</span><div><strong>Dit is vooral een NOTEN-probleem.</strong> ${et.pitchErrors} verkeerde/gemiste noten, ritme is grotendeels op orde. <em>Oefen de juiste noten langzaam apart, tempo maakt niet uit.</em></div></div>`);
+      } else {
+        parts.push(`<div class="sr-diag-row mixed"><span class="sr-diag-icon">⚖</span><div><strong>Gemengd: ritme én noten.</strong> ${et.lateNotes} timing-fouten, ${et.pitchErrors} noot-fouten. <em>Pak eerst de noten (hands apart), dan het ritme.</em></div></div>`);
+      }
+    }
+
+    // #2 + #8 — Hand-synchronisatie + normalisatie
+    const hs = review.handSync;
+    if (hs && hs.measurable && hs.worstBars.length > 0) {
+      const wb = hs.worstBars[0];
+      parts.push(`<div class="sr-diag-row handsync"><span class="sr-diag-icon">🤝</span><div><strong>Je handen lopen ${wb.deltaMs}ms uit elkaar bij maat ${wb.bar + 1}.</strong> Gemiddeld ${hs.avgDeltaMs}ms over het stuk.<br><em style="color:#a78bfa">Dit is voor volwassen leerlingen by design lastiger — niet omdat je iets fout doet. Hand-onafhankelijkheid is de traagste vaardigheid om te ontwikkelen, voor iedereen boven de 20.</em><br>Oefen maat ${wb.bar + 1} eerst hands-apart, dan heel langzaam samen.</div></div>`);
+    } else if (hs && hs.measurable && hs.avgDeltaMs < 40 && review.matched > 10) {
+      parts.push(`<div class="sr-diag-row good"><span class="sr-diag-icon">✅</span><div><strong>Je handen lopen mooi synchroon</strong> (gem. ${hs.avgDeltaMs}ms). Dat is precies de vaardigheid die volwassenen het langst kost — goed bezig.</div></div>`);
+    }
+
+    // #9 — Auto micro-segment
+    const ms = review.microSegment;
+    if (ms) {
+      const barCount = ms.endBar - ms.startBar + 1;
+      parts.push(`<div class="sr-diag-row segment"><span class="sr-diag-icon">🔍</span><div><strong>Fouten clusteren bij maat ${ms.startBar + 1}–${ms.endBar + 1}.</strong> Oefen dit ${barCount}-maten segment geïsoleerd op laag tempo. <button id="sr-micro-loop" class="sr-micro-btn">🔁 Loop maat ${ms.startBar + 1}–${ms.endBar + 1}</button></div></div>`);
+    }
+
+    panel.innerHTML = parts.join('');
+    panel.style.display = parts.length ? 'block' : 'none';
+
+    // Wire micro-segment loop button
+    const microBtn = document.getElementById('sr-micro-loop');
+    if (microBtn && ms) {
+      microBtn.onclick = () => {
+        try {
+          state.loopStart = ms.startBar * review.secPerBar;
+          state.loopEnd = (ms.endBar + 1) * review.secPerBar;
+          state.loopActive = true;
+          state.songTime = state.loopStart;
+          if (typeof draw === 'function') draw();
+        } catch {}
+        document.getElementById('selfreview-overlay').style.display = 'none';
+        window.toast?.('Micro-segment ingesteld', `Loop maat ${ms.startBar + 1}–${ms.endBar + 1}. Speel op laag tempo tot het vloeit.`, 'info');
+      };
+    }
+  })();
 
   // Mistake heatmap — aggregated over all sessions for this song
   const store = loadStore();
@@ -24033,7 +24289,7 @@ function buildRecapSlides(period) {
     slides.push({
       label: '🎹 Je top stuk',
       headline: topSong,
-      body: `Je hebt dit stuk ${Math.round(sortedSongs[0][1])} minuten lang gespeeld. Dat is meer dan de meeste mensen Spotify per artiest luisteren.`,
+      body: `Je hebt dit stuk ${Math.round(sortedSongs[0][1])} minuten lang gespeeld — meer dan elk ander stuk deze periode. Dit is jouw stuk geworden.`,
     });
   }
 
@@ -24053,7 +24309,7 @@ function buildRecapSlides(period) {
     slides.push({
       label: '📚 Je theorie',
       headline: `${gymCompleted.length} / 45 lessen.`,
-      body: `Op het conservatorium krijgen ze ${Math.round(gymCompleted.length / 1.5)} weken om dit te doen. Jij hebt het naast je werk gedaan.`,
+      body: `${gymCompleted.length} concepten waar je voor deze periode nog niets van wist of die je nog niet beheerste. Naast je werk, in de tijd die je had.`,
     });
   }
 
@@ -24086,8 +24342,8 @@ function buildRecapSlides(period) {
     slides.push({
       label: '🔥 Streak',
       headline: `${longStreak} dagen op rij.`,
-      body: longStreak >= 30 ? `Boven de 30 dagen kom je in het top 5% van leerlingen. Doorgaan.` :
-            longStreak >= 14 ? `Twee weken is psychologisch het moeilijkste punt. Je bent erdoorheen.` :
+      body: longStreak >= 30 ? `Een maand aaneengesloten — jouw langste reeks tot nu toe. Consistentie is de enige variabele die echt telt.` :
+            longStreak >= 14 ? `Twee weken aaneen. Dit is jouw ritme aan het worden, geen losse poging meer.` :
             `Elke streak begint bij dag 1. Geen schande in opnieuw starten — er is altijd morgen.`,
     });
   }
@@ -24609,6 +24865,376 @@ ACHIEVEMENTS.push({
 });
 
 // ============================================================================
+// v0.84 — ADULT LEARNER LAYER (40+ coaching framework)
+// Punten: #3 piece-theorie, #5 moeilijkheids-decompositie, #7 warm-up-stuk,
+//         #8 normalisatie (deels in Self-Review), #11 volwassen-modus,
+//         #12 structurele primer, #13 express-sessie.
+// ============================================================================
+
+// ── #5 — Moeilijkheid gedecomponeerd: handIndep > tempo > stretch > chords (1-5) ──
+const PIECE_DIFFICULTY = {
+  'ode-to-joy':        { handIndep: 1, tempo: 2, stretch: 1, chords: 1 },
+  'fur-elise':         { handIndep: 2, tempo: 2, stretch: 2, chords: 2 },
+  'gymnopedie-1':      { handIndep: 2, tempo: 1, stretch: 3, chords: 3 },
+  'una-mattina':       { handIndep: 2, tempo: 2, stretch: 2, chords: 2 },
+  'comptine':          { handIndep: 3, tempo: 3, stretch: 2, chords: 2 },
+  'river-flows':       { handIndep: 3, tempo: 3, stretch: 3, chords: 3 },
+  'chopin-prelude-em': { handIndep: 2, tempo: 1, stretch: 3, chords: 4 },
+  'bach-prelude-c':    { handIndep: 2, tempo: 2, stretch: 2, chords: 2 },
+  'moonlight-1':       { handIndep: 3, tempo: 2, stretch: 3, chords: 3 },
+  'clair-de-lune':     { handIndep: 4, tempo: 2, stretch: 4, chords: 4 },
+  'nuvole-bianche':    { handIndep: 3, tempo: 3, stretch: 3, chords: 3 },
+  'experience':        { handIndep: 3, tempo: 3, stretch: 3, chords: 3 },
+  'valse-amelie':      { handIndep: 4, tempo: 3, stretch: 3, chords: 3 },
+  'pirates':           { handIndep: 4, tempo: 4, stretch: 3, chords: 3 },
+  'nocturne-9-2':      { handIndep: 4, tempo: 3, stretch: 4, chords: 4 },
+  'alla-turca':        { handIndep: 4, tempo: 4, stretch: 3, chords: 3 },
+};
+function pieceDifficultyFor(slug, stars) {
+  if (slug && PIECE_DIFFICULTY[slug]) return PIECE_DIFFICULTY[slug];
+  // Heuristiek uit sterren als geen specifieke data
+  const s = stars || 3;
+  return { handIndep: Math.min(5, s), tempo: Math.max(1, s - 1), stretch: Math.max(1, s - 1), chords: Math.max(1, s - 1) };
+}
+// Gewogen totaal: hand-onafhankelijkheid weegt het zwaarst (framework-hiërarchie)
+function pieceDifficultyWeighted(d) {
+  return d.handIndep * 4 + d.tempo * 2 + d.stretch * 1.5 + d.chords * 1;
+}
+
+// ── #3 + #12 — Theorie + structuur per stuk ──
+const PIECE_THEORY = {
+  'fur-elise': {
+    structure: 'Rondo-vorm: A–B–A–C–A. Het hoofdthema (A) keert 3× terug. Leer A perfect, dan ken je het halve stuk. B en C zijn de "afleveringen" ertussen.',
+    concepts: ['A-mineur toonladder', 'Gebroken akkoorden in de linkerhand', 'De karakteristieke E–D♯ wisseling = chromatische buurtoon'],
+    lessonId: 'inversions',
+  },
+  'moonlight-1': {
+    structure: 'Doorlopende triolen in de rechterhand over langzame bas-octaven. Geen herhaalde secties — het is één lange boog. Leer per 4 maten, de harmonie verschuift traag.',
+    concepts: ['C♯-mineur', 'Triolen-arpeggio (3 noten per tel)', 'De melodie zit BOVENOP de triolen, niet erin'],
+    lessonId: 'arpeggios',
+  },
+  'una-mattina': {
+    structure: 'Minimalistisch: een korte cel die zich herhaalt en langzaam evolueert. RH-melodie, LH-ostinato. Leer de cel, dan de variaties. Veel payoff voor weinig noten.',
+    concepts: ['Ostinato (herhalend LH-patroon)', 'Eenvoudige akkoord-voicings', 'Sustain-pedaal per akkoordwissel'],
+    lessonId: 'diatonic-chords',
+  },
+  'river-flows': {
+    structure: 'A–B–A pop-structuur. RH speelt arpeggio + melodie tegelijk, LH ondersteunt. De I–V–vi–IV progressie zit eronder — die ken je van duizend popsongs.',
+    concepts: ['I–V–vi–IV progressie', 'Arpeggio met melodie bovenop', 'A-majeur'],
+    lessonId: 'progressions',
+  },
+  'comptine': {
+    structure: 'LH-ostinato in vaste figuur, RH-melodie eroverheen. Het LH-patroon is constant — automatiseer dat eerst los, dan komt de RH er als vanzelf overheen.',
+    concepts: ['Ostinato linkerhand', 'Modale interchange (majeur/mineur kleuring)', 'Stapsgewijze melodie'],
+    lessonId: 'modal-interchange',
+  },
+  'gymnopedie-1': {
+    structure: 'Wals-achtig (3/4): LH speelt bas-akkoord-akkoord, RH een trage melodie. Het hele stuk is één sfeer — geen tempo-druk, juist langzaam mooi.',
+    concepts: ['Modale harmonie (Lydisch/majeur-7)', '3/4 maatsoort', 'Bas op 1, akkoorden op 2-3'],
+    lessonId: 'modes-1',
+  },
+  'clair-de-lune': {
+    structure: 'Impressionistisch, vrije vorm. Begint rustig, bouwt naar een arpeggio-climax, keert terug naar rust. De eerste 8 maten zijn doable — de rest is gevorderd.',
+    concepts: ['Parallel-akkoorden (planing)', 'Des-majeur (5 mollen)', 'Pedaal = de ziel van dit stuk'],
+    lessonId: 'chromatic-mediants',
+  },
+  'bach-prelude-c': {
+    structure: 'Eén arpeggio-patroon, 16× herhaald op steeds een nieuw akkoord. Leer het patroon (5 noten LH + 3 RH), dan tel je gewoon de akkoordwissels. Geen melodie om te onthouden.',
+    concepts: ['Gebroken akkoorden', 'Cirkel-van-kwinten harmonie', 'C-majeur, alleen witte toetsen'],
+    lessonId: 'functional-harmony',
+  },
+  'chopin-prelude-em': {
+    structure: '25 maten, heel langzaam (Largo). RH speelt een trage dalende melodie, LH chromatisch dalende akkoorden. Slechts één pagina — elk akkoord telt. Leer de 4 LH-akkoordvormen eerst.',
+    concepts: ['Chromatisch dalende bas', 'E-mineur', 'Suspensies (vasthouden over de akkoordwissel)'],
+    lessonId: 'voice-leading',
+  },
+  'nuvole-bianche': {
+    structure: 'Bouwt in lagen: eerst alleen RH, dan LH erbij, dan beide vol. Volg die opbouw ook in je leren — voeg de LH pas toe als de RH automatisch is.',
+    concepts: ['Gelaagde opbouw', 'i–VI–III–VII mineur-progressie', 'Arpeggio-begeleiding'],
+    lessonId: 'progressions',
+  },
+};
+function pieceTheoryFor(slug) { return slug ? PIECE_THEORY[slug] : null; }
+
+// Helper: vind REPERTOIRE-entry op naam/titel
+function repertoireEntryByName(name) {
+  if (typeof REPERTOIRE === 'undefined' || !name) return null;
+  return REPERTOIRE.find(r => r.title === name || r.slug === name) ||
+         REPERTOIRE.find(r => name.toLowerCase().includes(r.title.toLowerCase().slice(0, 8)));
+}
+function loadSongByName(name) {
+  const entry = repertoireEntryByName(name);
+  if (entry && typeof handleRepertoireClick === 'function') { handleRepertoireClick(entry); return true; }
+  return false;
+}
+function currentSlug() {
+  if (!state.song) return null;
+  if (state.song.slug) return state.song.slug;
+  const entry = repertoireEntryByName(state.song.name);
+  return entry?.slug || null;
+}
+
+// ── #5 — Aanbevolen leervolgorde (RH-melodie + simpele LH eerst) ──
+function getAdultLearnOrder() {
+  if (typeof REPERTOIRE === 'undefined') return [];
+  return REPERTOIRE.map(r => ({
+    title: r.title, slug: r.slug, composer: r.composer,
+    diff: pieceDifficultyFor(r.slug, r.stars),
+  })).map(x => ({ ...x, weight: pieceDifficultyWeighted(x.diff) }))
+    .sort((a, b) => a.weight - b.weight);
+}
+
+// ── #3/#5/#12 — Piece Theory modal ──
+function showPieceTheory() {
+  const slug = currentSlug();
+  const name = state.song?.name || 'Geen stuk geladen';
+  document.getElementById('pt-title').textContent = name;
+  const theory = pieceTheoryFor(slug);
+  const entry = repertoireEntryByName(name);
+  const diff = pieceDifficultyFor(slug, entry?.stars);
+
+  // Structuur
+  document.getElementById('pt-structure').textContent =
+    theory?.structure || 'Voor dit stuk heb ik nog geen structuur-analyse. Algemeen advies: zoek de herhaalde secties — meestal leer je 1 deel dat 2-3× terugkeert, dan ken je het grootste deel al.';
+
+  // Theorie
+  const theoryEl = document.getElementById('pt-theory');
+  if (theory?.concepts?.length) {
+    theoryEl.innerHTML = '<ul style="margin:0;padding-left:18px;">' + theory.concepts.map(c => `<li>${c}</li>`).join('') + '</ul>';
+  } else {
+    theoryEl.textContent = 'Laad een stuk uit het repertoire voor de gekoppelde theorie.';
+  }
+  // Gekoppelde Gym-les
+  const lessonBtn = document.getElementById('pt-open-lesson');
+  if (theory?.lessonId && typeof THEORY_LESSONS !== 'undefined' && THEORY_LESSONS.find(l => l.id === theory.lessonId)) {
+    lessonBtn.style.display = 'inline-block';
+    lessonBtn.onclick = () => {
+      document.getElementById('piece-theory-overlay').style.display = 'none';
+      try {
+        document.getElementById('btn-gym').click();
+        setTimeout(() => {
+          const lesson = THEORY_LESSONS.find(l => l.id === theory.lessonId);
+          if (lesson && typeof openGymLesson === 'function') openGymLesson(lesson);
+        }, 250);
+      } catch {}
+    };
+  } else {
+    lessonBtn.style.display = 'none';
+  }
+
+  // Moeilijkheid gedecomponeerd
+  const axes = [
+    { k: 'handIndep', label: '🤝 Hand-onafhankelijkheid', v: diff.handIndep, weight: 'zwaarst' },
+    { k: 'tempo', label: '⏩ Tempo-eis', v: diff.tempo },
+    { k: 'stretch', label: '✋ Vinger-stretch', v: diff.stretch },
+    { k: 'chords', label: '🎵 Akkoord-complexiteit', v: diff.chords },
+  ];
+  document.getElementById('pt-difficulty').innerHTML = axes.map(a => `
+    <div class="pt-diff-row">
+      <span class="pt-diff-label">${a.label}${a.weight ? ' <em>(' + a.weight + ')</em>' : ''}</span>
+      <span class="pt-diff-dots">${'●'.repeat(a.v)}${'○'.repeat(5 - a.v)}</span>
+    </div>`).join('');
+
+  // Aanbevolen leervolgorde
+  const order = getAdultLearnOrder();
+  const curIdx = order.findIndex(o => o.slug === slug);
+  document.getElementById('pt-order').innerHTML = order.slice(0, 12).map((o, i) => `
+    <div class="pt-order-row ${o.slug === slug ? 'current' : ''}">
+      <span class="pt-order-num">${i + 1}</span>
+      <span class="pt-order-title">${o.title}</span>
+      <span class="pt-order-hand" title="Hand-onafhankelijkheid">🤝${o.diff.handIndep}</span>
+    </div>`).join('') + (curIdx >= 12 ? `<div class="pt-order-row current"><span class="pt-order-num">${curIdx + 1}</span><span class="pt-order-title">${name}</span><span class="pt-order-hand">🤝${diff.handIndep}</span></div>` : '');
+
+  document.getElementById('piece-theory-overlay').style.display = 'flex';
+}
+document.getElementById('piece-theory-close').onclick = () => document.getElementById('piece-theory-overlay').style.display = 'none';
+document.getElementById('coach-piece-theory').onclick = () => {
+  document.getElementById('coach-overlay').style.display = 'none';
+  showPieceTheory();
+};
+
+// ── #12 — Structurele primer als toast bij het laden van een stuk ──
+const _origLoadSongAdult = loadSong;
+loadSong = function(song) {
+  _origLoadSongAdult(song);
+  setTimeout(() => {
+    try {
+      const slug = song?.slug || repertoireEntryByName(song?.name)?.slug;
+      const theory = pieceTheoryFor(slug);
+      if (theory && typeof window.toast === 'function') {
+        window.toast('🏛 Structuur van dit stuk', theory.structure + ' · Klik 🧭 Coach → 🎼 Dit stuk voor de volledige analyse.', 'info');
+      }
+    } catch {}
+  }, 2600); // ná de componist-story toast (die op 1500ms staat)
+};
+
+// ── #13 — Express-sessie + volledige-sessie toggle in Coach ──
+function renderExpressCoach() {
+  const data = generateExpressSession();
+  const container = document.getElementById('coach-session');
+  container.innerHTML = '';
+  for (const step of data.session) {
+    const div = document.createElement('div');
+    div.className = 'coach-step';
+    div.innerHTML = `
+      <span class="coach-step-icon">${step.icon}</span>
+      <div class="coach-step-body">
+        <div class="coach-step-title">${step.title}</div>
+        <div class="coach-step-desc">${step.desc}</div>
+      </div>
+      <button data-action="${step.action}" data-payload="${step.payload || ''}">Start</button>`;
+    div.querySelector('button').onclick = (e) => runCoachAction(e.target.dataset.action, e.target.dataset.payload);
+    container.appendChild(div);
+  }
+  document.getElementById('coach-stats').innerHTML = '<strong>⚡ Express-modus:</strong> 10 minuten gericht. Consistentie verslaat duur — een korte sessie vandaag is meer waard dan een lange volgende week.';
+  document.getElementById('coach-express').style.display = 'none';
+  document.getElementById('coach-full').style.display = 'inline-block';
+}
+document.getElementById('coach-express').onclick = renderExpressCoach;
+document.getElementById('coach-full').onclick = () => {
+  renderSmartCoach();
+  document.getElementById('coach-express').style.display = 'inline-block';
+  document.getElementById('coach-full').style.display = 'none';
+};
+
+// ── #6/#13 — runCoachAction uitbreiden: 'song'+payload laadt het stuk, 'self-review' opent review ──
+const _origRunCoachActionAdult = runCoachAction;
+runCoachAction = function(action, payload) {
+  if (action === 'self-review') {
+    document.getElementById('coach-overlay').style.display = 'none';
+    setTimeout(() => { try { document.getElementById('btn-self-review').click(); } catch {} }, 100);
+    return;
+  }
+  if (action === 'song' && payload) {
+    document.getElementById('coach-overlay').style.display = 'none';
+    const ok = loadSongByName(payload);
+    if (ok) window.toast?.('🎹 ' + payload + ' geladen', 'Druk ▶ om te spelen — op jouw tempo.', 'success');
+    else window.scrollTo({ top: 0, behavior: 'smooth' });
+    return;
+  }
+  _origRunCoachActionAdult(action, payload);
+};
+
+// ── #7 — Warm-up met beheerst stuk i.p.v. Hanon ──
+document.getElementById('warmup-mastered').onclick = () => {
+  // Markeer warm-up als gedaan en laad een beheerst stuk
+  try {
+    const store = loadStore();
+    store.lastWarmupDate = new Date().toDateString();
+    store.warmupCount = (store.warmupCount || 0) + 1;
+    saveStore(store);
+  } catch {}
+  if (typeof warmupState !== 'undefined' && warmupState.timer) clearInterval(warmupState.timer);
+  document.getElementById('warmup-overlay').style.display = 'none';
+  const mastered = (() => {
+    try {
+      const c = getAllSongs().map(n => ({ name: n, m: computeSongMastery(n) }))
+        .filter(x => (x.m.rhythmStars || 0) >= 3 || (x.m.stars || 0) >= 3)
+        .sort((a, b) => (b.m.rhythmStars || b.m.stars) - (a.m.rhythmStars || a.m.stars));
+      return c[0]?.name || null;
+    } catch { return null; }
+  })();
+  if (mastered && loadSongByName(mastered)) {
+    window.toast?.('🎹 Warm-up: ' + mastered, 'Speel iets dat in je vingers zit — vertrouwen eerst, techniek volgt.', 'info');
+  } else {
+    window.toast?.('Warm-up', 'Geen beheerst stuk gevonden. Speel een willekeurig stuk dat je kent op laag tempo.', 'info');
+  }
+};
+
+// ── #11 — VOLWASSEN-MODUS ──
+function isAdultMode() { try { return !!loadStore().adultMode; } catch { return false; } }
+function setAdultMode(on) {
+  try { const s = loadStore(); s.adultMode = !!on; saveStore(s); } catch {}
+  document.body.classList.toggle('adult-mode', !!on);
+}
+document.getElementById('btn-adultmode').onclick = () => {
+  document.getElementById('am-enabled').checked = isAdultMode();
+  document.getElementById('adultmode-overlay').style.display = 'flex';
+};
+document.getElementById('adultmode-close').onclick = () => document.getElementById('adultmode-overlay').style.display = 'none';
+document.getElementById('am-enabled').onchange = (e) => {
+  setAdultMode(e.target.checked);
+  window.toast?.(e.target.checked ? '🎓 Volwassen-modus aan' : 'Volwassen-modus uit',
+    e.target.checked ? 'Nuchtere data-feedback, eigen-baseline framing.' : 'Standaard viering-modus terug.', 'success');
+};
+
+// Wrap celebrateMilestone: in volwassen-modus → data-framing i.p.v. aanmoediging
+if (typeof window.celebrateMilestone === 'function') {
+  const _origCelebrate = window.celebrateMilestone;
+  window.celebrateMilestone = function(opts) {
+    if (isAdultMode()) {
+      try {
+        const store = loadStore();
+        const xp = store.xp || 0;
+        const streak = store.streak?.current || 0;
+        const gymDone = Object.keys(store.gymProgress?.completed || {}).length;
+        opts = { ...opts, narrative: `Stand: ${xp} XP · ${streak} dagen streak · ${gymDone}/${THEORY_LESSONS.length} theorie-lessen. Mijlpaal vastgelegd in je voortgang.` };
+      } catch {}
+    }
+    return _origCelebrate(opts);
+  };
+}
+// Restore adult-mode body class on load
+setTimeout(() => { try { if (isAdultMode()) document.body.classList.add('adult-mode'); } catch {} }, 800);
+
+// ── Registreer nieuwe knoppen in compact-topbar categorieën ──
+if (typeof FEATURE_CATEGORIES !== 'undefined') {
+  FEATURE_CATEGORIES.Plan?.features.push({ id: 'btn-adultmode', icon: '🎓', label: 'Volwassen-modus', hint: 'Framing voor leren na je 40e' });
+}
+
+// ── CSS voor alle v0.84 elementen (zelf-ingespoten) ──
+(function injectAdultCss() {
+  const css = `
+  .sr-adult-diagnosis { display:flex; flex-direction:column; gap:8px; margin:12px 0 16px; }
+  .sr-diag-row { display:flex; gap:10px; align-items:flex-start; padding:10px 12px; border-radius:8px; font-size:12.5px; line-height:1.5; background:rgba(255,255,255,0.04); border-left:3px solid var(--accent); }
+  .sr-diag-row.rhythm { border-left-color:#fbbf24; background:rgba(251,191,36,0.07); }
+  .sr-diag-row.pitch { border-left-color:#60a5fa; background:rgba(96,165,250,0.07); }
+  .sr-diag-row.mixed { border-left-color:#a78bfa; background:rgba(167,139,250,0.07); }
+  .sr-diag-row.handsync { border-left-color:#ef4444; background:rgba(239,68,68,0.07); }
+  .sr-diag-row.segment { border-left-color:#4ade80; background:rgba(74,222,128,0.07); }
+  .sr-diag-row.good { border-left-color:#4ade80; background:rgba(74,222,128,0.07); }
+  .sr-diag-icon { font-size:18px; flex-shrink:0; }
+  .sr-micro-btn { margin-top:6px; background:rgba(74,222,128,0.2); border:1px solid #4ade80; color:#fff; padding:5px 12px; border-radius:5px; cursor:pointer; font-size:11px; }
+  .piece-theory-modal, .adultmode-modal { max-width:640px; }
+  .pt-section { margin:14px 0; }
+  .pt-section-title { font-size:12px; font-weight:600; color:var(--accent); text-transform:uppercase; letter-spacing:0.05em; margin-bottom:6px; }
+  .pt-body { font-size:13px; line-height:1.6; color:rgba(255,255,255,0.88); }
+  .pt-lesson-btn { margin-top:8px; background:var(--accent-dim); border:1px solid var(--accent); color:#fff; padding:7px 14px; border-radius:6px; cursor:pointer; font-size:12px; }
+  .pt-difficulty { display:flex; flex-direction:column; gap:6px; }
+  .pt-diff-row { display:flex; justify-content:space-between; align-items:center; font-size:13px; }
+  .pt-diff-label em { color:#fbbf24; font-style:normal; font-size:10px; text-transform:uppercase; }
+  .pt-diff-dots { color:#a78bfa; letter-spacing:2px; font-size:14px; }
+  .pt-diff-note { font-size:11px; color:var(--muted); margin-top:8px; font-style:italic; }
+  .pt-order { display:flex; flex-direction:column; gap:3px; max-height:240px; overflow-y:auto; }
+  .pt-order-row { display:grid; grid-template-columns:28px 1fr auto; gap:8px; align-items:center; padding:5px 8px; border-radius:4px; font-size:12px; }
+  .pt-order-row.current { background:rgba(167,139,250,0.15); border:1px solid rgba(167,139,250,0.4); }
+  .pt-order-num { font-family:monospace; color:var(--muted); text-align:center; }
+  .pt-order-hand { font-family:monospace; font-size:11px; color:#a78bfa; }
+  .am-toggle { display:flex; gap:12px; align-items:flex-start; padding:14px; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.1); border-radius:10px; cursor:pointer; margin:14px 0; }
+  .am-toggle input { margin-top:4px; width:18px; height:18px; cursor:pointer; }
+  .am-toggle-title { font-size:14px; font-weight:600; }
+  .am-toggle-desc { font-size:12px; color:var(--muted); line-height:1.45; margin-top:3px; }
+  .am-info { background:rgba(99,102,241,0.07); border-left:3px solid #6366f1; padding:12px 14px; border-radius:0 6px 6px 0; font-size:12px; line-height:1.6; }
+  .am-info ul { margin:6px 0 0 16px; padding:0; }
+  body.adult-mode .ms-icon { font-size:48px; }
+  `;
+  const style = document.createElement('style');
+  style.textContent = css;
+  document.head.appendChild(style);
+})();
+
+ACHIEVEMENTS.push({
+  id: 'adult-mode-on', icon: '🎓', label: 'Volwassen-modus geactiveerd', cat: 'Habits',
+  test: s => !!s.adultMode,
+});
+ACHIEVEMENTS.push({
+  id: 'rhythm-master', icon: '🥁', label: 'Ritme-mastery 5★ op een stuk (elk tempo)', cat: 'Practice',
+  test: s => {
+    try { return getAllSongs().some(n => computeSongMastery(n).rhythmStars >= 5); } catch { return false; }
+  },
+});
+
+// ============================================================================
 // v0.83 — UX POLISH: Toast notifications + Keyboard cheat-sheet
 // ============================================================================
 
@@ -24737,21 +25363,26 @@ function computeSongMastery(songName) {
   const prefs = (store.songPrefs || {})[songName] || {};
   const tempoTier = Math.round((prefs.tempo || 100) / 20); // 1=20%, 5=100%
 
-  // Stars formula:
-  // 1★ — played at least once
-  // 2★ — best accuracy ≥ 50%
-  // 3★ — best accuracy ≥ 70% AND ≥3 sessions
-  // 4★ — best accuracy ≥ 85% AND tempo ≥ 80% AND ≥5 sessions
-  // 5★ — best accuracy ≥ 90% AND tempo = 100% AND consistency ≥ 0.8 AND ≥7 sessions
+  // Stars formula (overall mastery — still tempo-aware for the "fully polished" tier):
   let stars = 1;
   if (bestAcc >= 0.5) stars = 2;
   if (bestAcc >= 0.7 && recs.length >= 3) stars = 3;
   if (bestAcc >= 0.85 && (prefs.tempo || 100) >= 80 && recs.length >= 5) stars = 4;
   if (bestAcc >= 0.9 && (prefs.tempo || 100) >= 100 && consistency >= 0.8 && recs.length >= 7) stars = 5;
 
+  // v0.84 #1 — RITME-MASTERY: tempo-ONAFHANKELIJK. Beloont nauwkeurigheid + timing op ELK tempo.
+  // Framework: "Never penalize slow tempo — reward rhythmic accuracy at any speed first."
+  const timings = recent.map(r => r.avgTiming != null ? r.avgTiming : 0.2).filter(t => t > 0);
+  const bestTiming = timings.length ? Math.min(...timings) : 0.3; // seconden afwijking; lager = beter
+  let rhythmStars = 1;
+  if (bestAcc >= 0.5) rhythmStars = 2;
+  if (bestAcc >= 0.7 && recs.length >= 2) rhythmStars = 3;
+  if (bestAcc >= 0.82 && bestTiming < 0.12 && recs.length >= 3) rhythmStars = 4;
+  if (bestAcc >= 0.9 && bestTiming < 0.08 && consistency >= 0.75 && recs.length >= 4) rhythmStars = 5;
+
   return {
-    stars, accuracy: bestAcc, avgRecent, consistency,
-    tempoTier, tempoPct: prefs.tempo || 100,
+    stars, rhythmStars, accuracy: bestAcc, avgRecent, consistency,
+    bestTiming, tempoTier, tempoPct: prefs.tempo || 100,
     sessions: recs.length, lastPlayed,
   };
 }
@@ -24851,6 +25482,8 @@ function renderRepertoire() {
       : 'nooit gespeeld';
     const filledStars = '★'.repeat(m.stars);
     const emptyStars = '<span class="empty">★</span>'.repeat(5 - m.stars);
+    const rs = m.rhythmStars || 0; // v0.84 #1 — tempo-onafhankelijke ritme-mastery
+    const rhythmStars = '<span style="color:#a78bfa">' + '♪'.repeat(rs) + '</span><span style="color:rgba(255,255,255,0.15)">' + '♪'.repeat(5 - rs) + '</span>';
     const tempoSuggest = suggestTempoProgression(song.name);
 
     const item = document.createElement('div');
@@ -24860,7 +25493,7 @@ function renderRepertoire() {
         <div class="rep-name">${song.name}${isStale ? ' <span class="rep-revisit-badge">REVISIT</span>' : ''}${tempoSuggest.suggest ? ' <span class="rep-revisit-badge" style="background:#4ade80;">↑ TEMPO</span>' : ''}</div>
         <div class="rep-composer">${song.composer}</div>
       </div>
-      <div class="rep-stars">${filledStars}${emptyStars}</div>
+      <div class="rep-stars" title="Polish-sterren (tempo-afhankelijk)&#10;♪ = ritme-mastery (elk tempo)">${filledStars}${emptyStars}<br><span style="font-size:12px;letter-spacing:1px;" title="Ritme-mastery — elk tempo telt">${rhythmStars}</span></div>
       <div class="rep-tempo">
         ${m.tempoPct}%
         <div class="rep-tempo-bar"><div class="rep-tempo-fill" style="width:${m.tempoPct}%"></div></div>
