@@ -898,7 +898,29 @@ Doorvoering van een audit tegen een 40+ coaching-rubric. Per punt:
 - **#12 Structurele primer** — bij laden van een stuk verschijnt de structuur als toast ("AABA, A keert 3× terug — leer A eerst").
 - **#13 Express-sessie (10 min)** — knop in Coach: warm-up beheerst stuk → 1 micro-segment → afsluiten op succes.
 
-### v0.85+ — Toekomstige ideeën
+### v0.85 ✅ — Gym To-Go (mobiele sportschool-modus)
+Maakt de app makkelijk mee te nemen naar de sportschool. De gym-usecase (audio-theorie, hands-free) staat centraal.
+- **📲 Gym To-Go scherm** — full-screen, dark, groot-knop interface voor één hand / sweaty fingers: grote ▶/⏮/⏭/⏪/⏩ transport, lessenlijst met tik-targets ≥56px, quick-toggles (Ear Training, Stem-bediening, Auto-next). Hergebruikt de bestaande gym-engine.
+- **🔒 Media Session API** — lock-screen + Bluetooth-koptelefoon bediening (play/pause/vorige/volgende les + 15s skip). Metadata (lesstitel + categorie + icoon) verschijnt op het vergrendelscherm als een podcast-app. Dé feature voor in de sportschool.
+- **📴 Offline** — Service Worker terug (echte `sw.js` met relatieve scope, werkt op localhost én GitHub-Pages-subpad). Network-first HTML zodat updates landen, cache-first runtime zodat app + lessen offline werken. Oude kapotte blob-URL SW wordt eenmalig opgeruimd.
+- **📱 PWA verbeterd** — echte `manifest.json` met app-shortcuts (Gym To-Go + Ear Training direct vanaf het homescreen-icoon), portrait-lock, maskable icon, iOS standalone meta-tags + apple-touch-icon. Eigen `icon.svg` + `icon-maskable.svg`.
+- **Wake Lock** — scherm blijft aan tijdens een les (bestond al, nu gekoppeld aan Gym To-Go).
+- **Diep-link** — `?screen=gym-mobile` / `?screen=ear-audio` openen direct het juiste scherm (gebruikt door de PWA-shortcuts).
+- **Mobiel-hint** — op kleine schermen verschijnt eenmalig een toast die naar Gym To-Go wijst; de topbar-knop is groen geaccentueerd op mobiel.
+- *Eerlijke kanttekening:* op iOS pauzeert Web Speech (TTS) wanneer het scherm vergrendelt — een OS-limiet die we niet kunnen omzeilen. Android Chrome speelt wél door op de achtergrond. Media Session + Wake Lock helpen op beide.
+
+### v0.86 ✅ — Speelklaar-start + trechter-meting
+Geen nieuwe modes. Deze versie haalt de drempel om te beginnen weg en meet voor het eerst waar een sessie stukloopt. Aanleiding: uit de echte opslag bleek 8,8 minuten speeltijd ooit, 3 van 38 stukken geladen, 0 secties en 0 oefenpogingen. Dat is een activatieprobleem, geen featureprobleem.
+- **🎹 Speelmodus** — verbergt coach, weekdoelen, achievements-muur, bibliotheek en statistiekpaneel, zodat vallende noten én klavier volledig in beeld staan. Pagina gaat van ~2.500 px naar ~1.080 px. Toggle in de topbar, keuze wordt onthouden in `store.playFocus`.
+- **▶ Sticky transport** — in speelmodus blijft de rij met Speel/Pauze/Opnieuw/Tempo bovenaan staan. Op 720 px hoogte passen stage en alle rijen niet samen, en zonder zichtbare knop was spatie de enige weg.
+- **⏭ Auto-resume** — bij openen wordt het laatste stuk uit `lastSession` vanzelf geladen, speelmodus aan, stage in beeld, sectie geactiveerd. Wacht netjes tot een open modal (welkomsthub, PWA-prompt) weg is, en opent nooit vanzelf de bestandskiezer: alleen wat in de cache staat.
+- **📊 Trechter-meting** — vijf tellers in `store.funnel`: app geopend, stuk geladen, play ingedrukt, 60 seconden gespeeld, sectie-poging afgerond. Met dag-overzicht en uitvalpercentage per stap. Knop `📊 Trechter` in de topbar.
+- **⚠ file://-waarschuwing** — vanaf `file://` faalt `fetch('songs/*.mid')`, waardoor 35 van de 38 stukken alleen via de bestandskiezer te laden zijn. De app zegt dat nu, in plaats van stil een dialoog te openen.
+- **🐛 Fix: gedeelde `store.goals`** — de v0.20 weekdoelen slaan `{weekStart, items}` op, de v0.60 curriculum-goals een array. Zes consumenten gingen uit van een array en crashten op de objectvorm. Doelen, Kalender, Sync en Coach gaven daardoor een TypeError. Nu genormaliseerd bij de bron. `?test=2` ging van 68 geslaagd met 3 fouten naar 71 geslaagd zonder fouten.
+
+Tests: `?test=1` 79/79, `?test=2` 71/71.
+
+### v0.87+ — Toekomstige ideeën
 - 🎼 Sheet music alternative view (VexFlow integratie)
 - 🆚 Audio recording met diff naar expected (via MediaRecorder)
 - 🌍 Multi-user / cloud sync via Supabase

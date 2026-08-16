@@ -2,7 +2,7 @@
 <html lang="nl">
 <head>
 <meta charset="UTF-8">
-<title>Piano Coach — v0.85</title>
+<title>Piano Coach — v0.86</title>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, user-scalable=no">
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#0f1419">
@@ -3656,7 +3656,7 @@
 </head>
 <body>
 
-<h1>Piano Coach <span style="color: var(--muted); font-weight: 400;">v0.85</span></h1>
+<h1>Piano Coach <span style="color: var(--muted); font-weight: 400;">v0.86</span></h1>
 <p class="sub">📜 Sight reading 2.0 (audio + keyboard + heatmap + adaptive + reaction) · 36 songs</p>
 
 <div class="topbar">
@@ -19561,7 +19561,14 @@ function generateGoalPlan(songName, target, weeks) {
 
 // v0.74 cleanup: renamed from loadGoals/saveGoals to avoid conflict with old weekly-goals (which use {items:[]} shape)
 function loadGoalsV60() {
-  try { return loadStore().goals || []; } catch { return []; }
+  // store.goals wordt gedeeld door twee features: de v0.20 weekdoelen slaan
+  // {weekStart, items} op, de v0.60 curriculum-goals een array. De items van de
+  // weekdoelen hebben een andere vorm en horen hier niet: dan zijn er simpelweg
+  // geen curriculum-goals. Zonder deze check crasht elke consument die een array verwacht.
+  try {
+    const g = loadStore().goals;
+    return Array.isArray(g) ? g : [];
+  } catch { return []; }
 }
 function saveGoalsV60(goals) {
   try { const store = loadStore(); store.goals = goals; saveStore(store); } catch {}
@@ -21140,7 +21147,7 @@ function getCalSuggestions() {
   }
 
   // Songs in active goals
-  const goals = store.goals || [];
+  const goals = Array.isArray(store.goals) ? store.goals : [];
   for (const goal of goals) {
     suggestions.push({ song: goal.song, reason: `🎯 Goal: ${goal.target}`, score: 50 });
   }
@@ -21691,7 +21698,7 @@ function runDeepAnalysis(periodDays = 30) {
   allRecs.sort((a, b) => a.timestamp - b.timestamp);
   const journal = (store.journal || []).filter(e => e.date >= cutoff);
   const gymCompleted = Object.keys(store.gymProgress?.completed || {});
-  const goals = store.goals || [];
+  const goals = Array.isArray(store.goals) ? store.goals : [];
   const totalMinutes = timeLog.reduce((s, t) => s + t.duration, 0) / 60000;
   const totalDays = new Set(timeLog.map(t => new Date(t.start).toDateString())).size;
   const avgMinPerDay = totalDays > 0 ? totalMinutes / totalDays : 0;
@@ -22143,7 +22150,7 @@ function tutorAnswerTheory(query) {
 }
 
 function tutorAnswerTodayPractice(store) {
-  const goals = store.goals || [];
+  const goals = Array.isArray(store.goals) ? store.goals : [];
   const calPlan = store.calendarPlan || {};
   const today = new Date().toISOString().slice(0, 10);
   const todayItems = (calPlan[today] || []).filter(i => !i.done);
@@ -22215,7 +22222,7 @@ function tutorAnswerWeakPoints(store) {
 }
 
 function tutorAnswerPrediction(store, query) {
-  const goals = store.goals || [];
+  const goals = Array.isArray(store.goals) ? store.goals : [];
   if (goals.length === 0) return `Je hebt nog geen actieve goals. Maak er een aan via <strong>🎯 Goals</strong> — dan kan ik realistische voorspellingen geven.`;
   const recs = store.recordings || {};
   const goal = goals[goals.length - 1];
@@ -22299,7 +22306,7 @@ function tutorAnswerStatus(store) {
   const streak = store.streak?.current || 0;
   const totalRecs = Object.values(store.recordings || {}).reduce((s, list) => s + list.length, 0);
   const gymDone = Object.keys(store.gymProgress?.completed || {}).length;
-  const goals = (store.goals || []).length;
+  const goals = (Array.isArray(store.goals) ? store.goals : []).length;
   return `<strong>Jouw status:</strong><ul>` +
     `<li>Level ${level} (${xp} XP)</li>` +
     `<li>Streak: ${streak} dagen 🔥</li>` +
@@ -22310,7 +22317,7 @@ function tutorAnswerStatus(store) {
 }
 
 function tutorAnswerGoals(store) {
-  const goals = store.goals || [];
+  const goals = Array.isArray(store.goals) ? store.goals : [];
   if (goals.length === 0) return `Je hebt geen actieve goals. Open <strong>🎯 Goals</strong> om er een aan te maken — geef een stuk + termijn, app maakt een week-voor-week plan.`;
   return `<strong>Actieve goals (${goals.length}):</strong><ul>` +
     goals.map(g => {
@@ -26731,6 +26738,359 @@ ACHIEVEMENTS.push({
     return results.some(r => r.drill === 'polyrhythm' && r.rhPct >= 0.8 && r.lhPct >= 0.8);
   },
 });
+
+// ===========================================================================
+// v0.86 — SPEELKLAAR-START + TRECHTER-METING
+// ---------------------------------------------------------------------------
+// Doel: de drempel om te beginnen naar nul, en voor het eerst meten waar
+// een sessie stukloopt. Geen nieuwe modes. Alles hieronder is additief:
+// bestaande functies worden gewrapt volgens het override-patroon.
+// ===========================================================================
+(function () {
+  'use strict';
+
+  const FUNNEL_STEPS = ['opened', 'song_loaded', 'play_pressed', 'played_60s', 'section_attempt'];
+  const FUNNEL_LABELS = {
+    opened: 'App geopend',
+    song_loaded: 'Stuk geladen',
+    play_pressed: 'Play ingedrukt',
+    played_60s: '60 seconden gespeeld',
+    section_attempt: 'Sectie-poging afgerond',
+  };
+
+  function safeStore() {
+    try { return loadStore() || {}; } catch (e) { return {}; }
+  }
+  function persist(mutate) {
+    try {
+      const s = loadStore() || {};
+      mutate(s);
+      saveStore(s);
+    } catch (e) { console.warn('v0.86 opslag:', e.message); }
+  }
+  function dayKey(d) {
+    d = d || new Date();
+    return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+  }
+  function notify(title, body, level) {
+    try { if (typeof window.toast === 'function') window.toast(title, body, level || 'info'); } catch (e) {}
+  }
+
+  // -------------------------------------------------------------------------
+  // 1. Trechter-meting
+  // -------------------------------------------------------------------------
+  const firedThisLoad = Object.create(null);
+
+  function trackFunnel(step, opts) {
+    if (FUNNEL_STEPS.indexOf(step) === -1) return;
+    if (opts && opts.oncePerLoad) {
+      if (firedThisLoad[step]) return;
+      firedThisLoad[step] = true;
+    }
+    persist(function (s) {
+      const f = s.funnel || (s.funnel = { days: {}, totals: {} });
+      if (!f.days) f.days = {};
+      if (!f.totals) f.totals = {};
+      const k = dayKey();
+      const day = f.days[k] || (f.days[k] = {});
+      day[step] = (day[step] || 0) + 1;
+      f.totals[step] = (f.totals[step] || 0) + 1;
+      f.last = { step: step, at: new Date().toISOString() };
+    });
+  }
+  window.trackFunnel = trackFunnel;
+
+  // opened: één keer per pageload
+  trackFunnel('opened', { oncePerLoad: true });
+
+  // song_loaded: wrap loadSong
+  if (typeof loadSong === 'function') {
+    const _origLoadSong86 = loadSong;
+    loadSong = function (song) {
+      const r = _origLoadSong86.apply(this, arguments);
+      try { trackFunnel('song_loaded'); } catch (e) {}
+      return r;
+    };
+  }
+
+  // play_pressed: wrap play
+  if (typeof play === 'function') {
+    const _origPlay86 = play;
+    play = function () {
+      const r = _origPlay86.apply(this, arguments);
+      try { trackFunnel('play_pressed'); } catch (e) {}
+      return r;
+    };
+  }
+
+  // section_attempt: wrap updateSongSectionAcc (enige plek waar accuracy landt)
+  if (typeof updateSongSectionAcc === 'function') {
+    const _origUpdAcc86 = updateSongSectionAcc;
+    updateSongSectionAcc = function (id, acc) {
+      const r = _origUpdAcc86.apply(this, arguments);
+      try { trackFunnel('section_attempt'); } catch (e) {}
+      return r;
+    };
+  }
+
+  // played_60s: onafhankelijke teller op echte kloktijd, niet op songtijd
+  let playedSeconds = 0;
+  setInterval(function () {
+    try {
+      if (typeof state === 'undefined' || !state || !state.playing) return;
+      playedSeconds += 1;
+      if (playedSeconds >= 60) trackFunnel('played_60s', { oncePerLoad: true });
+    } catch (e) {}
+  }, 1000);
+
+  // -------------------------------------------------------------------------
+  // 2. Speelmodus: dashboard weg, instrument bovenaan
+  // -------------------------------------------------------------------------
+  const style = document.createElement('style');
+  style.textContent = [
+    '#v86-bar { display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin:6px 0 4px; }',
+    '#v86-bar button { font-size:12px; padding:5px 10px; }',
+    '#v86-bar .v86-note { font-size:11px; color:var(--muted); }',
+    '#v86-bar .v86-warn { font-size:11px; color:#fbbf24; }',
+    'body.play-focus > h1,',
+    'body.play-focus > p.sub,',
+    'body.play-focus #coach,',
+    'body.play-focus #goals-panel,',
+    'body.play-focus #achievements-bar,',
+    'body.play-focus .library,',
+    'body.play-focus #stats-panel,',
+    'body.play-focus #sticky-widget,',
+    'body.play-focus #channels-panel,',
+    'body.play-focus #progressions,',
+    'body.play-focus #song-notes,',
+    'body.play-focus .footer { display:none !important; }',
+    'body.play-focus #v86-bar { margin-top:2px; }',
+    // Transportrij blijft in beeld: op 720px hoog passen stage en alle rijen
+    // niet samen, en zonder zichtbare Speel-knop is spatie de enige weg.
+    'body.play-focus .controls:not(.row2) { position:sticky; top:0; z-index:20; background:var(--panel); box-shadow:0 6px 12px rgba(0,0,0,0.45); }',
+    '#v86-funnel-overlay .v86-row { display:flex; align-items:center; gap:10px; margin:6px 0; font-size:13px; }',
+    '#v86-funnel-overlay .v86-num { min-width:44px; text-align:right; font-weight:700; }',
+    '#v86-funnel-overlay .v86-track { flex:1; height:8px; background:rgba(255,255,255,0.08); border-radius:4px; overflow:hidden; }',
+    '#v86-funnel-overlay .v86-fill { height:100%; background:linear-gradient(90deg,#6366f1,#4ade80); }',
+    '#v86-funnel-overlay .v86-drop { font-size:11px; color:#f87171; }',
+  ].join('\n');
+  document.head.appendChild(style);
+
+  const bar = document.createElement('div');
+  bar.id = 'v86-bar';
+  bar.innerHTML =
+    '<button id="v86-toggle" title="Verberg het dashboard en zet het instrument bovenaan">🎹 Speelmodus</button>' +
+    '<button id="v86-funnel-btn" title="Waar loopt een sessie stuk?">📊 Trechter</button>' +
+    '<span id="v86-note" class="v86-note"></span>';
+  const topbar = document.getElementById('compact-topbar');
+  if (topbar && topbar.parentNode) topbar.parentNode.insertBefore(bar, topbar.nextSibling);
+  else document.body.insertBefore(bar, document.body.firstChild);
+
+  function stageWrap() { return document.querySelector('.stage-wrap'); }
+
+  function centerKeyboard() {
+    const w = stageWrap();
+    if (!w) return;
+    try { w.scrollLeft = Math.max(0, (w.scrollWidth - w.clientWidth) / 2); } catch (e) {}
+  }
+
+  // Expliciet scrollen, niet via scrollIntoView met behavior:'smooth'.
+  // Die is in sommige omgevingen een no-op, en we willen de framing garanderen:
+  // het hele speelvlak (vallende noten + klavier) in beeld, klavier onderaan.
+  function showStage() {
+    const w = stageWrap();
+    if (!w) return;
+    try {
+      const box = w.getBoundingClientRect();
+      const top = box.top + window.scrollY;
+      const maxScroll = Math.max(0, document.body.scrollHeight - window.innerHeight);
+      let target;
+      if (box.height <= window.innerHeight) {
+        // past helemaal: leg de onderkant tegen de onderkant van het scherm
+        target = top + box.height - window.innerHeight + 8;
+      } else {
+        // past niet: klavier heeft voorrang boven lookahead
+        target = top + box.height - window.innerHeight;
+      }
+      window.scrollTo(0, Math.min(maxScroll, Math.max(0, Math.round(target))));
+    } catch (e) { try { w.scrollIntoView(); } catch (e2) {} }
+    setTimeout(centerKeyboard, 60);
+  }
+  window.showStage = showStage;
+
+  function setPlayFocus(on, opts) {
+    document.body.classList.toggle('play-focus', !!on);
+    const btn = document.getElementById('v86-toggle');
+    if (btn) {
+      btn.textContent = on ? '📋 Dashboard' : '🎹 Speelmodus';
+      btn.classList.toggle('on', !!on);
+      btn.title = on ? 'Terug naar coach, doelen en bibliotheek' : 'Verberg het dashboard en zet het instrument bovenaan';
+    }
+    if (!opts || !opts.silent) persist(function (s) { s.playFocus = !!on; });
+    if (on) setTimeout(function () { showStage(); }, 30);
+  }
+  window.setPlayFocus = setPlayFocus;
+
+  const toggleBtn = document.getElementById('v86-toggle');
+  if (toggleBtn) toggleBtn.onclick = function () { setPlayFocus(!document.body.classList.contains('play-focus')); };
+
+  // -------------------------------------------------------------------------
+  // 3. Auto-resume: open in de stand waarin je gisteren stopte
+  // -------------------------------------------------------------------------
+  function cachedSongExists(slug) {
+    try {
+      const d = typeof getRepertoireData === 'function' ? getRepertoireData(slug) : null;
+      return !!(d && d.notes && d.notes.length);
+    } catch (e) { return false; }
+  }
+
+  function anyModalOpen() {
+    const nodes = document.querySelectorAll('.modal-overlay, .welcome-hub-overlay');
+    for (const n of nodes) {
+      const disp = (n.style && n.style.display) || getComputedStyle(n).display;
+      if (disp && disp !== 'none') return true;
+    }
+    return false;
+  }
+
+  function autoResume(attempt) {
+    attempt = attempt || 0;
+    const params = new URLSearchParams(location.search);
+    if (params.get('focus') === '0' || params.get('screen') || params.get('test')) return;
+
+    // Een open modal (welkomsthub, PWA-prompt) is geen reden om te stoppen,
+    // wel om te wachten. Max ~20 seconden, daarna laten we het los.
+    if (anyModalOpen()) {
+      if (attempt < 20) setTimeout(function () { autoResume(attempt + 1); }, 1000);
+      return;
+    }
+    // Heeft de gebruiker zelf al een stuk gekozen? Dan niet overrulen.
+    try { if (state && state.song) return; } catch (e) {}
+
+    const last = safeStore().lastSession;
+    if (!last || !last.songSlug) return;
+
+    // Nooit automatisch de bestandskiezer openen: alleen hervatten wat gecachet is.
+    if (!cachedSongExists(last.songSlug)) {
+      const note = document.getElementById('v86-note');
+      if (note) note.textContent = 'Laatste stuk staat niet in de cache, kies het één keer in de bibliotheek.';
+      return;
+    }
+
+    const card = document.querySelector('.song-card[data-slug="' + last.songSlug + '"]');
+    if (!card) return;
+    card.click();
+
+    setTimeout(function () {
+      try {
+        if (!state || !state.song) return;
+        setPlayFocus(true, { silent: true });
+        if (last.sectionId && typeof getSongSections === 'function' && typeof activateSection === 'function') {
+          const target = getSongSections().find(function (s) { return s.id === last.sectionId; });
+          if (target) activateSection(target);
+        }
+        const note = document.getElementById('v86-note');
+        if (note) note.textContent = 'Hervat: ' + (state.song.name || last.songSlug) + '. Spatie = start.';
+        // Bibliotheek en secties renderen na het laden nog na, wat de layout
+        // verschuift. Corrigeer de framing daarom een paar keer.
+        [120, 600, 1200].forEach(function (ms) { setTimeout(showStage, ms); });
+      } catch (e) { console.warn('v0.86 resume:', e.message); }
+    }, 500);
+  }
+
+  // -------------------------------------------------------------------------
+  // 4. file:// waarschuwing — hier faalt het automatisch laden van 35 stukken
+  // -------------------------------------------------------------------------
+  function checkProtocol() {
+    if (location.protocol !== 'file:') return;
+    const note = document.getElementById('v86-note');
+    if (note) {
+      note.className = 'v86-warn';
+      note.textContent = '⚠ Je draait vanaf een bestand. Stukken kunnen niet automatisch laden (fetch werkt niet op file://). Open de app via de server of de geïnstalleerde versie.';
+    }
+    notify('⚠ Draait vanaf file://',
+      'Alleen stukken die al in de cache staan werken. Start een lokale server of gebruik de geïnstalleerde app.',
+      'warn');
+  }
+
+  // -------------------------------------------------------------------------
+  // 5. Trechter-overzicht
+  // -------------------------------------------------------------------------
+  function buildFunnelModal() {
+    let ov = document.getElementById('v86-funnel-overlay');
+    if (ov) return ov;
+    ov = document.createElement('div');
+    ov.className = 'modal-overlay';
+    ov.id = 'v86-funnel-overlay';
+    ov.style.display = 'none';
+    ov.innerHTML =
+      '<div class="modal">' +
+      '<h2>📊 Sessie-trechter</h2>' +
+      '<div class="modal-sub">Waar loopt een oefensessie stuk? Alleen deze vijf stappen tellen.</div>' +
+      '<div id="v86-funnel-body"></div>' +
+      '<div class="modal-actions"><button id="v86-funnel-close">Sluit</button></div>' +
+      '</div>';
+    document.body.appendChild(ov);
+    ov.querySelector('#v86-funnel-close').onclick = function () { ov.style.display = 'none'; };
+    return ov;
+  }
+
+  function renderFunnel() {
+    const ov = buildFunnelModal();
+    const f = safeStore().funnel || { days: {}, totals: {} };
+    const totals = f.totals || {};
+    const top = Math.max(1, totals.opened || 0);
+    let html = '';
+    let prev = null;
+    for (const step of FUNNEL_STEPS) {
+      const n = totals[step] || 0;
+      const pct = Math.round(100 * n / top);
+      const drop = (prev !== null && prev > 0 && n < prev)
+        ? '<span class="v86-drop">' + Math.round(100 * (prev - n) / prev) + '% valt hier af</span>'
+        : '';
+      html += '<div class="v86-row">' +
+        '<span class="v86-num">' + n + '</span>' +
+        '<span style="min-width:190px;">' + FUNNEL_LABELS[step] + '</span>' +
+        '<span class="v86-track"><span class="v86-fill" style="width:' + pct + '%"></span></span>' +
+        drop +
+        '</div>';
+      prev = n;
+    }
+    const days = Object.keys(f.days || {}).sort().slice(-7);
+    if (days.length) {
+      html += '<div class="modal-sub" style="margin-top:14px;">Laatste dagen</div>';
+      for (const d of days) {
+        const row = f.days[d] || {};
+        html += '<div class="v86-row"><span style="min-width:96px;">' + d + '</span><span style="font-size:12px;color:var(--muted);">' +
+          FUNNEL_STEPS.map(function (s) { return (row[s] || 0) + '× ' + s; }).join(' · ') + '</span></div>';
+      }
+    } else {
+      html += '<div class="modal-sub" style="margin-top:14px;">Nog geen dagen geregistreerd.</div>';
+    }
+    document.getElementById('v86-funnel-body').innerHTML = html;
+    ov.style.display = 'flex';
+  }
+  window.renderFunnel = renderFunnel;
+
+  const funnelBtn = document.getElementById('v86-funnel-btn');
+  if (funnelBtn) funnelBtn.onclick = renderFunnel;
+
+  // -------------------------------------------------------------------------
+  // 6. Init
+  // -------------------------------------------------------------------------
+  function init() {
+    try {
+      checkProtocol();
+      const s = safeStore();
+      if (s.playFocus) setPlayFocus(true, { silent: true });
+      autoResume();
+    } catch (e) { console.warn('v0.86 init:', e.message); }
+  }
+
+  if (document.readyState === 'complete') setTimeout(init, 400);
+  else window.addEventListener('load', function () { setTimeout(init, 400); });
+})();
+
 </script>
 
 </body>
