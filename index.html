@@ -3966,6 +3966,46 @@
   #session-summary .ss-list { display: grid; gap: 4px; margin-top: var(--sp-3); }
   #session-summary .ss-item { font-size: 13px; color: var(--text-2); }
 
+  /* ============================================================
+     v0.87 FASE 5 — touch-first en toegankelijkheid
+     ============================================================ */
+  /* het klavier op het scherm is speelbaar, dus voelt het ook zo */
+  body.v87 .piano { touch-action: pan-x; cursor: pointer; }
+  body.v87 .key { -webkit-tap-highlight-color: transparent; }
+  /* de randen vervagen: er is meer klavier dan je nu ziet */
+  body.v87 .stage-wrap {
+    -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 28px,
+                        #000 calc(100% - 28px), transparent 100%);
+            mask-image: linear-gradient(90deg, transparent 0, #000 28px,
+                        #000 calc(100% - 28px), transparent 100%);
+  }
+  /* octaaf-navigatie voor als je geen muis hebt om mee te scrollen */
+  body.v87 .kb-nav { display: none; gap: 4px; }
+  body.v87 .kb-nav button { min-width: 44px; }
+  @media (max-width: 760px), (pointer: coarse) {
+    body.v87 .kb-nav { display: inline-flex; }
+  }
+
+  /* geen MIDI is de grootste blokkade, dus geen grijze pil van 11px */
+  #midi-help {
+    display: none;
+    position: fixed; left: 50%; transform: translateX(-50%);
+    top: 96px; z-index: 400; width: min(440px, calc(100% - 32px));
+    background: var(--surface-2); border: 1px solid var(--warn);
+    border-left: 4px solid var(--warn);
+    border-radius: var(--r-md); box-shadow: var(--elev-3);
+    padding: var(--sp-4);
+  }
+  #midi-help.show { display: block; }
+  #midi-help h3 { font-size: 15px; margin-bottom: 6px; }
+  #midi-help p { font-size: 13px; color: var(--text-2); margin-bottom: var(--sp-3); }
+  #midi-help .mh-actions { display: flex; gap: 6px; flex-wrap: wrap; }
+  #midi-help .mh-close {
+    position: absolute; top: 6px; right: 6px;
+    min-width: 36px; padding: 2px 8px; border: none; background: transparent;
+    color: var(--text-3);
+  }
+
   /* -- 5. mobiel: kop en dock klappen in ---------------------
      Op een telefoon telt alleen: wat speel ik, en speel/pauze.
      De rest zit achter ☰ (kop) en ⌃ (dock), één tik weg.        */
@@ -3990,6 +4030,14 @@
     body.v87 #dock.expanded .controls.row2 { display: flex; }
     body.v87 #dock .stats { gap: var(--sp-3); }
     body.v87 #dock .song-info { display: none; }
+    /* in de duimzone hoort alleen wat je tijdens het spelen aanraakt */
+    body.v87 #dock .controls:not(.row2) > *:not(#btn-play):not(#btn-pause):not(#btn-restart):not(#dock-more):not(#kb-nav) {
+      display: none;
+    }
+    body.v87 #dock.expanded .controls:not(.row2) > *:not(.song-info) {
+      display: inline-flex;
+    }
+    body.v87 #dock.expanded .controls:not(.row2) > label { display: flex; }
   }
 </style>
 </head>
@@ -28089,6 +28137,187 @@ ACHIEVEMENTS.push({
 
   if (document.readyState === 'complete') setTimeout(boot, 900);
   else window.addEventListener('load', () => setTimeout(boot, 900));
+})();
+
+// =========================================================================
+// v0.87 FASE 5 — touch-first en toegankelijkheid
+// Het klavier op het scherm was decoratie. Nu is het een instrument, en de
+// belangrijkste foutmelding is geen grijze pil meer maar een kaart met een
+// uitweg.
+// =========================================================================
+(function () {
+  const byId = (id) => document.getElementById(id);
+
+  // --- 1. speelbaar klavier -----------------------------------------------
+  function wirePlayableKeys() {
+    const pianoEl = byId('piano');
+    if (!pianoEl || pianoEl.dataset.playable) return;
+    pianoEl.dataset.playable = '1';
+    const down = new Map();   // pointerId -> midi
+
+    function press(el, e) {
+      const midi = Number(el.dataset.midi);
+      if (!Number.isFinite(midi)) return;
+      const r = el.getBoundingClientRect();
+      // lager op de toets = harder, net als een echte aanslag
+      const rel = Math.max(0, Math.min(1, (e.clientY - r.top) / r.height));
+      const velocity = Math.round(45 + rel * 82);
+      try {
+        const actx = ensureAudio();
+        scheduleSynthNote(actx, midi, actx.currentTime, 0.9, 0.05 + (velocity / 127) * 0.16);
+      } catch (err) {}
+      try { onKeyDown(midi, velocity); } catch (err) {}
+      return midi;
+    }
+
+    pianoEl.addEventListener('pointerdown', (e) => {
+      const el = e.target.closest('.key');
+      if (!el) return;
+      e.preventDefault();
+      down.set(e.pointerId, press(el, e));
+    });
+    const release = (e) => {
+      const midi = down.get(e.pointerId);
+      if (midi == null) return;
+      down.delete(e.pointerId);
+      try { if (typeof onKeyUp === 'function') onKeyUp(midi); } catch (err) {}
+    };
+    pianoEl.addEventListener('pointerup', release);
+    pianoEl.addEventListener('pointercancel', release);
+  }
+
+  // --- 2. navigeren over 88 toetsen zonder muis ----------------------------
+  function scrollOctave(dir) {
+    const wrap = document.querySelector('.stage-wrap');
+    if (!wrap) return;
+    wrap.scrollBy({ left: dir * 7 * 40, behavior: 'smooth' });   // 7 witte toetsen
+  }
+
+  // Centreer op waar het stuk klinkt, niet op het midden van het meubel.
+  function centerOnSong() {
+    const wrap = document.querySelector('.stage-wrap');
+    if (!wrap) return;
+    let midi = 60;
+    try {
+      const notes = state.song && state.song.notes;
+      if (notes && notes.length) {
+        const sorted = notes.map((n) => n.midi).sort((a, b) => a - b);
+        midi = sorted[Math.floor(sorted.length / 2)];
+      }
+    } catch (e) {}
+    const pos = (typeof keyX !== 'undefined') && keyX[midi];
+    if (!pos) return;
+    wrap.scrollLeft = Math.max(0, pos.x - wrap.clientWidth / 2);
+  }
+
+  function addKbNav() {
+    const row1 = document.querySelector('#dock .controls:not(.row2)');
+    if (!row1 || byId('kb-nav')) return;
+    const nav = document.createElement('span');
+    nav.className = 'kb-nav';
+    nav.id = 'kb-nav';
+    nav.innerHTML =
+      '<button id="kb-left" aria-label="Een octaaf naar links">◀</button>' +
+      '<button id="kb-center" aria-label="Centreer op dit stuk">◎</button>' +
+      '<button id="kb-right" aria-label="Een octaaf naar rechts">▶</button>';
+    row1.appendChild(nav);
+    byId('kb-left').onclick = () => scrollOctave(-1);
+    byId('kb-right').onclick = () => scrollOctave(1);
+    byId('kb-center').onclick = centerOnSong;
+  }
+
+  // --- 3. geen MIDI: een kaart met een uitweg ------------------------------
+  function buildMidiHelp() {
+    if (byId('midi-help')) return;
+    const card = document.createElement('div');
+    card.id = 'midi-help';
+    card.setAttribute('role', 'status');
+    card.innerHTML =
+      '<button class="mh-close" id="mh-close" aria-label="Sluiten">✕</button>' +
+      '<h3>Geen MIDI-piano verbonden</h3>' +
+      '<p id="mh-body">De browser kreeg geen toegang tot je piano. Je kunt gewoon ' +
+      'verder: tik of klik op de toetsen op het scherm. Alle modi werken daarmee.</p>' +
+      '<div class="mh-actions">' +
+      '<button class="primary" id="mh-touch">🎹 Speel op het scherm</button>' +
+      '<button id="mh-retry">Opnieuw verbinden</button>' +
+      '</div>';
+    document.body.appendChild(card);
+    byId('mh-close').onclick = () => card.classList.remove('show');
+    byId('mh-touch').onclick = () => {
+      card.classList.remove('show');
+      centerOnSong();
+      try { window.toast('Tik op de toetsen', 'Lager op een toets tikken geeft een hardere aanslag.', 'info'); } catch (e) {}
+    };
+    byId('mh-retry').onclick = () => {
+      if (!navigator.requestMIDIAccess) return;
+      navigator.requestMIDIAccess({ sysex: false })
+        .then((a) => { card.classList.remove('show'); if (typeof setupMIDI === 'function') setupMIDI(a); })
+        .catch((err) => { byId('mh-body').textContent = 'Nog steeds geen toegang (' + err.message + '). Speel zolang op het scherm.'; });
+    };
+  }
+
+  function watchMidiStatus() {
+    const status = byId('status');
+    const card = byId('midi-help');
+    if (!status || !card) return;
+    const check = () => {
+      const failed = status.classList.contains('error');
+      card.classList.toggle('show', failed && !card.dataset.dismissed);
+    };
+    byId('mh-close').addEventListener('click', () => { card.dataset.dismissed = '1'; });
+    new MutationObserver(check).observe(status, { attributes: true, attributeFilter: ['class'] });
+    setTimeout(check, 1200);
+  }
+
+  // --- 4. toegankelijkheid -------------------------------------------------
+  function labelIconButtons() {
+    const labels = {
+      'ct-more-btn': 'Meer instellingen', 'ct-burger': 'Menu',
+      'dock-more': 'Oefengereedschap tonen', 'sr-stop': 'Sessie stoppen',
+    };
+    for (const [id, label] of Object.entries(labels)) {
+      const el = byId(id);
+      if (el && !el.getAttribute('aria-label')) el.setAttribute('aria-label', label);
+    }
+    document.querySelectorAll('.ct-icon-btn').forEach((b) => {
+      if (!b.getAttribute('aria-label') && b.title) b.setAttribute('aria-label', b.title);
+    });
+  }
+
+  // Focus blijft binnen de bovenste open modal: met Tab loop je niet
+  // ongemerkt de pagina eronder in.
+  function trapFocus() {
+    document.addEventListener('keydown', (e) => {
+      if (e.key !== 'Tab') return;
+      const open = [...document.querySelectorAll('.modal-overlay')]
+        .filter((m) => getComputedStyle(m).display !== 'none');
+      if (!open.length) return;
+      const modal = open[open.length - 1];
+      const focusable = [...modal.querySelectorAll(
+        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])')]
+        .filter((el) => el.offsetParent !== null && !el.disabled);
+      if (!focusable.length) return;
+      const first = focusable[0], last = focusable[focusable.length - 1];
+      if (!modal.contains(document.activeElement)) { e.preventDefault(); first.focus(); return; }
+      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+    });
+  }
+
+  function start() {
+    wirePlayableKeys();
+    addKbNav();
+    buildMidiHelp();
+    watchMidiStatus();
+    labelIconButtons();
+    trapFocus();
+    setTimeout(centerOnSong, 400);
+    let n = 0;
+    const iv = setInterval(() => { addKbNav(); labelIconButtons(); if (++n > 10) clearInterval(iv); }, 400);
+  }
+
+  if (document.readyState === 'complete') setTimeout(start, 1000);
+  else window.addEventListener('load', () => setTimeout(start, 1000));
 })();
 
 </script>
