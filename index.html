@@ -4034,6 +4034,27 @@
     padding: 1px 6px; left: 6px;
   }
 
+  /* streak, level en minuten staan in de kop; de zwevende kopie erbij
+     dekte alleen het dock af */
+  body.v87 .sticky-widget { display: none; }
+
+  /* -- lege staat: de volgende stap in plaats van een mededeling -- */
+  body.v87 .stage-wrap { position: relative; }
+  #empty-stage {
+    display: none;
+    position: absolute; left: 50%; top: 38%;
+    transform: translate(-50%, -50%);
+    width: min(420px, calc(100% - 32px));
+    background: var(--surface-1); border: 1px solid var(--line);
+    border-radius: var(--r-md); box-shadow: var(--elev-3);
+    padding: var(--sp-5); text-align: center; z-index: 5;
+  }
+  body.v87.no-song #empty-stage { display: block; }
+  #empty-stage h3 { font-size: var(--fs-sub); margin-bottom: 6px; }
+  #empty-stage p { font-size: 13px; color: var(--text-3); margin-bottom: var(--sp-4); }
+  #empty-stage .es-actions { display: flex; gap: var(--sp-2); justify-content: center; flex-wrap: wrap; }
+  #empty-stage .es-hint { margin-top: var(--sp-3); font-size: var(--fs-label); color: var(--text-3); }
+
   /* ============================================================
      v0.87 FASE 5 — touch-first en toegankelijkheid
      ============================================================ */
@@ -7481,11 +7502,9 @@ requestAnimationFrame(tick);
 // DRAW
 // ===========================================================================
 function drawIdle() {
+  // v0.87: de lege staat is geen tekst meer maar een kaart met knoppen
+  // (#empty-stage). Het canvas blijft leeg zodat die kaart alleen staat.
   ctx.clearRect(0, 0, KEYBOARD_WIDTH, FALL_HEIGHT);
-  ctx.fillStyle = '#7a8290';
-  ctx.font = '14px system-ui';
-  ctx.textAlign = 'center';
-  ctx.fillText('Laad een MIDI-bestand of klik "Demo" om te beginnen', KEYBOARD_WIDTH / 2, FALL_HEIGHT / 2);
 }
 
 function roundRect(x, y, w, h, r) {
@@ -8735,10 +8754,9 @@ document.getElementById('modal-overlay').onclick = (e) => {
 };
 document.getElementById('btn-tour').onclick = showOnboarding;
 
-// Show on first visit
-if (!loadStore().onboardingShown) {
-  showOnboarding();
-}
+// v0.87: geen tweede deur. Een nieuwe gebruiker kreeg eerst de Welcome Hub en
+// daarna deze zes-stappen-uitleg. De uitleg blijft bereikbaar via 🎓 Tour en
+// het ?-menu, maar opent niet meer vanzelf.
 
 // ===========================================================================
 // Hooks: update notes panel when song changes
@@ -27899,7 +27917,11 @@ ACHIEVEMENTS.push({
     }
 
     // --- de rest zakt onder het dock ----------------------------------
-    ['.library', '#channels-panel', '#progressions', '#song-notes', '.ear-panel', '#stats-panel']
+    // Ook het coach-widget, de weekdoelen en de achievement-balk: die stonden
+    // bij een nieuwe gebruiker tussen de kop en het instrument in, en duwden
+    // het klavier 800px naar beneden. Ze blijven bestaan, maar onder de vouw.
+    ['#coach', '#goals-panel', '#achievements-bar', '.library', '#channels-panel',
+     '#progressions', '#song-notes', '.ear-panel', '#stats-panel', '.footer']
       .forEach((sel) => {
         const el = document.querySelector(sel);
         if (el) document.body.appendChild(el);
@@ -28453,10 +28475,46 @@ ACHIEVEMENTS.push({
     });
   }
 
+  // Zonder stuk stond er "klik Demo" terwijl die knop in het menu zit.
+  // Nu staat de volgende stap er zelf, als kaart in het speelveld.
+  function buildEmptyState() {
+    const wrap = document.querySelector('.stage-wrap');
+    if (!wrap || byId('empty-stage')) return;
+    const el = document.createElement('div');
+    el.id = 'empty-stage';
+    el.innerHTML =
+      '<h3>Kies iets om te spelen</h3>' +
+      '<p>Je repertoire staat onder het klavier. Of begin met de demo.</p>' +
+      '<div class="es-actions">' +
+      '<button class="primary" id="es-pick">🎹 Naar mijn repertoire</button>' +
+      '<button id="es-demo">🎵 Demo</button>' +
+      '</div>' +
+      '<div class="es-hint">Tik ondertussen gerust op de toetsen om vrij te spelen.</div>';
+    wrap.appendChild(el);
+    byId('es-pick').onclick = () => {
+      const lib = document.querySelector('.library');
+      if (lib) lib.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      const search = byId('library-search');
+      if (search) setTimeout(() => search.focus(), 500);
+    };
+    byId('es-demo').onclick = () => { try { byId('btn-demo').click(); } catch (e) {} };
+  }
+
+  function watchSong() {
+    setInterval(() => {
+      try {
+        if (typeof state === 'undefined') return;
+        document.body.classList.toggle('no-song', !state.song);
+      } catch (e) {}
+    }, 500);
+  }
+
   function start() {
     splitSearchLabel();
     tuckWelcomeButton();
     wrapSeparators();
+    buildEmptyState();
+    watchSong();
     watchPlayState();
     let n = 0;
     const iv = setInterval(() => {
