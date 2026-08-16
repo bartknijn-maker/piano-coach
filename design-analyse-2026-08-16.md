@@ -1,6 +1,6 @@
 # Piano Coach — Design-analyse + stappenplan
 
-> **Status per 16 augustus 2026: alle zes fases uitgevoerd in v0.87, plus vier vervolgrondes** (11 commits, zie `git log`).
+> **Status per 16 augustus 2026: alle zes fases uitgevoerd in v0.87, plus zeven vervolgrondes** (15 commits, zie `git log`).
 > Resultaat gemeten: chrome boven het speelveld 330px → 55px (desktop) en 995px → 51px (mobiel),
 > instrument krijgt 73% van het telefoonscherm, 0 knoppen onder 32px (44px op touch),
 > 0 tekst onder 11px, 0 van 74 tekstelementen onder 4,5:1 contrast, 0 console-errors.
@@ -15,6 +15,14 @@
 > van ~830px naar 55px), en een lege staat die de volgende stap zelf aanbiedt; (4) de doel-toets in
 > wait mode en toegankelijkheid: 56 modals met `role`/`aria-labelledby`, focus-trap, `aria-live`
 > op de sessierail. Prestatie tijdens spelen gemeten: 60fps, 0,12ms per frame.
+> (5) oefenrij in vijf benoemde groepen, en een bug: `autoResume()` zette `play-focus` terug aan,
+> waardoor het repertoire voor een terugkerende gebruiker onbereikbaar was vanaf het hoofdscherm;
+> (6) de zone onder het dock: achievement-muur van 42 chips naar vijf, marges voor alle panelen;
+> (7) meetlat gemeten, en daarbij bleek de eerste tik op een telefoon stil te blijven omdat de
+> toetsen pas op load+1000ms aan pointer-events hingen. Nu meteen.
+>
+> **Meetlat, gemeten:** tijd tot je eerste noot — terugkerend desktop 1,7s / 0 klikken,
+> terugkerend telefoon 0,9s / 1 tik, nieuw desktop 3,0s / 2 klikken. Doel was onder 10 seconden.
 
 **Datum:** 16 augustus 2026 · **Versie bekeken:** v0.86 · **Rol:** senior product designer
 **Methode:** headless Chromium op `http://localhost:3457` met de echte backup (`piano-coach-backup-2026-08-16.json`) in localStorage, op 1440×900 en 390×844. Plus statische analyse van de 3.640 CSS-regels en de DOM.
