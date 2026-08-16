@@ -3910,6 +3910,62 @@
     body.v87 .key.wrong { animation: none; }
   }
 
+  /* ============================================================
+     v0.87 FASE 4 — de sessie als flow
+     De rail blijft zichtbaar in elke modus, ook boven een modal,
+     zodat je nooit verdwaalt tussen stap 3 en stap 4.
+     ============================================================ */
+  #session-rail { display: none; }
+  body.session-active #session-rail {
+    display: flex; align-items: center; gap: var(--sp-3);
+    position: fixed; top: 0; left: 0; right: 0; z-index: 9990;
+    background: linear-gradient(180deg, var(--surface-2), var(--surface-1));
+    border-bottom: 1px solid var(--accent-dim);
+    padding: 6px var(--sp-4); min-height: 40px;
+    font-size: var(--fs-label);
+  }
+  body.session-active { padding-top: 40px; }
+  body.session-active .compact-topbar { top: 40px; }
+  body.session-active .modal-overlay { padding-top: 40px; }
+  #session-rail .sr-dots { display: flex; gap: 4px; flex: none; }
+  #session-rail .sr-dot {
+    width: 20px; height: 5px; border-radius: var(--r-pill);
+    background: var(--line);
+  }
+  #session-rail .sr-dot.done { background: var(--accent-dim); }
+  #session-rail .sr-dot.now { background: var(--accent); box-shadow: 0 0 8px var(--accent); }
+  #session-rail .sr-label { color: var(--text-3); flex: none; }
+  #session-rail .sr-title {
+    color: var(--text-1); font-weight: 600; font-size: 13px;
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  }
+  #session-rail .sr-actions { margin-left: auto; display: flex; gap: 6px; flex: none; }
+  #session-rail button { min-height: 30px; padding: 4px 10px; font-size: var(--fs-label); }
+  @media (max-width: 760px) {
+    #session-rail .sr-label { display: none; }
+    body.session-active #session-rail { padding: 6px var(--sp-2); gap: var(--sp-2); }
+  }
+  /* samenvatting na afloop */
+  #session-summary .ss-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: var(--sp-3); margin: var(--sp-4) 0;
+  }
+  #session-summary .ss-cell {
+    background: var(--surface-2); border: 1px solid var(--line);
+    border-radius: var(--r-sm); padding: var(--sp-3);
+  }
+  #session-summary .ss-num {
+    font-size: 24px; font-weight: 600; font-variant-numeric: tabular-nums;
+  }
+  #session-summary .ss-cap { color: var(--text-3); font-size: var(--fs-label); }
+  #session-summary .ss-next {
+    background: var(--brass, var(--surface-2)); background: var(--surface-2);
+    border-left: 3px solid var(--accent); border-radius: 0 var(--r-sm) var(--r-sm) 0;
+    padding: var(--sp-3) var(--sp-4); font-size: 14px; color: var(--text-2);
+  }
+  #session-summary .ss-list { display: grid; gap: 4px; margin-top: var(--sp-3); }
+  #session-summary .ss-item { font-size: 13px; color: var(--text-2); }
+
   /* -- 5. mobiel: kop en dock klappen in ---------------------
      Op een telefoon telt alleen: wat speel ik, en speel/pauze.
      De rest zit achter ☰ (kop) en ⌃ (dock), één tik weg.        */
@@ -27820,6 +27876,219 @@ ACHIEVEMENTS.push({
     flush();
   };
   setInterval(flush, 1500);
+})();
+
+// =========================================================================
+// v0.87 FASE 4 — de sessie wordt een flow
+// De Coach stelde zeven stappen samen en zette er zeven gelijke knoppen
+// onder. Nu is er een sessie die loopt: een rail die je door de stappen
+// leidt, in elke modus zichtbaar, met een afsluiter aan het eind.
+// =========================================================================
+(function () {
+  const byId = (id) => document.getElementById(id);
+
+  const run = { steps: [], idx: -1, active: false, startedAt: 0, done: [] };
+  let rail = null;
+
+  function minutesOf(title) {
+    const m = /\((\d+)(?:\s*[-–]\s*\d+)?\s*min/i.exec(title || '');
+    return m ? Number(m[1]) : 5;
+  }
+
+  // De Coach rendert zijn stappen als DOM. Die lezen we terug in plaats van
+  // de generator te dupliceren: één bron van waarheid blijft één bron.
+  function readSteps() {
+    return [...document.querySelectorAll('#coach-session .coach-step')].map((el) => {
+      const btn = el.querySelector('button');
+      const title = el.querySelector('.coach-step-title')?.textContent?.trim() || 'Stap';
+      return {
+        title,
+        icon: el.querySelector('.coach-step-icon')?.textContent?.trim() || '•',
+        action: btn?.dataset.action || '',
+        payload: btn?.dataset.payload || '',
+        min: minutesOf(title),
+      };
+    });
+  }
+
+  function buildRail() {
+    if (rail) return rail;
+    rail = document.createElement('div');
+    rail.id = 'session-rail';
+    rail.innerHTML =
+      '<span class="sr-dots"></span>' +
+      '<span class="sr-label"></span>' +
+      '<span class="sr-title"></span>' +
+      '<span class="sr-actions">' +
+      '<button id="sr-next">Volgende ⏭</button>' +
+      '<button id="sr-skip" title="Sla deze stap over">Overslaan</button>' +
+      '<button id="sr-stop" title="Sessie stoppen">✕</button>' +
+      '</span>';
+    document.body.insertBefore(rail, document.body.firstChild);
+    byId('sr-next').onclick = () => advance(false);
+    byId('sr-skip').onclick = () => advance(true);
+    byId('sr-stop').onclick = () => stop(false);
+    return rail;
+  }
+
+  function paint() {
+    if (!rail) return;
+    const dots = rail.querySelector('.sr-dots');
+    dots.innerHTML = '';
+    run.steps.forEach((s, i) => {
+      const d = document.createElement('span');
+      d.className = 'sr-dot' + (i < run.idx ? ' done' : i === run.idx ? ' now' : '');
+      d.title = s.title;
+      dots.appendChild(d);
+    });
+    const step = run.steps[run.idx];
+    const left = run.steps.slice(run.idx).reduce((a, s) => a + s.min, 0);
+    rail.querySelector('.sr-label').textContent =
+      `Stap ${run.idx + 1} van ${run.steps.length} · nog ${left} min`;
+    rail.querySelector('.sr-title').textContent = step ? step.icon + ' ' + step.title : '';
+    byId('sr-next').textContent =
+      run.idx >= run.steps.length - 1 ? 'Afronden ✓' : 'Volgende ⏭';
+  }
+
+  function runStep(i) {
+    run.idx = i;
+    paint();
+    const step = run.steps[i];
+    if (!step) return;
+    try { runCoachAction(step.action, step.payload); } catch (e) { console.warn('sessie-stap:', e.message); }
+  }
+
+  function advance(skipped) {
+    const step = run.steps[run.idx];
+    if (step) run.done.push({ title: step.title, skipped: !!skipped });
+    // sluit wat er open staat, anders stapel je modals op
+    document.querySelectorAll('.modal-overlay').forEach((o) => {
+      if (o.id !== 'session-summary' && getComputedStyle(o).display !== 'none') o.style.display = 'none';
+    });
+    if (run.idx >= run.steps.length - 1) { stop(true); return; }
+    runStep(run.idx + 1);
+  }
+
+  function start(atIndex) {
+    const steps = readSteps();
+    if (!steps.length) return;
+    run.steps = steps;
+    run.done = [];
+    run.active = true;
+    run.startedAt = Date.now();
+    buildRail();
+    document.body.classList.add('session-active');
+    byId('coach-overlay').style.display = 'none';
+    runStep(atIndex || 0);
+  }
+
+  function stop(completed) {
+    run.active = false;
+    document.body.classList.remove('session-active');
+    if (completed) showSummary();
+  }
+
+  function showSummary() {
+    const mins = Math.max(1, Math.round((Date.now() - run.startedAt) / 60000));
+    const done = run.done.filter((d) => !d.skipped).length;
+    const xpGain = 40 + done * 20;
+    try {
+      const s = loadStore();
+      const today = new Date().toISOString().slice(0, 10);
+      if (s.coachLastDay !== today) {
+        s.coachStreak = (s.coachStreak || 0) + 1;
+        s.coachLastDay = today;
+        saveStore(s);
+      }
+    } catch (e) {}
+
+    let ov = byId('session-summary');
+    if (!ov) {
+      ov = document.createElement('div');
+      ov.id = 'session-summary';
+      ov.className = 'modal-overlay';
+      document.body.appendChild(ov);
+    }
+    const next = run.done.find((d) => d.skipped);
+    ov.innerHTML =
+      '<div class="modal">' +
+      '<h2>🏁 Sessie afgerond</h2>' +
+      '<div class="modal-sub">Je hebt ' + done + ' van de ' + run.steps.length +
+      ' stappen gedaan. Dat is wat morgen makkelijker maakt.</div>' +
+      '<div class="ss-grid">' +
+      '<div class="ss-cell"><div class="ss-num">' + mins + '</div><div class="ss-cap">minuten</div></div>' +
+      '<div class="ss-cell"><div class="ss-num">' + done + '</div><div class="ss-cap">stappen</div></div>' +
+      '<div class="ss-cell"><div class="ss-num">+' + xpGain + '</div><div class="ss-cap">XP</div></div>' +
+      '</div>' +
+      '<div class="ss-next"><b>Voor morgen:</b> ' +
+      (next ? 'begin met wat je vandaag oversloeg — ' + next.title
+            : 'zelfde tijd, zelfde plek. Consistentie verslaat lengte.') +
+      '</div>' +
+      '<div class="ss-list">' +
+      run.done.map((d) => '<div class="ss-item">' + (d.skipped ? '⏭' : '✓') + ' ' + d.title + '</div>').join('') +
+      '</div>' +
+      '<div class="modal-actions" style="margin-top:20px; display:flex; gap:8px; justify-content:flex-end;">' +
+      '<button id="ss-journal">📓 Kort reflecteren</button>' +
+      '<button class="primary" id="ss-close">Klaar</button>' +
+      '</div></div>';
+    ov.style.display = 'flex';
+    // XP pas toekennen als de samenvatting weg is: anders valt een level-up
+    // over je eigen afsluiter heen.
+    let awarded = false;
+    const award = () => {
+      if (awarded) return;
+      awarded = true;
+      try { if (typeof addXP === 'function') addXP(xpGain, 'coach-sessie'); } catch (e) {}
+    };
+    byId('ss-close').onclick = () => { ov.style.display = 'none'; award(); };
+    byId('ss-journal').onclick = () => {
+      ov.style.display = 'none';
+      award();
+      try { byId('btn-journal').click(); } catch (e) {}
+    };
+  }
+
+  // --- de Coach-modal krijgt één primaire knop ------------------------------
+  function wireCoachModal() {
+    const actions = document.querySelector('#coach-overlay .modal-actions')
+      || byId('coach-regen')?.parentNode;
+    if (!actions || byId('coach-start-session')) return false;
+
+    const btn = document.createElement('button');
+    btn.id = 'coach-start-session';
+    btn.className = 'primary';
+    btn.onclick = () => start(0);
+    actions.insertBefore(btn, actions.firstChild);
+
+    const label = () => {
+      const total = readSteps().reduce((a, s) => a + s.min, 0);
+      btn.textContent = '▶ Start sessie' + (total ? ' (' + total + ' min)' : '');
+    };
+    label();
+    // de coach hergenereert; houd het label kloppend
+    byId('coach-regen')?.addEventListener('click', () => setTimeout(label, 60));
+    byId('btn-coach')?.addEventListener('click', () => setTimeout(label, 60));
+
+    // losse Start-knoppen starten de sessie op die stap in plaats van
+    // je in een modus te dumpen zonder weg terug
+    byId('coach-session')?.addEventListener('click', (e) => {
+      const btnEl = e.target.closest('button[data-action]');
+      if (!btnEl) return;
+      const steps = [...document.querySelectorAll('#coach-session .coach-step')];
+      const idx = steps.indexOf(btnEl.closest('.coach-step'));
+      if (idx >= 0) setTimeout(() => start(idx), 0);
+    }, true);
+    return true;
+  }
+
+  function boot() {
+    if (wireCoachModal()) return;
+    let n = 0;
+    const iv = setInterval(() => { if (wireCoachModal() || ++n > 20) clearInterval(iv); }, 300);
+  }
+
+  if (document.readyState === 'complete') setTimeout(boot, 900);
+  else window.addEventListener('load', () => setTimeout(boot, 900));
 })();
 
 </script>
