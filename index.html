@@ -2,7 +2,7 @@
 <html lang="nl">
 <head>
 <meta charset="UTF-8">
-<title>Piano Coach — v0.86</title>
+<title>Piano Coach — v0.87</title>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, user-scalable=no">
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#0f1419">
@@ -3738,11 +3738,131 @@
   .legend { display: inline-flex; gap: 12px; margin-left: 12px; }
   .legend span { display: inline-flex; align-items: center; gap: 5px; }
   .swatch { display: inline-block; width: 11px; height: 11px; border-radius: var(--r-sm); }
+
+  /* ============================================================
+     v0.87 FASE 1 — één navigatielaag: kop · speelveld · dock
+     Alles wat niet helpt om nu te spelen zit in de kop of het dock.
+     ============================================================ */
+  body.v87 {
+    padding: 0;
+    display: flex; flex-direction: column;
+    min-height: 100vh;
+  }
+
+  /* -- 1. KOP: sticky, één rij ------------------------------- */
+  body.v87 .compact-topbar {
+    position: sticky; top: 0; z-index: 300;
+    margin: 0; border-radius: 0;
+    border: none; border-bottom: 1px solid var(--line);
+    background: var(--surface-1);
+    padding: var(--sp-2) var(--sp-4);
+    flex: none;
+  }
+  body.v87 .ct-status {
+    display: flex; align-items: center; gap: var(--sp-2);
+    margin-left: var(--sp-3); min-width: 0;
+  }
+  body.v87 .ct-status #status {
+    max-width: 190px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  }
+  body.v87 .ct-status .device-name { display: none; }
+  body.v87 .ct-song {
+    font-size: var(--fs-label); color: var(--text-3);
+    margin-left: var(--sp-3); min-width: 0;
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  }
+  body.v87 .ct-song b { color: var(--text-1); font-weight: 600; }
+  /* het overloopmenu voor alles wat niet elke seconde telt */
+  body.v87 .ct-more-wrap { position: relative; }
+  body.v87 .ct-more-pop {
+    display: none; position: absolute; right: 0; top: calc(100% + 6px);
+    background: var(--surface-2); border: 1px solid var(--line);
+    border-radius: var(--r-md); box-shadow: var(--elev-3);
+    padding: var(--sp-3); z-index: 320;
+    flex-direction: column; gap: var(--sp-3); align-items: flex-start;
+    min-width: 230px;
+  }
+  body.v87 .ct-more-pop.open { display: flex; }
+  body.v87 .ct-more-pop .ct-more-row {
+    display: flex; align-items: center; gap: var(--sp-2); flex-wrap: wrap;
+  }
+  body.v87 .ct-more-label {
+    font-size: var(--fs-label); color: var(--text-3);
+    text-transform: uppercase; letter-spacing: 0.06em;
+  }
+
+  /* -- 2. SPEELVELD: vult wat er over is --------------------- */
+  body.v87 .stage-wrap {
+    flex: 1 1 auto;
+    display: flex; align-items: flex-end;
+    margin: 0; border-radius: 0; padding: 0;
+    background: var(--surface-sunken);
+  }
+
+  /* -- 3. DOCK: alles wat je tijdens het spelen bedient ------ */
+  body.v87 #dock {
+    position: sticky; bottom: 0; z-index: 200; flex: none;
+    background: var(--surface-1);
+    border-top: 1px solid var(--line);
+    box-shadow: 0 -6px 18px rgba(0, 0, 0, 0.45);
+    padding: var(--sp-2) var(--sp-4) var(--sp-3);
+    display: flex; flex-direction: column; gap: var(--sp-2);
+  }
+  body.v87 #dock .controls,
+  body.v87 #dock .controls.row2 {
+    background: transparent; padding: 0; margin: 0; border-radius: 0;
+    gap: var(--sp-2); position: static; box-shadow: none;
+  }
+  body.v87 #dock .progress-wrap { margin: 0; height: 20px; flex: none; }
+  body.v87 #dock .sections-bar { margin: 0; }
+  /* lege sectiebalk verdwijnt in plaats van uitleg te geven die je niet vroeg */
+  body.v87 #dock .sections-bar:has(.sections-empty) { display: none; }
+  /* vijf statistiekkaarten worden vijf cijfers */
+  body.v87 #dock .stats {
+    display: flex; flex-wrap: wrap; gap: var(--sp-4);
+    margin: 0; grid-template-columns: none;
+  }
+  body.v87 #dock .stat {
+    background: transparent; padding: 0;
+    display: flex; align-items: baseline; gap: 6px;
+  }
+  body.v87 #dock .stat-label { font-size: var(--fs-label); }
+  body.v87 #dock .stat-value { font-size: 15px; margin: 0; }
+  body.v87 #dock .song-info { margin-left: auto; }
+
+  /* -- 4. wat de kop en het dock overbodig maken ------------- */
+  body.v87 > h1, body.v87 > p.sub, body.v87 .topbar, body.v87 #v86-bar { display: none; }
+
+  /* -- 5. mobiel: kop en dock klappen in ---------------------
+     Op een telefoon telt alleen: wat speel ik, en speel/pauze.
+     De rest zit achter ☰ (kop) en ⌃ (dock), één tik weg.        */
+  body.v87 #ct-burger, body.v87 #dock-more { display: none; }
+  @media (max-width: 760px) {
+    body.v87 .compact-topbar { padding: 6px var(--sp-2); gap: 6px; }
+    body.v87 #ct-burger, body.v87 #dock-more { display: inline-flex; }
+    body.v87 .compact-topbar .ct-cat,
+    body.v87 .compact-topbar .ct-search,
+    body.v87 .compact-topbar .ct-status,
+    body.v87 .compact-topbar .song-info,
+    body.v87 .compact-topbar .ct-icon-btn:not(#ct-more-btn):not(#ct-burger) { display: none; }
+    body.v87 .compact-topbar.open .ct-cat,
+    body.v87 .compact-topbar.open .ct-search,
+    body.v87 .compact-topbar.open .ct-icon-btn { display: inline-flex; }
+    body.v87 .compact-topbar.open .ct-status { display: flex; }
+    body.v87 .compact-topbar.open .song-info { display: block; width: 100%; text-align: left; margin: 0; }
+    body.v87 .ct-status { margin-left: 0; }
+    body.v87 .ct-status #status { max-width: 150px; }
+    body.v87 #dock { padding: var(--sp-2); }
+    body.v87 #dock .controls.row2 { display: none; }
+    body.v87 #dock.expanded .controls.row2 { display: flex; }
+    body.v87 #dock .stats { gap: var(--sp-3); }
+    body.v87 #dock .song-info { display: none; }
+  }
 </style>
 </head>
 <body>
 
-<h1>Piano Coach <span style="color: var(--muted); font-weight: 400;">v0.86</span></h1>
+<h1>Piano Coach <span style="color: var(--muted); font-weight: 400;">v0.87</span></h1>
 <p class="sub">📜 Sight reading 2.0 (audio + keyboard + heatmap + adaptive + reaction) · 36 songs</p>
 
 <div class="topbar">
@@ -27175,6 +27295,174 @@ ACHIEVEMENTS.push({
 
   if (document.readyState === 'complete') setTimeout(init, 400);
   else window.addEventListener('load', function () { setTimeout(init, 400); });
+})();
+
+// =========================================================================
+// v0.87 FASE 1 — één navigatielaag
+// Herschikt de bestaande elementen tot drie banden: kop, speelveld, dock.
+// Verplaatst alleen, verwijdert niets: alle id's en handlers blijven leven.
+// =========================================================================
+(function () {
+  const byId = (id) => document.getElementById(id);
+
+  function moveInto(parent, el) { if (el && parent) parent.appendChild(el); }
+
+  function buildMorePopover(kop) {
+    const wrap = document.createElement('div');
+    wrap.className = 'ct-more-wrap';
+    const btn = document.createElement('button');
+    btn.className = 'ct-icon-btn';
+    btn.id = 'ct-more-btn';
+    btn.innerHTML = '⋯';
+    btn.title = 'Timer, thema, daily challenge en meetopties';
+    btn.setAttribute('aria-haspopup', 'true');
+    btn.setAttribute('aria-expanded', 'false');
+
+    const pop = document.createElement('div');
+    pop.className = 'ct-more-pop';
+    pop.id = 'ct-more-pop';
+
+    const row = (label) => {
+      const r = document.createElement('div');
+      r.className = 'ct-more-row';
+      const l = document.createElement('span');
+      l.className = 'ct-more-label';
+      l.textContent = label;
+      r.appendChild(l);
+      pop.appendChild(r);
+      return r;
+    };
+
+    const rTimer = row('Sessie');
+    moveInto(rTimer, byId('pomodoro'));
+    moveInto(rTimer, byId('daily-chip'));
+    moveInto(rTimer, byId('freeze-chip'));
+
+    const rTheme = row('Thema');
+    const themeHost = document.querySelector('.theme-btn') && document.querySelector('.theme-btn').parentNode;
+    moveInto(rTheme, themeHost);
+
+    const rMeta = row('Meten');
+    moveInto(rMeta, byId('v86-toggle'));
+    moveInto(rMeta, byId('v86-funnel-btn'));
+
+    btn.onclick = (e) => {
+      e.stopPropagation();
+      const open = pop.classList.toggle('open');
+      btn.setAttribute('aria-expanded', String(open));
+    };
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('.ct-more-wrap')) {
+        pop.classList.remove('open');
+        btn.setAttribute('aria-expanded', 'false');
+      }
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') pop.classList.remove('open');
+    });
+
+    wrap.appendChild(btn);
+    wrap.appendChild(pop);
+    kop.appendChild(wrap);
+  }
+
+  function build() {
+    const kop = byId('compact-topbar');
+    const stage = document.querySelector('.stage-wrap');
+    if (!kop || !stage || byId('dock')) return false;
+
+    document.body.classList.add('v87');
+    // Speelmodus was een aparte modus; in v0.87 is het gewoon de layout.
+    document.body.classList.remove('play-focus');
+    try {
+      const s = loadStore();
+      if (s.playFocus) { s.playFocus = false; saveStore(s); }
+    } catch (e) {}
+
+    // --- kop: statuschips uit de oude topbar erbij ---------------------
+    const oldTop = document.querySelector('.topbar');
+    const spacer = kop.querySelector('.ct-spacer');
+    if (oldTop) {
+      const status = document.createElement('div');
+      status.className = 'ct-status';
+      ['status', 'device-name', 'wait-badge', 'streak-chip', 'xp-chip'].forEach((id) => {
+        const el = byId(id) || oldTop.querySelector('.' + id);
+        if (el) status.appendChild(el);
+      });
+      if (spacer) kop.insertBefore(status, spacer.nextSibling);
+      else kop.appendChild(status);
+    }
+
+    // welk stuk staat er: hoort in de kop, niet in de transportrij
+    const songInfo = document.querySelector('.song-info');
+    if (songInfo && spacer) kop.insertBefore(songInfo, spacer.nextSibling);
+
+    // ☰ vouwt de menu's uit op een telefoon
+    const burger = document.createElement('button');
+    burger.className = 'ct-icon-btn';
+    burger.id = 'ct-burger';
+    burger.innerHTML = '☰';
+    burger.title = 'Menu';
+    burger.setAttribute('aria-expanded', 'false');
+    burger.onclick = (e) => {
+      e.stopPropagation();
+      const open = kop.classList.toggle('open');
+      burger.setAttribute('aria-expanded', String(open));
+    };
+    if (spacer) kop.insertBefore(burger, spacer.nextSibling);
+    else kop.appendChild(burger);
+
+    buildMorePopover(kop);
+
+    // --- dock: alles wat je tijdens het spelen bedient -----------------
+    const dock = document.createElement('div');
+    dock.id = 'dock';
+    [
+      document.querySelector('.progress-wrap'),
+      document.querySelector('.controls:not(.row2)'),
+      document.querySelector('.controls.row2'),
+      byId('sections-bar'),
+      document.querySelector('.stats'),
+    ].forEach((el) => moveInto(dock, el));
+    stage.parentNode.insertBefore(dock, stage.nextSibling);
+
+    // ⌃ vouwt de oefengereedschappen uit op een telefoon
+    const row1 = dock.querySelector('.controls:not(.row2)');
+    if (row1) {
+      const more = document.createElement('button');
+      more.id = 'dock-more';
+      more.innerHTML = '⌃';
+      more.title = 'Oefengereedschap tonen (wait mode, hand, loop, secties)';
+      more.setAttribute('aria-expanded', 'false');
+      more.onclick = () => {
+        const open = dock.classList.toggle('expanded');
+        more.innerHTML = open ? '⌄' : '⌃';
+        more.setAttribute('aria-expanded', String(open));
+      };
+      row1.appendChild(more);
+    }
+
+    // --- de rest zakt onder het dock ----------------------------------
+    ['.library', '#channels-panel', '#progressions', '#song-notes', '.ear-panel', '#stats-panel']
+      .forEach((sel) => {
+        const el = document.querySelector(sel);
+        if (el) document.body.appendChild(el);
+      });
+
+    return true;
+  }
+
+  function start() {
+    if (build()) return;
+    // de kop wordt async gebouwd; probeer het een paar keer
+    let tries = 0;
+    const t = setInterval(() => {
+      if (build() || ++tries > 20) clearInterval(t);
+    }, 250);
+  }
+
+  if (document.readyState === 'complete') setTimeout(start, 600);
+  else window.addEventListener('load', () => setTimeout(start, 600));
 })();
 
 </script>
