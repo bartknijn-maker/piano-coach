@@ -1,6 +1,6 @@
 # Piano Coach — Design-analyse + stappenplan
 
-> **Status per 16 augustus 2026: alle zes fases uitgevoerd in v0.87, plus zeven vervolgrondes** (15 commits, zie `git log`).
+> **Status per 16 augustus 2026: alle zes fases uitgevoerd in v0.87, plus acht vervolgrondes** (17 commits, zie `git log`).
 > Resultaat gemeten: chrome boven het speelveld 330px → 55px (desktop) en 995px → 51px (mobiel),
 > instrument krijgt 73% van het telefoonscherm, 0 knoppen onder 32px (44px op touch),
 > 0 tekst onder 11px, 0 van 74 tekstelementen onder 4,5:1 contrast, 0 console-errors.
@@ -20,6 +20,11 @@
 > (6) de zone onder het dock: achievement-muur van 42 chips naar vijf, marges voor alle panelen;
 > (7) meetlat gemeten, en daarbij bleek de eerste tik op een telefoon stil te blijven omdat de
 > toetsen pas op load+1000ms aan pointer-events hingen. Nu meteen.
+>
+> (8) de drie plekken die nog uit de pas liepen: de 53 modals (elke dialoog had een groene rand
+> terwijl groen nu 'muzikaal juist' betekent; negen eyebrow-klassen gebruikten groen als decoratie),
+> de repertoire-kaarten (`MIDI laden…` kapte af, `✓ Geladen` was groen terwijl dat een systeemstaat
+> is), en het welkomstscherm dat nog '75+ modes' beloofde.
 >
 > **Meetlat, gemeten:** tijd tot je eerste noot — terugkerend desktop 1,7s / 0 klikken,
 > terugkerend telefoon 0,9s / 1 tik, nieuw desktop 3,0s / 2 klikken. Doel was onder 10 seconden.
