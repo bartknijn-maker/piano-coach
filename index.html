@@ -28503,6 +28503,18 @@ ACHIEVEMENTS.push({
     });
   }
 
+  // Het klavier moet meteen speelbaar zijn. De rest van deze fase mag
+  // wachten op de layout, maar een tik in de eerste seconde mag niet stil
+  // blijven: dat is precies het moment waarop iemand het uitprobeert.
+  (function wireKeysNow() {
+    if (document.getElementById('piano')) { wirePlayableKeys(); return; }
+    let n = 0;
+    const iv = setInterval(() => {
+      if (document.getElementById('piano')) { wirePlayableKeys(); clearInterval(iv); }
+      if (++n > 40) clearInterval(iv);
+    }, 50);
+  })();
+
   function start() {
     wirePlayableKeys();
     addKbNav();
