@@ -4066,6 +4066,34 @@
     body.v87 #lib-more { display: inline-flex; width: 100%; margin-top: var(--sp-2); }
   }
 
+  /* ============================================================
+     v0.87 RONDE 6 — de zone onder het dock
+     Die was nooit ontworpen omdat hij verborgen zat. Nu is het de
+     plek waar je een stuk kiest, dus krijgt hij ritme en ademruimte.
+     ============================================================ */
+  body.v87 > #coach,
+  body.v87 > #goals-panel,
+  body.v87 > #achievements-bar,
+  body.v87 > .library,
+  body.v87 > #channels-panel,
+  body.v87 > #progressions,
+  body.v87 > #song-notes,
+  body.v87 > #stats-panel,
+  body.v87 > .footer {
+    margin: var(--sp-3) var(--sp-4);
+  }
+  body.v87 > #coach { margin-top: var(--sp-4); }
+  body.v87 > .footer { margin-bottom: var(--sp-6); }
+
+  /* 42 gelijke chips is dezelfde muur als de oude knoppenrij: laat zien wat
+     je hebt en de eerste drie die je nog kunt halen, de rest op verzoek.
+     De ~-keten telt de voorgaande vergrendelde chips, ongeacht volgorde. */
+  body.v87 .achievements-bar:not(.expanded)
+    .achievement.locked ~ .achievement.locked ~ .achievement.locked ~ .achievement.locked {
+    display: none;
+  }
+  body.v87 #ach-more { margin-left: auto; }
+
   /* -- wait mode: de toets die je moet spelen ----------------
      De oude doel-toets kromp met scaleY, wat met de nieuwe 3D-toetsen
      leest als een defect. Nu een warme gloed die pulseert in helderheid. */
@@ -28640,6 +28668,23 @@ ACHIEVEMENTS.push({
     });
   }
 
+  // Zelfde behandeling als het repertoire: wat je hebt plus de eerstvolgende
+  // drie, en de rest als je erom vraagt.
+  function limitAchievements() {
+    const bar = document.querySelector('.achievements-bar');
+    if (!bar || byId('ach-more')) return;
+    if (!bar.querySelector('.achievement')) return;   // nog niet gerenderd
+    const btn = document.createElement('button');
+    btn.id = 'ach-more';
+    const count = bar.querySelectorAll('.achievement').length;
+    btn.textContent = 'Toon alle ' + count;
+    btn.onclick = () => {
+      const open = bar.classList.toggle('expanded');
+      btn.textContent = open ? 'Toon minder' : 'Toon alle ' + count;
+    };
+    bar.appendChild(btn);
+  }
+
   function start() {
     splitSearchLabel();
     tuckWelcomeButton();
@@ -28647,12 +28692,13 @@ ACHIEVEMENTS.push({
     buildEmptyState();
     groupDockRow();
     limitLibrary();
+    limitAchievements();
     watchSong();
     watchPlayState();
     let n = 0;
     const iv = setInterval(() => {
       splitSearchLabel(); tuckWelcomeButton(); wrapSeparators();
-      groupDockRow(); limitLibrary();
+      groupDockRow(); limitLibrary(); limitAchievements();
       if (++n > 10) clearInterval(iv);
     }, 400);
   }
