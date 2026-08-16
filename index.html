@@ -26388,10 +26388,62 @@ showComposerDetail = function(c) {
 // v0.48 — REPERTOIRE MASTERY SYSTEM
 // ============================================================================
 // Per-song mastery: 0-5 stars based on accuracy × tempo × consistency
+// ---------------------------------------------------------------------------
+// v0.87 — brug tussen twee datamodellen
+// De mastery-modal (v0.48) leest store.recordings. Dat wordt pas sinds v0.46
+// geschreven, en alleen als je met noten speelt én daarna pauzeert. Wie
+// daarvoor al oefende heeft alles in store.repertoire staan: bestAccuracy
+// (0-100) plus lastPracticed. Zonder brug meldt de modal "geen stukken in je
+// repertoire" terwijl er stukken zijn, wat aantoonbaar onwaar is.
+// ---------------------------------------------------------------------------
+function repertoireEntries() {
+  const store = loadStore();
+  const out = [];
+  for (const [slug, data] of Object.entries(store.repertoire || {})) {
+    if (!data || typeof data !== 'object') continue;
+    const known = (typeof REPERTOIRE !== 'undefined')
+      ? REPERTOIRE.find(e => e.slug === slug) : null;
+    let name = (known && known.title) || data.name;
+    if (!name) name = slug.startsWith('scale-') ? 'Toonladder (oefening)' : slug;
+    out.push({ name, slug, data });
+  }
+  return out;
+}
+
+function repertoireDataFor(songName) {
+  return repertoireEntries().find(e => e.name === songName || e.slug === songName) || null;
+}
+
 function computeSongMastery(songName) {
   const store = loadStore();
   const recs = (store.recordings || {})[songName] || [];
-  if (recs.length === 0) return { stars: 0, accuracy: 0, tempoTier: 0, sessions: 0, lastPlayed: null };
+  if (recs.length === 0) {
+    // Geen opnames: val terug op wat het oefenen zelf heeft opgeslagen.
+    const entry = repertoireDataFor(songName);
+    const rawAcc = entry && entry.data.bestAccuracy != null ? Number(entry.data.bestAccuracy) : null;
+    const acc = rawAcc != null ? rawAcc / 100 : 0;             // repertoire telt 0-100
+    const parsed = entry && entry.data.lastPracticed ? Date.parse(entry.data.lastPracticed) : NaN;
+    const lastPlayed = isFinite(parsed) ? parsed : null;
+    if (!entry || (rawAcc == null && lastPlayed == null)) {
+      // avgRecent hoort erbij: zonder dat veld rendert de mastery-lijst
+      // letterlijk "undefined%" (viel niet op toen de lijst altijd leeg was)
+      return {
+        stars: 0, rhythmStars: 0, accuracy: 0, avgRecent: 0, consistency: 0,
+        bestTiming: null, tempoTier: 0, tempoPct: 100, sessions: 0, lastPlayed: null,
+      };
+    }
+    // Zonder opnames kennen we accuracy wel, maar sessies en timing niet.
+    // Dan is drie sterren het plafond: meer beweren dan we gemeten hebben
+    // maakt de sterren waardeloos.
+    let stars = 1;
+    if (acc >= 0.5) stars = 2;
+    if (acc >= 0.7) stars = 3;
+    return {
+      stars, rhythmStars: stars, accuracy: acc, avgRecent: acc, consistency: 0,
+      bestTiming: null, tempoTier: 0, tempoPct: 100, sessions: 0, lastPlayed,
+      fromRepertoire: true,
+    };
+  }
 
   const recent = recs.slice(-7); // last 7 sessions
   const accuracies = recent.map(r => r.accuracy || 0);
@@ -26447,6 +26499,8 @@ function getAllSongs() {
   for (const name of Object.keys(store.songPrefs || {})) songNames.add(name);
   // From songStats
   for (const name of Object.keys(store.songStats || {})) songNames.add(name);
+  // v0.87 — uit het repertoire zelf: dat is wat het oefenen echt schrijft
+  for (const e of repertoireEntries()) songNames.add(e.name);
   // From SONG_LIBRARY if defined
   if (typeof SONG_LIBRARY !== 'undefined' && Array.isArray(SONG_LIBRARY)) {
     SONG_LIBRARY.forEach(s => songNames.add(s.name || s.title));
@@ -26455,6 +26509,16 @@ function getAllSongs() {
 }
 
 function songComposer(songName) {
+  // v0.87 — eerst de tabel die het antwoord gewoon weet. De fuzzy match
+  // hieronder vergeleek de eerste tien tekens van een stuk, waardoor
+  // "Prelude in E minor" van Chopin op "Prelude in C" van Bach viel.
+  if (typeof REPERTOIRE !== 'undefined') {
+    const known = REPERTOIRE.find(e => e.title === songName || e.slug === songName);
+    if (known && known.composer) return known.composer;
+  }
+  const entry = typeof repertoireDataFor === 'function' ? repertoireDataFor(songName) : null;
+  if (entry && entry.slug.startsWith('scale-')) return 'Oefening';
+
   // Best-effort composer lookup
   if (typeof SONG_LIBRARY !== 'undefined' && Array.isArray(SONG_LIBRARY)) {
     const s = SONG_LIBRARY.find(s => (s.name || s.title) === songName);
@@ -26526,6 +26590,13 @@ function renderRepertoire() {
     const rs = m.rhythmStars || 0; // v0.84 #1 — tempo-onafhankelijke ritme-mastery
     const rhythmStars = '<span style="color:#a78bfa">' + '♪'.repeat(rs) + '</span><span style="color:rgba(255,255,255,0.15)">' + '♪'.repeat(5 - rs) + '</span>';
     const tempoSuggest = suggestTempoProgression(song.name);
+    // v0.87 — niet doen alsof: een stuk dat je nooit speelde heeft geen
+    // oefentempo van 100%, en een stuk zonder opnames heeft geen 0 sessies
+    // maar een onbekend aantal.
+    const played = !!(m.lastPlayed || m.sessions);
+    const sessionTxt = m.sessions
+      ? `${m.sessions} sessies`
+      : (played ? 'sessies onbekend' : 'nog niet geoefend');
 
     const item = document.createElement('div');
     item.className = 'rep-item' + (isStale ? ' stale' : '') + (m.sessions === 0 ? ' unplayed' : '');
@@ -26536,10 +26607,10 @@ function renderRepertoire() {
       </div>
       <div class="rep-stars" title="Polish-sterren (tempo-afhankelijk)&#10;♪ = ritme-mastery (elk tempo)">${filledStars}${emptyStars}<br><span style="font-size:12px;letter-spacing:1px;" title="Ritme-mastery — elk tempo telt">${rhythmStars}</span></div>
       <div class="rep-tempo">
-        ${m.tempoPct}%
-        <div class="rep-tempo-bar"><div class="rep-tempo-fill" style="width:${m.tempoPct}%"></div></div>
+        ${played ? `${m.tempoPct}%` : '<span style="opacity:0.45">—</span>'}
+        <div class="rep-tempo-bar">${played ? `<div class="rep-tempo-fill" style="width:${m.tempoPct}%"></div>` : ''}</div>
       </div>
-      <div class="rep-last">${m.sessions} sessies<br>${lastTxt}</div>
+      <div class="rep-last">${sessionTxt}<br>${lastTxt}</div>
     `;
     item.onclick = () => {
       // Try to load the song
