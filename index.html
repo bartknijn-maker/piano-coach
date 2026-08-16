@@ -36,7 +36,16 @@
     --line: #384560;        /* scheiding, rustig */
     --line-strong: #63769c; /* rand van iets dat je kunt bedienen (3:1) */
 
-    /* -- betekeniskleuren ---------------------------------- */
+    /* -- twee kleurrollen, streng gescheiden (v0.87 ronde 2) --
+       --brand  = "doe dit" en "dit staat aan": knoppen, toggles, voortgang.
+       --accent = "muzikaal juist": hitlijn, geraakte noten, actieve toets.
+       Zolang die twee niet door elkaar lopen, weet groen altijd iets. */
+    --brand: #5b5ee8;        /* wit hierop = 4,99:1, net boven AA */
+    --brand-hover: #4b4fd6;  /* 6,2:1 */
+    --brand-2: #a78bfa;      /* alleen decoratief, nooit met witte tekst */
+    --brand-dim: #312e81;
+    --brand-ink: #ffffff;
+
     --accent: #4ade80;
     --accent-dim: #166534;
     --accent-ink: #052e16;  /* tekst op een accent-vlak */
@@ -1166,6 +1175,10 @@
     --text-3: #b8b8b8;
     --line: #4a4a4a;
     --line-strong: #8a8a8a;
+    --brand: #4cc2ff;
+    --brand-2: #8ad8ff;
+    --brand-dim: #003a5c;
+    --brand-ink: #001018;
     --accent: #00ff7f;
     --accent-ink: #00170a;
     --ok: #00ff7f;
@@ -3970,6 +3983,56 @@
   }
   #session-summary .ss-list { display: grid; gap: 4px; margin-top: var(--sp-3); }
   #session-summary .ss-item { font-size: 13px; color: var(--text-2); }
+
+  /* ============================================================
+     v0.87 RONDE 2 — één kleur voor acties, groen alleen muzikaal
+     ============================================================ */
+  body.v87 button.primary {
+    background: var(--brand); border-color: var(--brand); color: var(--brand-ink);
+  }
+  body.v87 button.primary:hover { background: var(--brand-hover); border-color: var(--brand-hover); }
+  /* het verloop liep naar een lila waarop witte tekst 2,2:1 haalt */
+  body.v87 .compact-topbar .ct-primary {
+    background: var(--brand);
+    box-shadow: 0 2px 10px rgba(91, 94, 232, 0.45);
+  }
+  body.v87 .compact-topbar .ct-primary:hover { background: var(--brand-hover); }
+  /* de kop moet op één rij passen: het XP-getal is de eerste die wijkt */
+  @media (max-width: 1600px) {
+    body.v87 .compact-topbar #xp-amount { display: none; }
+    body.v87 .compact-topbar .ct-spacer { min-width: 0; }
+  }
+  body.v87 button.toggle.on {
+    background: var(--brand-dim); border-color: var(--brand); color: var(--brand-ink);
+  }
+  /* de coach-knop in het oude widget gebruikte groen als actie-kleur */
+  body.v87 .coach button.primary { background: var(--brand); color: var(--brand-ink); }
+  body.v87 .coach button.primary:hover { background: var(--brand-hover); }
+  /* groen blijft van de muziek: hitlijn, geraakte noot, actieve toets */
+
+  /* -- kop op één rij: alleen wat je op dit scherm nodig hebt -- */
+  @media (max-width: 1600px) {
+    body.v87 .compact-topbar #song-meta,
+    body.v87 .compact-topbar .ct-sep { display: none; }
+    body.v87 .compact-topbar .ct-search .ct-search-label,
+    body.v87 .compact-topbar .ct-search kbd { display: none; }
+  }
+  body.v87 .ct-status #status {
+    max-width: none; padding: 5px 8px;
+  }
+  body.v87 .ct-status #status.error #status-text,
+  body.v87 .ct-status #status.connected #status-text { display: none; }
+  body.v87 .ct-status #status .dot { width: 9px; height: 9px; }
+
+  /* -- dock: cijfers pas als er iets te tellen valt ---------- */
+  body.v87 #dock .stats { display: none; }
+  body.v87.is-playing #dock .stats,
+  body.v87.has-played #dock .stats { display: flex; }
+  /* de tijd stond boven op de maatnummers */
+  body.v87 #dock .progress-time {
+    background: rgba(10, 13, 18, 0.85); border-radius: var(--r-sm);
+    padding: 1px 6px; left: 6px;
+  }
 
   /* ============================================================
      v0.87 FASE 5 — touch-first en toegankelijkheid
@@ -28323,6 +28386,87 @@ ACHIEVEMENTS.push({
 
   if (document.readyState === 'complete') setTimeout(start, 1000);
   else window.addEventListener('load', () => setTimeout(start, 1000));
+})();
+
+// =========================================================================
+// v0.87 RONDE 2 — kop op één rij, dock zwijgt tot er iets te tellen valt
+// =========================================================================
+(function () {
+  const byId = (id) => document.getElementById(id);
+
+  // De zoekknop verliest zijn label zodra de kop krap wordt, niet zijn functie.
+  function splitSearchLabel() {
+    const btn = document.querySelector('.compact-topbar .ct-search');
+    if (!btn || btn.dataset.split) return;
+    const kbd = btn.querySelector('kbd');
+    btn.dataset.split = '1';
+    btn.innerHTML = '<span aria-hidden="true">🔍</span><span class="ct-search-label">Zoek</span>' +
+      (kbd ? kbd.outerHTML : '');
+    if (!btn.getAttribute('aria-label')) btn.setAttribute('aria-label', 'Zoeken (Ctrl+K)');
+  }
+
+  // Het welkomstscherm is een zeldzame actie; die hoort niet in de eerste rij.
+  function tuckWelcomeButton() {
+    const pop = byId('ct-more-pop');
+    if (!pop || pop.dataset.tucked) return;
+    const btns = [...document.querySelectorAll('.compact-topbar .ct-icon-btn')];
+    const wh = btns.find((b) => b.textContent.trim() === '?');
+    if (!wh) return;
+    pop.dataset.tucked = '1';
+    const row = document.createElement('div');
+    row.className = 'ct-more-row';
+    const label = document.createElement('span');
+    label.className = 'ct-more-label';
+    label.textContent = 'Uitleg';
+    row.appendChild(label);
+    row.appendChild(wh);
+    pop.appendChild(row);
+  }
+
+  // Cijfers verschijnen als er iets te tellen valt, en verdwijnen niet meer
+  // zodra je gespeeld hebt.
+  function watchPlayState() {
+    setInterval(() => {
+      try {
+        if (typeof state === 'undefined' || !state) return;
+        document.body.classList.toggle('is-playing', !!state.playing);
+        const s = state.stats || {};
+        if ((s.hits || 0) + (s.misses || 0) + (s.wrong || 0) > 0) {
+          document.body.classList.add('has-played');
+        }
+      } catch (e) {}
+    }, 400);
+  }
+
+  // De scheidingstekens tussen titel en metadata zijn losse tekstknopen.
+  // Zonder wrapper blijft er een zwevende punt staan zodra de meta wegvalt.
+  function wrapSeparators() {
+    const info = document.querySelector('.song-info');
+    if (!info || info.dataset.sep) return;
+    info.dataset.sep = '1';
+    [...info.childNodes].forEach((n) => {
+      if (n.nodeType !== 3 || !n.textContent.includes('·')) return;
+      const span = document.createElement('span');
+      span.className = 'ct-sep';
+      span.textContent = n.textContent;
+      n.replaceWith(span);
+    });
+  }
+
+  function start() {
+    splitSearchLabel();
+    tuckWelcomeButton();
+    wrapSeparators();
+    watchPlayState();
+    let n = 0;
+    const iv = setInterval(() => {
+      splitSearchLabel(); tuckWelcomeButton(); wrapSeparators();
+      if (++n > 10) clearInterval(iv);
+    }, 400);
+  }
+
+  if (document.readyState === 'complete') setTimeout(start, 1100);
+  else window.addEventListener('load', () => setTimeout(start, 1100));
 })();
 
 </script>
