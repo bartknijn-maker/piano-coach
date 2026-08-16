@@ -3833,6 +3833,63 @@
   /* -- 4. wat de kop en het dock overbodig maken ------------- */
   body.v87 > h1, body.v87 > p.sub, body.v87 .topbar, body.v87 #v86-bar { display: none; }
 
+  /* ============================================================
+     v0.87 FASE 2 — het instrument als held
+     ============================================================ */
+  body.v87 .stage-wrap { min-height: 0; }
+  body.v87 #fall-canvas {
+    background: linear-gradient(to bottom, #070a0e 0%, #0d131c 62%, #121a26 100%);
+    border-radius: 0;
+  }
+  /* de hitlijn is de horizon van het speelveld */
+  body.v87 .hit-line {
+    height: 2px;
+    background: linear-gradient(90deg,
+      rgba(74, 222, 128, 0.35), var(--accent) 12%, var(--accent) 88%, rgba(74, 222, 128, 0.35));
+    box-shadow: 0 0 18px rgba(74, 222, 128, 0.55), 0 0 5px rgba(74, 222, 128, 0.9);
+  }
+
+  /* -- klavier: echte toetsen in plaats van rechthoeken ------ */
+  body.v87 .key { transition: background 60ms, transform 60ms, box-shadow 60ms; }
+  body.v87 .key.white {
+    background: linear-gradient(180deg, #fdfdfc 0%, #f5f3ef 70%, #e3dfd7 100%);
+    border: 1px solid #24272c; border-top: none;
+    border-radius: 0 0 5px 5px;
+    box-shadow: inset 0 -7px 11px -7px rgba(0, 0, 0, 0.5),
+                inset -2px 0 0 rgba(0, 0, 0, 0.045);
+  }
+  body.v87 .key.white.active {
+    background: linear-gradient(180deg, #a7f3c6 0%, var(--white-key-active) 100%);
+  }
+  body.v87 .key.white.wrong {
+    background: linear-gradient(180deg, #fecaca 0%, var(--white-key-wrong) 100%);
+  }
+  body.v87 .key.black {
+    background: linear-gradient(180deg, #45494f 0%, #1d1f23 52%, #0a0b0d 100%);
+    border: 1px solid #000; border-top: none;
+    border-radius: 0 0 4px 4px;
+    box-shadow: 0 4px 7px rgba(0, 0, 0, 0.65),
+                inset 0 2px 0 rgba(255, 255, 255, 0.11);
+  }
+  body.v87 .key.black.active {
+    background: linear-gradient(180deg, #34d399 0%, var(--black-key-active) 100%);
+  }
+  body.v87 .key.black.wrong {
+    background: linear-gradient(180deg, #ef4444 0%, var(--black-key-wrong) 100%);
+  }
+  /* ingedrukt zakt de toets, zoals een echte */
+  body.v87 .key.active, body.v87 .key.wrong {
+    transform: translateY(2px);
+    box-shadow: inset 0 3px 6px rgba(0, 0, 0, 0.3);
+  }
+  /* 88 labels is ruis: alleen de C's oriënteren je */
+  body.v87 .key .key-label { display: none; }
+  body.v87 .key.is-c .key-label { display: block; }
+  @media (prefers-reduced-motion: reduce) {
+    body.v87 .key { transition: background 60ms; }
+    body.v87 .key.active, body.v87 .key.wrong { transform: none; }
+  }
+
   /* -- 5. mobiel: kop en dock klappen in ---------------------
      Op een telefoon telt alleen: wat speel ik, en speel/pauze.
      De rest zit achter ☰ (kop) en ⌃ (dock), één tik weg.        */
@@ -6315,7 +6372,7 @@ const NOTE_NAMES = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 
 const BLACK_SET = new Set([1, 3, 6, 8, 10]);
 const WHITE_WIDTH = 40, BLACK_WIDTH = 26;
 const KEYBOARD_WIDTH = 2080;
-const FALL_HEIGHT = 400;
+let FALL_HEIGHT = 400;   // v0.87 fase 2: groeit mee met het scherm, zie fitStage()
 const LOOKAHEAD = 3.0;
 const HIT_WINDOW = 0.18;
 const CHORD_WINDOW = 0.04;   // notes within 40ms = same chord
@@ -7251,8 +7308,90 @@ function roundRect(x, y, w, h, r) {
   ctx.closePath();
 }
 
+// ---------------------------------------------------------------------------
+// v0.87 fase 2 — het speelveld leesbaar maken
+// Drie lagen onder de noten: banen per toets, maatstrepen, landingszone.
+// ---------------------------------------------------------------------------
+
+// Baan per toets. Zwarte toetsen krijgen een donkere kolom, elke C een lijn.
+// Zo rust een blok zichtbaar op zijn toets in plaats van in het niets te zweven.
+function drawLanes() {
+  for (let m = FIRST_MIDI; m <= LAST_MIDI; m++) {
+    const pos = keyX[m];
+    if (!pos || !isBlack(m)) continue;
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.38)';
+    ctx.fillRect(pos.x - BLACK_WIDTH / 2, 0, BLACK_WIDTH, FALL_HEIGHT);
+  }
+  ctx.fillStyle = 'rgba(255, 255, 255, 0.07)';
+  for (let m = FIRST_MIDI; m <= LAST_MIDI; m++) {
+    if (m % 12 !== 0) continue;              // elke C
+    const pos = keyX[m];
+    if (pos) ctx.fillRect(Math.round(pos.x - WHITE_WIDTH / 2), 0, 1, FALL_HEIGHT);
+  }
+}
+
+function barGrid() {
+  const bpm = (state.song && state.song.bpm) || state.bpm || 120;
+  const ts = (state.song && state.song.timeSignature) || [4, 4];
+  const beatSec = 60 / bpm;
+  const barSec = beatSec * (ts[0] || 4);
+  return { beatSec, barSec };
+}
+
+// Maatstrepen met maatnummer. Elke 4e maat zwaarder, zodat je frasen ziet.
+function drawBars() {
+  if (!state.song) return;
+  const { barSec } = barGrid();
+  if (!isFinite(barSec) || barSec <= 0.05) return;
+  const start = Math.max(0, Math.floor(state.songTime / barSec));
+  ctx.font = '600 12px system-ui';
+  ctx.textBaseline = 'bottom';
+  ctx.textAlign = 'left';
+  for (let b = start; b * barSec <= state.songTime + LOOKAHEAD; b++) {
+    const t = b * barSec;
+    if (t < state.songTime - 0.2) continue;
+    const y = Math.round(FALL_HEIGHT * (1 - (t - state.songTime) / LOOKAHEAD));
+    const major = b % 4 === 0;
+    ctx.fillStyle = major ? 'rgba(255, 255, 255, 0.16)' : 'rgba(255, 255, 255, 0.06)';
+    ctx.fillRect(0, y, KEYBOARD_WIDTH, major ? 2 : 1);
+    if (!major) continue;
+    // nummer herhalen zodat het leesbaar blijft waar je ook scrollt
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.30)';
+    for (let x = 10; x < KEYBOARD_WIDTH; x += 520) ctx.fillText(String(b + 1), x, y - 4);
+  }
+}
+
+// Landingszone: waar de noot de toets raakt, ademend op de beat.
+function drawHitZone() {
+  const H = 64;
+  const { beatSec } = barGrid();
+  let pulse = 0;
+  if (state.playing && isFinite(beatSec) && beatSec > 0.05) {
+    const phase = (state.songTime % beatSec) / beatSec;
+    pulse = Math.max(0, 1 - phase * 2.6);
+  }
+  const g = ctx.createLinearGradient(0, FALL_HEIGHT - H, 0, FALL_HEIGHT);
+  g.addColorStop(0, 'rgba(74, 222, 128, 0)');
+  g.addColorStop(1, 'rgba(74, 222, 128, ' + (0.05 + 0.11 * pulse).toFixed(3) + ')');
+  ctx.fillStyle = g;
+  ctx.fillRect(0, FALL_HEIGHT - H, KEYBOARD_WIDTH, H);
+}
+
+// Kleurpaar per notestaat: boven donker, onder helder, zodat de aanslagrand
+// (de onderkant, die als eerste de lijn raakt) het meeste licht krijgt.
+const NOTE_COLORS = {
+  hit:      ['#34d399', '#059669'],
+  miss:     ['#fca5a5', '#b91c1c'],
+  R:        ['#93c5fd', '#3b82f6'],
+  L:        ['#fcd34d', '#d97706'],
+  inactive: ['rgba(130,140,160,0.30)', 'rgba(90,100,120,0.30)'],
+};
+
 function draw() {
   ctx.clearRect(0, 0, KEYBOARD_WIDTH, FALL_HEIGHT);
+  drawLanes();
+  drawBars();
+  drawHitZone();
 
   const t0 = state.songTime - 0.3;
   const t1 = state.songTime + LOOKAHEAD;
@@ -7274,26 +7413,32 @@ function draw() {
       const w = pos.w, x = pos.x - w / 2, y = yEnd;
       const h = Math.max(yStart - yEnd, 4);
 
-      if (!active) {
-        ctx.fillStyle = 'rgba(110, 120, 140, 0.35)';
-      } else if (state.hitMap[n.id] === 'hit') {
-        ctx.fillStyle = '#22c55e';
-      } else if (state.hitMap[n.id] === 'miss') {
-        ctx.fillStyle = '#dc2626';
-      } else {
-        ctx.fillStyle = n.hand === 'L' ? '#f59e0b' : '#60a5fa';
+      const key = !active ? 'inactive'
+        : state.hitMap[n.id] === 'hit' ? 'hit'
+        : state.hitMap[n.id] === 'miss' ? 'miss'
+        : (n.hand === 'L' ? 'L' : 'R');
+      const [top, bottom] = NOTE_COLORS[key];
+
+      // hoe dichter bij de lijn, hoe helderder: je oog wordt naar beneden getrokken
+      const nearness = Math.max(0, Math.min(1, (yStart - (FALL_HEIGHT - 140)) / 140));
+      if (active && !state.hitMap[n.id] && nearness > 0) {
+        ctx.save();
+        ctx.shadowColor = bottom;
+        ctx.shadowBlur = 10 * nearness;
       }
 
-      roundRect(x, y, w, h, 4);
+      const grad = ctx.createLinearGradient(0, y, 0, y + h);
+      grad.addColorStop(0, top);
+      grad.addColorStop(1, bottom);
+      ctx.fillStyle = grad;
+      roundRect(x, y, w, h, Math.min(5, h / 2));
       ctx.fill();
+      if (active && !state.hitMap[n.id] && nearness > 0) ctx.restore();
 
-      if (active && !state.hitMap[n.id] && yStart > 0 && yStart < FALL_HEIGHT) {
-        ctx.strokeStyle = 'rgba(255,255,255,0.4)';
-        ctx.lineWidth = 1;
-        ctx.beginPath();
-        ctx.moveTo(x, yStart);
-        ctx.lineTo(x + w, yStart);
-        ctx.stroke();
+      // aanslagrand: de onderkant raakt de lijn als eerste
+      if (active && !state.hitMap[n.id] && yStart > 0 && yStart < FALL_HEIGHT && h > 5) {
+        ctx.fillStyle = 'rgba(255, 255, 255, ' + (0.35 + 0.45 * nearness).toFixed(2) + ')';
+        ctx.fillRect(x + 1, yStart - 2, w - 2, 2);
       }
 
       // Note name label inside block
@@ -27463,6 +27608,45 @@ ACHIEVEMENTS.push({
 
   if (document.readyState === 'complete') setTimeout(start, 600);
   else window.addEventListener('load', () => setTimeout(start, 600));
+})();
+
+// =========================================================================
+// v0.87 FASE 2 — speelveld schaalt mee, C-toetsen gemarkeerd
+// =========================================================================
+(function () {
+  // Het speelveld was vast 400px hoog. Nu vult het de ruimte die de layout
+  // overhoudt, zodat je op een groot scherm meer vooruit ziet.
+  function fitStage() {
+    const wrap = document.querySelector('.stage-wrap');
+    const canvas = document.getElementById('fall-canvas');
+    const pianoEl = document.getElementById('piano');
+    if (!wrap || !canvas || !pianoEl) return;
+    const pianoH = pianoEl.getBoundingClientRect().height || 200;
+    const target = Math.max(280, Math.min(760, Math.round(wrap.clientHeight - pianoH)));
+    if (Math.abs(canvas.height - target) < 8) return;   // hysterese tegen pendelen
+    canvas.height = target;
+    try { FALL_HEIGHT = target; } catch (e) {}
+  }
+
+  function markCKeys() {
+    document.querySelectorAll('.piano .key').forEach((el) => {
+      const m = Number(el.dataset.midi);
+      if (Number.isFinite(m) && m % 12 === 0) el.classList.add('is-c');
+    });
+  }
+
+  function start() {
+    markCKeys();
+    fitStage();
+    let t;
+    window.addEventListener('resize', () => { clearTimeout(t); t = setTimeout(fitStage, 120); });
+    // de layout van fase 1 landt async; nog een paar keer nameten
+    let n = 0;
+    const iv = setInterval(() => { fitStage(); if (++n > 8) clearInterval(iv); }, 300);
+  }
+
+  if (document.readyState === 'complete') setTimeout(start, 800);
+  else window.addEventListener('load', () => setTimeout(start, 800));
 })();
 
 </script>
