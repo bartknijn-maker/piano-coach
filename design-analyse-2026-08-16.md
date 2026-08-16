@@ -1,12 +1,20 @@
 # Piano Coach — Design-analyse + stappenplan
 
-> **Status per 16 augustus 2026: alle zes fases zijn uitgevoerd in v0.87** (7 commits, zie `git log`).
-> Resultaat gemeten: chrome boven het speelveld 330px → 103px (desktop) en 995px → 51px (mobiel),
+> **Status per 16 augustus 2026: alle zes fases uitgevoerd in v0.87, plus vier vervolgrondes** (11 commits, zie `git log`).
+> Resultaat gemeten: chrome boven het speelveld 330px → 55px (desktop) en 995px → 51px (mobiel),
 > instrument krijgt 73% van het telefoonscherm, 0 knoppen onder 32px (44px op touch),
 > 0 tekst onder 11px, 0 van 74 tekstelementen onder 4,5:1 contrast, 0 console-errors.
 > Klavier op het scherm is nu overal speelbaar. Voor/na-beelden: `design-review-2026-08-16/na-*.png`.
 > Twee regressies onderweg gevonden en gefixt: circulaire tokens (witte pagina) en thema's die
 > niet meer wisselden. Details staan per fase in de commit-berichten.
+>
+> **Vervolgrondes na het plan:** (2) het accent-conflict uit B2 echt opgelost met één regel —
+> `--brand` = doe dit, `--accent` = muzikaal juist — plus kop van 99 naar 55px en een dock dat
+> zwijgt tot er iets te tellen valt; (3) de eerste-keer-ervaring: twee welkomstschermen na elkaar
+> teruggebracht tot één, de dashboardpanelen onder het dock (chrome bij een lege installatie ging
+> van ~830px naar 55px), en een lege staat die de volgende stap zelf aanbiedt; (4) de doel-toets in
+> wait mode en toegankelijkheid: 56 modals met `role`/`aria-labelledby`, focus-trap, `aria-live`
+> op de sessierail. Prestatie tijdens spelen gemeten: 60fps, 0,12ms per frame.
 
 **Datum:** 16 augustus 2026 · **Versie bekeken:** v0.86 · **Rol:** senior product designer
 **Methode:** headless Chromium op `http://localhost:3457` met de echte backup (`piano-coach-backup-2026-08-16.json`) in localStorage, op 1440×900 en 390×844. Plus statische analyse van de 3.640 CSS-regels en de DOM.
