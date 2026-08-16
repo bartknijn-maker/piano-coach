@@ -4094,6 +4094,46 @@
   }
   body.v87 #ach-more { margin-left: auto; }
 
+  /* ============================================================
+     v0.87 RONDE 8 — de 53 modals in lijn met de kleurregel
+     Elke dialoog had een groene rand. Groen betekent nu iets
+     (muzikaal juist), dus een dialoog krijgt gewoon een lijn.
+     ============================================================ */
+  body.v87 .modal-overlay > * {
+    border-color: var(--line-strong);
+    box-shadow: var(--elev-3);
+  }
+  body.v87 .modal .modal-sub { font-size: var(--fs-body); color: var(--text-2); }
+  body.v87 .modal-actions { justify-content: flex-end; }
+
+  /* eyebrows zijn structuur, geen juistheid: die worden rustig */
+  body.v87 .review-lesson-tag,
+  body.v87 .composer-era,
+  body.v87 .composer-detail-section-title,
+  body.v87 .warmup-step-num,
+  body.v87 .etude-card-cat,
+  body.v87 .follow-label,
+  body.v87 .tour-tooltip-step,
+  body.v87 .persona-section-title,
+  body.v87 .ins-mantra-label {
+    color: var(--text-3);
+  }
+  /* een kaart die je aanwijst of gekozen hebt, is interactie */
+  body.v87 .composer-card:hover,
+  body.v87 .etude-card:hover,
+  body.v87 .cal-day-card.today,
+  body.v87 .song-card.active {
+    border-color: var(--brand);
+  }
+  body.v87 .song-card.active { background: rgba(91, 94, 232, 0.09); }
+
+  /* -- repertoire-kaart: de status is een staat, geen prijs -- */
+  body.v87 .song-status { flex: none; white-space: nowrap; }
+  body.v87 .song-stars { min-width: 0; overflow: hidden; }
+  body.v87 .song-status.cached { color: var(--text-3); font-weight: 400; }
+  body.v87 .song-status.best { color: var(--accent); }   /* accuracy is wel muzikaal */
+  body.v87 .song-status.to-load { color: var(--brand-2); }
+
   /* -- wait mode: de toets die je moet spelen ----------------
      De oude doel-toets kromp met scaleY, wat met de nieuwe 3D-toetsen
      leest als een defect. Nu een warme gloed die pulseert in helderheid. */
@@ -6088,7 +6128,7 @@ create policy "Anyone can update"
     <div class="wh-header">
       <div class="wh-logo">🎹</div>
       <div class="wh-title">Piano Coach</div>
-      <div class="wh-subtitle" id="wh-subtitle">Jouw complete piano-leerplatform — 75+ modes voor theorie, oefenen, performance en groei</div>
+      <div class="wh-subtitle" id="wh-subtitle">Je piano, je stukken, en een sessie die je door de dag heen helpt.</div>
     </div>
     <div class="wh-wisdom" id="wh-wisdom" style="display:none;">
       <div class="wh-wisdom-label">💭 Wijsheid vandaag</div>
@@ -6096,7 +6136,7 @@ create policy "Anyone can update"
       <div class="wh-wisdom-author" id="wh-wisdom-author">—</div>
     </div>
     <div class="wh-quick-start">
-      <div class="wh-quick-start-text" id="wh-mantra-text">Begin meteen met je dagelijkse sessie — Coach kiest automatisch de juiste oefeningen op basis van je niveau en data.</div>
+      <div class="wh-quick-start-text" id="wh-mantra-text">Eén knop stelt je sessie samen en loopt hem daarna met je af. Je hoeft niets te kiezen.</div>
       <button class="wh-quick-start-btn" id="wh-coach-btn">🧭 Start vandaag's sessie</button>
     </div>
     <div class="wh-tiles">
@@ -7224,7 +7264,7 @@ function renderLibrary() {
     const bestAcc = data?.bestAccuracy;
     const statusHTML = cached
       ? (bestAcc ? `<span class="song-status best">Best ${bestAcc}%</span>` : `<span class="song-status cached">✓ Geladen</span>`)
-      : `<span class="song-status">MIDI laden…</span>`;
+      : `<span class="song-status to-load">↓ Laden</span>`;
 
     const warnings = cached ? assessSongQuality(entry.slug) : null;
     const warnHTML = warnings && warnings.length
@@ -19849,7 +19889,7 @@ function renderEtudesList() {
   const container = document.getElementById('etudes-list');
   container.innerHTML = '';
   document.getElementById('etude-player').style.display = 'none';
-  document.getElementById('etudes-list-actions').style.display = 'block';
+  document.getElementById('etudes-list-actions').style.display = 'flex';
   for (const etude of ETUDES) {
     const stats = loadEtudeStats(etude.id);
     const mastered = stats.bestTempo >= etude.targetTempo;
@@ -20022,7 +20062,7 @@ document.getElementById('etudes-close').onclick = () => {
 document.getElementById('etude-back').onclick = () => {
   etudeState.active = false;
   document.getElementById('etudes-list').style.display = 'grid';
-  document.getElementById('etudes-list-actions').style.display = 'block';
+  document.getElementById('etudes-list-actions').style.display = 'flex';
   document.getElementById('etude-player').style.display = 'none';
   renderEtudesList();
 };
@@ -23913,7 +23953,7 @@ function showWelcomeHub(isFirstTime = false) {
     const songsPlayed = Object.keys(store.recordings || {}).length;
     const statusEl = document.getElementById('wh-status');
     if (isFirstTime) {
-      statusEl.innerHTML = `<strong>Eerste keer hier?</strong> Klik <em>Geef me een tour</em> voor een korte 2-minuten rondleiding, of duik gewoon in via <em>Start vandaag's sessie</em>.`;
+      statusEl.innerHTML = `<strong>Eerste keer hier?</strong> Je hebt geen MIDI-piano nodig om te beginnen: tik gewoon op de toetsen op het scherm. <em>Geef me een tour</em> duurt twee minuten.`;
     } else {
       statusEl.innerHTML = `<strong>Je voortgang:</strong>
         <div class="wh-status-grid">
