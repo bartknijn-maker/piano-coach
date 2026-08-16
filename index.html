@@ -3890,6 +3890,26 @@
     body.v87 .key.active, body.v87 .key.wrong { transform: none; }
   }
 
+  /* ============================================================
+     v0.87 FASE 3 — feedback op het moment dat je speelt
+     ============================================================ */
+  /* een fout straft niet: de toets schrikt even, hij knippert niet rood */
+  @keyframes key-shake {
+    0%, 100% { transform: translateY(2px) translateX(0); }
+    30%      { transform: translateY(2px) translateX(-2px); }
+    70%      { transform: translateY(2px) translateX(2px); }
+  }
+  body.v87 .key.wrong { animation: key-shake 180ms ease-in-out; }
+  /* wat je nu kunt doen, staat naast de knop die het doet */
+  body.v87 #dock #v86-note {
+    font-size: var(--fs-label); color: var(--text-3);
+    margin-left: var(--sp-2);
+  }
+  body.v87 #dock #v86-note:empty { display: none; }
+  @media (prefers-reduced-motion: reduce) {
+    body.v87 .key.wrong { animation: none; }
+  }
+
   /* -- 5. mobiel: kop en dock klappen in ---------------------
      Op een telefoon telt alleen: wat speel ik, en speel/pauze.
      De rest zit achter ☰ (kop) en ⌃ (dock), één tik weg.        */
@@ -7236,6 +7256,8 @@ function tick() {
         if (state.songTime > n.time + HIT_WINDOW) {
           state.hitMap[n.id] = 'miss';
           state.stats.misses++;
+          feedback.combo = 0;
+          feedback.barDirty = true;
           updateStats();
         }
       }
@@ -7377,6 +7399,109 @@ function drawHitZone() {
   ctx.fillRect(0, FALL_HEIGHT - H, KEYBOARD_WIDTH, H);
 }
 
+// ---------------------------------------------------------------------------
+// v0.87 fase 3 — de feedback-laag
+// De app was stil op het moment dat je speelt. Elk raak, elke schone maat en
+// elke combo krijgt nu een kort visueel antwoord op de plek waar je kijkt.
+// ---------------------------------------------------------------------------
+const REDUCED_MOTION = window.matchMedia
+  && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+const fx = [];              // { type, midi, t0, ms }
+const feedback = {
+  combo: 0,
+  bestCombo: 0,
+  barIndex: -1,
+  barDirty: false,          // is er in deze maat iets misgegaan?
+};
+
+function pushFx(type, midi, ms) {
+  if (REDUCED_MOTION && type !== 'bar') return;
+  fx.push({ type, midi, t0: performance.now(), ms: ms || 340 });
+  if (fx.length > 40) fx.splice(0, fx.length - 40);
+}
+
+// korte toon voor combo-mijlpalen; klinkt als een bevestiging, geen alarm
+function feedbackTone(midi, gain) {
+  try {
+    const actx = ensureAudio();
+    scheduleSynthNote(actx, midi, actx.currentTime, 0.5, gain == null ? 0.10 : gain);
+  } catch (e) {}
+}
+
+function registerHit(midi) {
+  pushFx('hit', midi);
+  feedback.combo++;
+  if (feedback.combo > feedback.bestCombo) feedback.bestCombo = feedback.combo;
+  if (feedback.combo === 8 || feedback.combo === 16 || feedback.combo === 32) {
+    pushFx('combo', midi, 700);
+    const step = feedback.combo === 8 ? 76 : feedback.combo === 16 ? 79 : 84;
+    feedbackTone(step, 0.09);
+  }
+}
+
+function registerMistake(midi) {
+  pushFx('wrong', midi, 220);
+  feedback.combo = 0;
+  feedback.barDirty = true;
+}
+
+// Maatwissel: was de vorige maat schoon, dan licht de maatstreep op.
+function checkBarBoundary() {
+  if (!state.song || !state.playing) return;
+  const { barSec } = barGrid();
+  if (!isFinite(barSec) || barSec <= 0.05) return;
+  const idx = Math.floor(state.songTime / barSec);
+  if (idx === feedback.barIndex) return;
+  const hadBar = feedback.barIndex >= 0;
+  if (hadBar && !feedback.barDirty && state.stats.hits > 0) pushFx('bar', null, 520);
+  feedback.barIndex = idx;
+  feedback.barDirty = false;
+}
+
+// Effecten tekenen op de landingslijn: daar kijk je toch al.
+function drawFx() {
+  const now = performance.now();
+  for (let i = fx.length - 1; i >= 0; i--) {
+    const f = fx[i];
+    const p = (now - f.t0) / f.ms;
+    if (p >= 1) { fx.splice(i, 1); continue; }
+    const fade = 1 - p;
+
+    if (f.type === 'bar') {
+      ctx.fillStyle = 'rgba(74, 222, 128, ' + (0.30 * fade).toFixed(3) + ')';
+      ctx.fillRect(0, FALL_HEIGHT - 3, KEYBOARD_WIDTH, 3);
+      continue;
+    }
+    if (f.type === 'combo') {
+      const grad = ctx.createLinearGradient(0, FALL_HEIGHT - 26, 0, FALL_HEIGHT);
+      grad.addColorStop(0, 'rgba(250, 204, 21, 0)');
+      grad.addColorStop(1, 'rgba(250, 204, 21, ' + (0.42 * fade).toFixed(3) + ')');
+      ctx.fillStyle = grad;
+      ctx.fillRect(0, FALL_HEIGHT - 26, KEYBOARD_WIDTH, 26);
+      continue;
+    }
+
+    const pos = keyX[f.midi];
+    if (!pos) continue;
+    if (f.type === 'hit') {
+      // ring die uitdijt vanaf de toets
+      const r = 6 + 34 * p;
+      ctx.strokeStyle = 'rgba(74, 222, 128, ' + (0.75 * fade).toFixed(3) + ')';
+      ctx.lineWidth = 2.5 * fade + 0.5;
+      ctx.beginPath();
+      ctx.arc(pos.x, FALL_HEIGHT - 2, r, Math.PI, 2 * Math.PI);
+      ctx.stroke();
+      // veeg op de lijn zelf
+      ctx.fillStyle = 'rgba(190, 255, 215, ' + (0.85 * fade).toFixed(3) + ')';
+      ctx.fillRect(pos.x - pos.w / 2, FALL_HEIGHT - 4, pos.w, 4);
+    } else if (f.type === 'wrong') {
+      ctx.fillStyle = 'rgba(248, 113, 113, ' + (0.55 * fade).toFixed(3) + ')';
+      ctx.fillRect(pos.x - pos.w / 2, FALL_HEIGHT - 4, pos.w, 4);
+    }
+  }
+}
+
 // Kleurpaar per notestaat: boven donker, onder helder, zodat de aanslagrand
 // (de onderkant, die als eerste de lijn raakt) het meeste licht krijgt.
 const NOTE_COLORS = {
@@ -7453,6 +7578,9 @@ function draw() {
       }
     }
   }
+
+  checkBarBoundary();
+  drawFx();
 }
 
 // ===========================================================================
@@ -7479,9 +7607,11 @@ function onKeyDown(midi, velocity) {
     if (target) {
       state.hitMap[target.id] = 'hit';
       state.stats.hits++;
+      registerHit(midi);
     } else {
       state.stats.wrong++;
       flashKey(midi, 'wrong');
+      registerMistake(midi);
     }
     updateStats();
     return;
@@ -7498,9 +7628,11 @@ function onKeyDown(midi, velocity) {
   if (best) {
     state.hitMap[best.id] = 'hit';
     state.stats.hits++;
+    registerHit(midi);
   } else {
     state.stats.wrong++;
     flashKey(midi, 'wrong');
+    registerMistake(midi);
   }
   updateStats();
 }
@@ -23624,10 +23756,13 @@ function endTour() {
 function initUxOverhaul() {
   hideOriginalFeatureButtons();
   buildCompactTopbar();
-  // Show welcome hub if first-time visit
+  // Welkomstscherm alleen als er nog geen geschiedenis is. Wie al speelt,
+  // wil de app zien, niet eerst een deur openen. (v0.87 fase 3)
   try {
     const store = loadStore();
-    if (!store.welcomeHubDismissed && !store.tourCompleted) {
+    const hasHistory = !!(store.lastSession || store.xp > 0 || store.streak
+      || Object.keys(store.repertoire || {}).length);
+    if (!store.welcomeHubDismissed && !store.tourCompleted && !hasHistory) {
       setTimeout(() => showWelcomeHub(true), 800);
     }
   } catch {}
@@ -27571,8 +27706,12 @@ ACHIEVEMENTS.push({
     ].forEach((el) => moveInto(dock, el));
     stage.parentNode.insertBefore(dock, stage.nextSibling);
 
-    // ⌃ vouwt de oefengereedschappen uit op een telefoon
+    // "Hervat: X. Spatie = start." hoort naast de knop die het doet
     const row1 = dock.querySelector('.controls:not(.row2)');
+    const resume = byId('v86-note');
+    if (row1 && resume) row1.appendChild(resume);
+
+    // ⌃ vouwt de oefengereedschappen uit op een telefoon
     if (row1) {
       const more = document.createElement('button');
       more.id = 'dock-more';
@@ -27647,6 +27786,40 @@ ACHIEVEMENTS.push({
 
   if (document.readyState === 'complete') setTimeout(start, 800);
   else window.addEventListener('load', () => setTimeout(start, 800));
+})();
+
+// =========================================================================
+// v0.87 FASE 3 — meldingen wachten op hun beurt
+// De app praatte als je niets deed en zweeg als je speelde. Omgedraaid:
+// maximaal één melding tegelijk, en niets tijdens het spelen.
+// =========================================================================
+(function () {
+  const original = window.toast;
+  if (typeof original !== 'function') return;
+
+  const queue = [];
+  let showing = false;
+
+  function playing() {
+    try { return !!(typeof state !== 'undefined' && state && state.playing); }
+    catch (e) { return false; }
+  }
+
+  function flush() {
+    if (showing || !queue.length || playing()) return;
+    showing = true;
+    const item = queue.shift();
+    original.apply(null, item);
+    setTimeout(() => { showing = false; flush(); }, 4400);
+  }
+
+  window.toast = function (title, body, level) {
+    if (level === 'error') { original(title, body, level); return; }  // fouten wachten niet
+    queue.push([title, body, level]);
+    if (queue.length > 4) queue.shift();   // oude tips zijn geen nieuws meer
+    flush();
+  };
+  setInterval(flush, 1500);
 })();
 
 </script>
