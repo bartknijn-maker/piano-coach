@@ -19,3 +19,7 @@ node_modules/
 *.bak
 *.swp
 *.orig
+
+# Persoonlijk, blijft lokaal (repo is publiek)
+piano-coach-backup-*.json
+product-analyse-*.md
