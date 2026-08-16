@@ -1,5 +1,13 @@
 # Piano Coach — Design-analyse + stappenplan
 
+> **Status per 16 augustus 2026: alle zes fases zijn uitgevoerd in v0.87** (7 commits, zie `git log`).
+> Resultaat gemeten: chrome boven het speelveld 330px → 103px (desktop) en 995px → 51px (mobiel),
+> instrument krijgt 73% van het telefoonscherm, 0 knoppen onder 32px (44px op touch),
+> 0 tekst onder 11px, 0 van 74 tekstelementen onder 4,5:1 contrast, 0 console-errors.
+> Klavier op het scherm is nu overal speelbaar. Voor/na-beelden: `design-review-2026-08-16/na-*.png`.
+> Twee regressies onderweg gevonden en gefixt: circulaire tokens (witte pagina) en thema's die
+> niet meer wisselden. Details staan per fase in de commit-berichten.
+
 **Datum:** 16 augustus 2026 · **Versie bekeken:** v0.86 · **Rol:** senior product designer
 **Methode:** headless Chromium op `http://localhost:3457` met de echte backup (`piano-coach-backup-2026-08-16.json`) in localStorage, op 1440×900 en 390×844. Plus statische analyse van de 3.640 CSS-regels en de DOM.
 **Screenshots:** [`design-review-2026-08-16/`](design-review-2026-08-16/)
