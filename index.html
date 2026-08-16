@@ -4034,6 +4034,27 @@
     padding: 1px 6px; left: 6px;
   }
 
+  /* -- wait mode: de toets die je moet spelen ----------------
+     De oude doel-toets kromp met scaleY, wat met de nieuwe 3D-toetsen
+     leest als een defect. Nu een warme gloed die pulseert in helderheid. */
+  body.v87 .key.white.target {
+    background: linear-gradient(180deg, #fde68a 0%, #fcd34d 70%, #f0b429 100%);
+    box-shadow: 0 0 22px rgba(251, 191, 36, 0.75), inset 0 -6px 10px -6px rgba(160, 100, 0, 0.5);
+    animation: target-glow 1.1s ease-in-out infinite;
+  }
+  body.v87 .key.black.target {
+    background: linear-gradient(180deg, #f3b73f 0%, #d97706 60%, #a35404 100%);
+    box-shadow: 0 0 22px rgba(251, 191, 36, 0.8), inset 0 2px 0 rgba(255, 255, 255, 0.25);
+    animation: target-glow 1.1s ease-in-out infinite;
+  }
+  @keyframes target-glow {
+    0%, 100% { filter: brightness(1); }
+    50%      { filter: brightness(1.18); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    body.v87 .key.white.target, body.v87 .key.black.target { animation: none; }
+  }
+
   /* streak, level en minuten staan in de kop; de zwevende kopie erbij
      dekte alleen het dock af */
   body.v87 .sticky-widget { display: none; }
@@ -28053,6 +28074,8 @@ ACHIEVEMENTS.push({
     if (rail) return rail;
     rail = document.createElement('div');
     rail.id = 'session-rail';
+    rail.setAttribute('role', 'status');
+    rail.setAttribute('aria-live', 'polite');
     rail.innerHTML =
       '<span class="sr-dots"></span>' +
       '<span class="sr-label"></span>' +
@@ -28394,16 +28417,36 @@ ACHIEVEMENTS.push({
     });
   }
 
+  // Elke modal krijgt de rol die hij al speelt, zodat een schermlezer weet
+  // dat de pagina eronder even niet meedoet.
+  function labelModals() {
+    document.querySelectorAll('.modal-overlay').forEach((ov) => {
+      if (ov.dataset.a11y) return;
+      ov.dataset.a11y = '1';
+      ov.setAttribute('role', 'dialog');
+      ov.setAttribute('aria-modal', 'true');
+      const h = ov.querySelector('h2, h3');
+      if (h) {
+        if (!h.id) h.id = (ov.id || 'modal') + '-title';
+        ov.setAttribute('aria-labelledby', h.id);
+      }
+    });
+  }
+
   function start() {
     wirePlayableKeys();
     addKbNav();
     buildMidiHelp();
     watchMidiStatus();
     labelIconButtons();
+    labelModals();
     trapFocus();
     setTimeout(centerOnSong, 400);
     let n = 0;
-    const iv = setInterval(() => { addKbNav(); labelIconButtons(); if (++n > 10) clearInterval(iv); }, 400);
+    const iv = setInterval(() => {
+      addKbNav(); labelIconButtons(); labelModals();
+      if (++n > 10) clearInterval(iv);
+    }, 400);
   }
 
   if (document.readyState === 'complete') setTimeout(start, 1000);
