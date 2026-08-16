@@ -26,6 +26,14 @@
 > de repertoire-kaarten (`MIDI laden…` kapte af, `✓ Geladen` was groen terwijl dat een systeemstaat
 > is), en het welkomstscherm dat nog '75+ modes' beloofde.
 >
+> **Bug gevonden bij het opruimen (niet ontwerp, wel onwaar):** Repertoire Mastery meldde "Geen
+> stukken in je repertoire" terwijl er vier in staan. Twee parallelle datamodellen: het oefenen
+> schrijft `store.repertoire` (sinds v0.6), de auto-analyse `store.recordings` (pas sinds v0.46).
+> De modal las alleen het tweede. Gebrugd, plafond op 3 sterren zonder opnamedata. Legde drie
+> latente rendering-fouten bloot: `undefined%`, Chopins Prelude op naam van Bach (fuzzy match op
+> de eerste tien tekens van een titel), en een volle tempobalk bij nooit gespeelde stukken.
+> De andere acht features op datzelfde model hebben wel een eerlijke lege staat.
+>
 > **Meetlat, gemeten:** tijd tot je eerste noot — terugkerend desktop 1,7s / 0 klikken,
 > terugkerend telefoon 0,9s / 1 tik, nieuw desktop 3,0s / 2 klikken. Doel was onder 10 seconden.
 
