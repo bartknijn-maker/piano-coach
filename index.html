@@ -4034,6 +4034,38 @@
     padding: 1px 6px; left: 6px;
   }
 
+  /* ============================================================
+     v0.87 RONDE 5 — de oefenrij krijgt groepen
+     Dertien knoppen op een rij lezen als een lijst zonder inhoud.
+     Vier groepen met een naam lezen als gereedschap.
+     ============================================================ */
+  body.v87 #dock .dock-group {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 3px 8px 3px 6px; border-radius: var(--r-sm);
+    background: rgba(255, 255, 255, 0.035);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+  }
+  body.v87 #dock .dock-group-label {
+    font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--text-3); padding-right: 2px;
+  }
+  body.v87 #dock .controls.row2 .sep { display: none; }
+  body.v87 #dock .controls.row2 > label { display: none; }
+  @media (max-width: 760px) {
+    body.v87 #dock .dock-group { background: none; border: none; padding: 0; }
+    body.v87 #dock .dock-group-label { display: none; }
+  }
+
+  /* -- repertoire op een telefoon: niet 37 kaarten in één keer -- */
+  @media (max-width: 760px) {
+    body.v87 .library-grid { grid-template-columns: 1fr; }
+    body.v87 .library:not(.expanded) .library-grid > .song-card:nth-child(n+7) { display: none; }
+  }
+  body.v87 #lib-more { display: none; }
+  @media (max-width: 760px) {
+    body.v87 #lib-more { display: inline-flex; width: 100%; margin-top: var(--sp-2); }
+  }
+
   /* -- wait mode: de toets die je moet spelen ----------------
      De oude doel-toets kromp met scaleY, wat met de nieuwe 3D-toetsen
      leest als een defect. Nu een warme gloed die pulseert in helderheid. */
@@ -23894,12 +23926,14 @@ document.querySelectorAll('.wh-tile').forEach(tile => {
 });
 
 // ----- Onboarding Tour -----
+// v0.87: de tour beschreef de oude layout (drie navigatielagen). Nu volgt hij
+// de drie banden: kop, speelveld, dock.
 const TOUR_STEPS = [
-  { target: '.ct-primary', title: 'Start vandaag\'s sessie', text: 'Smart Coach kiest automatisch de juiste 25-30 min sessie op basis van je niveau en wat je nog moet oefenen. Dit is je dagelijkse start-knop.', step: 1 },
-  { target: '.compact-topbar .ct-cat:nth-child(2)', title: 'Categorieën', text: '7 dropdowns groeperen 60+ features: Practice, Learn, Perform, Analyze, Plan, Tools, Settings. Klik om te openen.', step: 2 },
-  { target: '.ct-search', title: 'Quick Search ⌘K', text: 'Druk altijd ⌘K (Mac) of Ctrl+K (Windows) om elke feature in 2 seconden te vinden. Type bv. "improv" of "self".', step: 3 },
-  { target: '#btn-play', title: 'Player controls', text: 'De normale player-controls (▶/⏸, wait mode, secties, loops) blijven hier zichtbaar. Dit is je piano-player.', step: 4 },
-  { target: null, title: '🎉 Je bent klaar', text: 'Begin met "Start vandaag\'s sessie" voor je eerste sessie. AI Tutor (💬 in Learn) helpt als je vragen hebt.', step: 5 },
+  { target: '.stage-wrap', title: 'Dit is het instrument', text: 'Het speelveld vult je scherm. Elke toets heeft een eigen baan, de lijnen zijn maten, en de groene lijn onderaan is waar een noot geraakt moet worden. Tik of klik gerust op de toetsen: je speelt ook zonder MIDI-piano.', step: 1 },
+  { target: '#dock', title: 'Alles wat je tijdens het spelen bedient', text: 'Afspelen, tempo, hand, loops en secties zitten samen onderaan. De cijfers verschijnen zodra je speelt. Op een telefoon klapt de rest weg achter de knop met het pijltje.', step: 2 },
+  { target: '.ct-primary', title: 'Eén knop om te beginnen', text: 'Start sessie stelt je dagsessie samen en loopt hem daarna met je af: een balk bovenin houdt bij bij welke stap je bent, ook als er een venster openstaat.', step: 3 },
+  { target: '.ct-search', title: 'Alles is doorzoekbaar', text: 'Druk Ctrl+K (of ⌘K) en typ wat je zoekt: "improv", "self review", "toonladder". Sneller dan zoeken in de menu\'s ernaast.', step: 4 },
+  { target: null, title: '🎉 Je bent klaar', text: 'Kies een stuk onder het klavier, of druk op Start sessie. Alles wat je nu niet ziet zit in de menu\'s, en niets daarvan hoef je te weten om te beginnen.', step: 5 },
 ];
 let tourStep = 0;
 
@@ -27864,7 +27898,15 @@ ACHIEVEMENTS.push({
 
     document.body.classList.add('v87');
     // Speelmodus was een aparte modus; in v0.87 is het gewoon de layout.
+    // autoResume() zet hem na het laden van het laatste stuk opnieuw aan,
+    // en dan verdwijnt onder andere het repertoire onder het dock. Dus
+    // bewaken in plaats van eenmalig verwijderen.
     document.body.classList.remove('play-focus');
+    new MutationObserver(() => {
+      if (document.body.classList.contains('play-focus')) {
+        document.body.classList.remove('play-focus');
+      }
+    }).observe(document.body, { attributes: true, attributeFilter: ['class'] });
     try {
       const s = loadStore();
       if (s.playFocus) { s.playFocus = false; saveStore(s); }
@@ -28552,16 +28594,65 @@ ACHIEVEMENTS.push({
     }, 500);
   }
 
+  // Dertien knoppen op een rij zijn een lijst; vier benoemde groepen zijn
+  // gereedschap. De knoppen zelf blijven ongemoeid, ze krijgen een huis.
+  const DOCK_GROUPS = [
+    { label: 'Oefenen', ids: ['btn-wait', 'hand-all', 'hand-R', 'hand-L'] },
+    { label: 'Loop',    ids: ['btn-loop-start', 'btn-loop-end', 'btn-loop-toggle', 'btn-loop-clear', 'loop-range'] },
+    { label: 'Secties', ids: ['btn-section-save', 'btn-section-split', 'btn-section-smart'] },
+    { label: 'Opnemen', ids: ['btn-recorder', 'btn-recorder-replay', 'btn-recorder-save', 'btn-recorder-import'] },
+    { label: 'Weergave', ids: ['btn-tv'] },
+  ];
+
+  function groupDockRow() {
+    const row = document.querySelector('#dock .controls.row2');
+    if (!row || row.dataset.grouped) return;
+    const present = DOCK_GROUPS.filter((g) => g.ids.some((id) => byId(id)));
+    if (present.length < 3) return;   // layout nog niet klaar
+    row.dataset.grouped = '1';
+    for (const g of present) {
+      const box = document.createElement('div');
+      box.className = 'dock-group';
+      const lab = document.createElement('span');
+      lab.className = 'dock-group-label';
+      lab.textContent = g.label;
+      box.appendChild(lab);
+      g.ids.forEach((id) => { const el = byId(id); if (el) box.appendChild(el); });
+      row.appendChild(box);
+    }
+  }
+
+  // Op een telefoon is een lijst van 37 kaarten geen keuze maar een muur.
+  function limitLibrary() {
+    const lib = document.querySelector('.library');
+    if (!lib || byId('lib-more')) return;
+    const btn = document.createElement('button');
+    btn.id = 'lib-more';
+    btn.textContent = 'Toon alle stukken';
+    btn.onclick = () => {
+      const open = lib.classList.toggle('expanded');
+      btn.textContent = open ? 'Toon minder' : 'Toon alle stukken';
+    };
+    lib.appendChild(btn);
+    // zoeken betekent dat je iets specifieks wilt: dan geen limiet
+    byId('library-search')?.addEventListener('input', (e) => {
+      lib.classList.toggle('expanded', e.target.value.trim().length > 0);
+    });
+  }
+
   function start() {
     splitSearchLabel();
     tuckWelcomeButton();
     wrapSeparators();
     buildEmptyState();
+    groupDockRow();
+    limitLibrary();
     watchSong();
     watchPlayState();
     let n = 0;
     const iv = setInterval(() => {
       splitSearchLabel(); tuckWelcomeButton(); wrapSeparators();
+      groupDockRow(); limitLibrary();
       if (++n > 10) clearInterval(iv);
     }, 400);
   }
