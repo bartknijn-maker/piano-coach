@@ -75,7 +75,12 @@
     /* -- besturing ----------------------------------------- */
     --control-h: 36px;      /* wordt 44px op touch, zie @media pointer:coarse */
 
-    /* -- legacy aliassen: oude namen blijven werken -------- */
+  }
+  /* Legacy aliassen: de oude namen blijven werken.
+     Deze moeten OOK op body staan: var() wordt op de declaratie-plek
+     ingevuld, dus een thema dat --surface-* op body herdefinieert bereikt
+     een alias die alleen op :root staat niet. */
+  :root, body {
     --bg: var(--surface-0);
     --panel: var(--surface-1);
     --panel-2: var(--surface-2);
