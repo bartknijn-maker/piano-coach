@@ -7438,6 +7438,7 @@ function pause() {
   state.playing = false;
   state.waiting = false;
   cancelScheduledNodes();
+  try { duetStop(); } catch {}
   flushDailyPractice();
   // Section accuracy on pause (if active section)
   const total = state.stats.hits + state.stats.misses + state.stats.wrong;
@@ -7552,6 +7553,7 @@ function tick() {
     if (advanceTime) {
       state.waiting = false;
       state.songTime += dt;
+      duetTick(state.songTime);
 
       // End of song
       if (state.songTime >= state.song.duration) {
@@ -8088,6 +8090,72 @@ if (!navigator.requestMIDIAccess) {
   navigator.requestMIDIAccess({ sysex: false })
     .then(setupMIDI)
     .catch(err => setStatus('error', 'MIDI geweigerd: ' + err.message));
+}
+
+// ===========================================================================
+// DUET-BEGELEIDING — v0.88 F2: de piano speelt de andere hand mee
+// ===========================================================================
+// Tijdens hand-isolatie stuurt de app de niet-actieve hand als MIDI naar de
+// piano: de begeleiding klinkt uit de CLP zelf, met dezelfde vleugelklank als
+// je eigen spel. Zonder verbonden piano-output gebeurt er niets.
+const DUET_VELOCITY = 64;     // iets zachter dan je eigen spel
+const DUET_CATCHUP_S = 0.25;  // noten die nét gepasseerd zijn klinken alsnog
+
+const Duet = window.Duet = {
+  on: true,
+  fired: new Set(),     // note-ids die deze doorloop al geklonken hebben
+  sounding: new Set(),  // midi-nummers die nu klinken, voor nette note-offs
+  timers: new Set(),
+  lastTime: 0,
+  announced: false,
+};
+
+function duetActive() {
+  return Duet.on && state.playing && !state.listenMode &&
+         state.handMode !== 'all' && !!Midi.output && !!state.song;
+}
+
+function duetStop() {
+  for (const t of Duet.timers) clearTimeout(t);
+  Duet.timers.clear();
+  for (const m of Duet.sounding) Midi.noteOff(m);
+  Duet.sounding.clear();
+  Midi.allNotesOff();
+  Duet.fired.clear();
+}
+
+function duetTick(t) {
+  if (!duetActive()) {
+    if (Duet.sounding.size || Duet.timers.size) duetStop();
+    Duet.lastTime = t;
+    return;
+  }
+  // Terugspoelen of loop-wrap: alles uit en de doorloop begint schoon.
+  if (t < Duet.lastTime - 0.05) duetStop();
+  Duet.lastTime = t;
+
+  for (const n of state.song.notes) {
+    if (isActiveHand(n) || Duet.fired.has(n.id)) continue;
+    if (n.time > t || n.time < t - DUET_CATCHUP_S) continue;
+    Duet.fired.add(n.id);
+    Midi.noteOn(n.midi, DUET_VELOCITY);
+    Duet.sounding.add(n.midi);
+    const offT = setTimeout(() => {
+      Duet.timers.delete(offT);
+      Midi.noteOff(n.midi);
+      Duet.sounding.delete(n.midi);
+    }, Math.max(80, (n.duration / state.tempo) * 1000));
+    Duet.timers.add(offT);
+  }
+
+  if (!Duet.announced) {
+    Duet.announced = true;
+    try {
+      window.toast('🎹 Duet', 'De piano speelt je ' +
+        (state.handMode === 'right' ? 'linker' : 'rechter') +
+        'hand mee. Speel jij de andere.', 'info');
+    } catch {}
+  }
 }
 
 // ===========================================================================
