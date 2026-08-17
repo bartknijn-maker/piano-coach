@@ -24287,16 +24287,9 @@ function endTour() {
 function initUxOverhaul() {
   hideOriginalFeatureButtons();
   buildCompactTopbar();
-  // Welkomstscherm alleen als er nog geen geschiedenis is. Wie al speelt,
-  // wil de app zien, niet eerst een deur openen. (v0.87 fase 3)
-  try {
-    const store = loadStore();
-    const hasHistory = !!(store.lastSession || store.xp > 0 || store.streak
-      || Object.keys(store.repertoire || {}).length);
-    if (!store.welcomeHubDismissed && !store.tourCompleted && !hasHistory) {
-      setTimeout(() => showWelcomeHub(true), 800);
-    }
-  } catch {}
+  // v0.89 fase 1: het welkomstscherm opent zichzelf nooit meer — het podium
+  // is de voordeur, ook op een leeg profiel of nieuw apparaat. De hub blijft
+  // bereikbaar via het menu.
 }
 
 // Run after DOM is ready and most buttons exist
@@ -27861,6 +27854,12 @@ ACHIEVEMENTS.push({
     return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
   }
   function notify(title, body, level) {
+    // v0.89: geen automatische kaarten over het podium heen — die informatie
+    // staat dan al inline (v86-note) of op het podium zelf.
+    try {
+      const p = document.getElementById('podium');
+      if (p && !p.classList.contains('hidden')) return;
+    } catch (e) {}
     try { if (typeof window.toast === 'function') window.toast(title, body, level || 'info'); } catch (e) {}
   }
 
@@ -28773,6 +28772,9 @@ ACHIEVEMENTS.push({
     const card = byId('midi-help');
     if (!status || !card) return;
     const check = () => {
+      // v0.89: het podium heeft een eigen MIDI-diagnose met retry; deze
+      // kaart alleen nog als het podium er niet is (test/screenshot-modus).
+      if (document.getElementById('podium')) { card.classList.remove('show'); return; }
       const failed = status.classList.contains('error');
       card.classList.toggle('show', failed && !card.dataset.dismissed);
     };
