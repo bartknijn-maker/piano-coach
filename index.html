@@ -7949,8 +7949,21 @@ function onKeyDown(midi, velocity) {
   updateStats();
 }
 
+// Loslaten: toets dooft. Een foute noot mag nog even rood blijven staan,
+// anders is de feedback bij een korte tik te kort om te zien.
+function onKeyUp(midi) {
+  const el = keyEls[midi];
+  if (!el) return;
+  clearTimeout(state.flashTimers[midi]);
+  if (el.classList.contains('wrong')) {
+    state.flashTimers[midi] = setTimeout(() => el.classList.remove('active', 'wrong'), KEY_FLASH_MS);
+    return;
+  }
+  el.classList.remove('active');
+}
+
 // ===========================================================================
-// MIDI ACCESS
+// MIDI ACCESS — v0.88 MIDI-brug (CLP-725)
 // ===========================================================================
 const statusEl = document.getElementById('status');
 const statusText = document.getElementById('status-text');
@@ -7961,17 +7974,110 @@ function setStatus(s, text, device) {
   statusText.textContent = text;
   deviceName.textContent = device || '';
 }
+
+// De brug onthoudt de verbinding en de output-poort (daarlangs speelt de
+// duet-begeleiding straks uit de speakers van de piano zelf) en telt vrij
+// spel op de piano als oefentijd, ook zonder stuk of play-knop.
+const MIDI_GAP_MS = 30000;    // stilte langer dan dit telt niet als oefenen
+const MIDI_FLUSH_MS = 10000;  // hoe vaak de sessielog naar localStorage gaat
+
+const Midi = window.Midi = {
+  access: null,
+  output: null,
+  connected: false,
+  deviceName: '',
+  sustain: false,
+  activeNotes: new Set(),
+  lastNoteAt: 0,
+  sessionNotes: 0,
+  _pendSec: 0,
+  _pendNotes: 0,
+  _lastFlush: 0,
+  send(bytes) { try { if (this.output) this.output.send(bytes); } catch {} },
+  noteOn(midi, vel) { this.send([0x90, midi & 0x7f, Math.max(1, Math.min(127, vel | 0))]); },
+  noteOff(midi) { this.send([0x80, midi & 0x7f, 0]); },
+  allNotesOff() { this.send([0xb0, 123, 0]); },
+  simulate(data) { handleMIDIMessage({ data }); }, // voor tests zonder piano
+};
+
+function trackMidiPractice(now) {
+  const prev = Midi.lastNoteAt;
+  Midi.lastNoteAt = now;
+  Midi.sessionNotes++;
+  Midi._pendNotes++;
+  if (prev && now - prev < MIDI_GAP_MS) {
+    const dt = (now - prev) / 1000;
+    Midi._pendSec += dt;
+    // Vrij spel telt mee voor dagtotaal + streak; tijdens play telt de
+    // game-loop de tijd al, dus dan hier niet nog een keer.
+    if (!state.playing) state.todayPracticeSeconds += dt;
+  }
+  if (now - Midi._lastFlush > MIDI_FLUSH_MS) flushMidiSession(now);
+}
+
+function flushMidiSession(now) {
+  Midi._lastFlush = now || Date.now();
+  if (Midi._pendSec < 0.5 && Midi._pendNotes < 1) return;
+  try {
+    const store = loadStore();
+    const v88 = store.v88 = store.v88 || {};
+    const days = v88.midiDays = v88.midiDays || {};
+    const tk = todayKey();
+    const d = days[tk] = days[tk] || { seconds: 0, notes: 0 };
+    d.seconds = Math.round((d.seconds + Midi._pendSec) * 10) / 10;
+    d.notes += Midi._pendNotes;
+    saveStore(store);
+  } catch {}
+  Midi._pendSec = 0;
+  Midi._pendNotes = 0;
+  try { flushDailyPractice(); updateStreakDisplay(); } catch {}
+}
+window.addEventListener('pagehide', () => flushMidiSession());
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'hidden') flushMidiSession();
+});
+
+// Zolang een toets fysiek ingedrukt blijft, blijft hij op het scherm
+// opgelicht: de flash-timer van onKeyDown wordt geannuleerd, onKeyUp dooft.
+function holdKeyVisual(midi) {
+  clearTimeout(state.flashTimers[midi]);
+}
+
 function handleMIDIMessage(e) {
   const [status, note, velocity] = e.data;
   const cmd = status & 0xf0;
-  if (cmd === 0x90 && velocity > 0) onKeyDown(note, velocity);
+  if (cmd === 0x90 && velocity > 0) {
+    Midi.activeNotes.add(note);
+    trackMidiPractice(Date.now());
+    onKeyDown(note, velocity);
+    holdKeyVisual(note);
+  } else if (cmd === 0x80 || (cmd === 0x90 && velocity === 0)) {
+    Midi.activeNotes.delete(note);
+    onKeyUp(note);
+  } else if (cmd === 0xb0 && note === 64) {
+    Midi.sustain = velocity >= 64;
+  }
 }
+
 function setupMIDI(access) {
+  Midi.access = access;
   const refresh = () => {
     const inputs = Array.from(access.inputs.values());
-    if (inputs.length === 0) { setStatus('error', 'Geen MIDI'); return; }
-    setStatus('connected', 'MIDI verbonden', inputs.map(i => i.name).join(', '));
-    for (const i of inputs) i.onmidimessage = handleMIDIMessage;
+    const outputs = Array.from(access.outputs.values());
+    Midi.output = outputs.find(o => /clp|clavinova|yamaha/i.test(o.name || '')) || outputs[0] || null;
+    Midi.connected = inputs.length > 0;
+    Midi.deviceName = inputs.map(i => i.name).join(', ');
+    if (!Midi.connected) {
+      setStatus('error', 'Geen MIDI');
+    } else {
+      setStatus('connected', 'Piano verbonden', Midi.deviceName);
+      for (const i of inputs) i.onmidimessage = handleMIDIMessage;
+    }
+    try {
+      document.dispatchEvent(new CustomEvent('midi:change', {
+        detail: { connected: Midi.connected, name: Midi.deviceName },
+      }));
+    } catch {}
   };
   refresh();
   access.onstatechange = refresh;
