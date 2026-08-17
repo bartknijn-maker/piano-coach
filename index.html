@@ -7440,9 +7440,11 @@ function pause() {
   cancelScheduledNodes();
   try { duetStop(); } catch {}
   flushDailyPractice();
-  // Section accuracy on pause (if active section)
+  try { if (window.ConcertRun) window.ConcertRun.onPause(); } catch {}
+  // Section accuracy on pause (if active section) — niet tijdens een
+  // concertrun, die is meetvrij.
   const total = state.stats.hits + state.stats.misses + state.stats.wrong;
-  if (total >= 5 && state.activeSectionId) {
+  if (total >= 5 && state.activeSectionId && !state.concertRun) {
     const acc = Math.round(100 * state.stats.hits / total);
     updateSongSectionAcc(state.activeSectionId, acc);
     renderSectionsBar();
@@ -7559,7 +7561,7 @@ function tick() {
       if (state.songTime >= state.song.duration) {
         state.songTime = state.song.duration;
         const total = state.stats.hits + state.stats.misses + state.stats.wrong;
-        if (total > 0) saveAccuracy(Math.round(100 * state.stats.hits / total));
+        if (total > 0 && !state.concertRun) saveAccuracy(Math.round(100 * state.stats.hits / total));
         pause();
       }
     }
@@ -29002,6 +29004,464 @@ ACHIEVEMENTS.push({
 
   if (document.readyState === 'complete') setTimeout(start, 1100);
   else window.addEventListener('load', () => setTimeout(start, 1100));
+})();
+
+// =========================================================================
+// v0.88 — HET PODIUM
+// F4 startscherm (één stuk, drie knoppen, werkplaats achter één klik)
+// F3 concertrun: meetvrij doorspelen + microfoon-opname (IndexedDB)
+// F5 mama-week: wekelijks fragment, deadline zondag, .ics + aankondiging
+// F6 bouw-gate: eerst spelen, dan bouwen
+// =========================================================================
+(function () {
+  'use strict';
+  const byId = (id) => document.getElementById(id);
+  const PIECE = { slug: 'nuvole-bianche', title: 'Nuvole Bianche', composer: 'Ludovico Einaudi' };
+  const DREAM = { title: 'Clair de Lune', composer: 'Debussy' };
+  const SESSION_MIN_S = 300;     // 5 minuten telt als sessie, zelfde lat als de streak
+  const SESSIONS_PER_WEEK = 3;
+
+  function note(a, b, c) { try { window.toast(a, b, c); } catch (e) {} }
+  function safeStore() { try { return loadStore(); } catch (e) { return {}; } }
+  function saveTo(fn) { try { const s = loadStore(); fn(s); saveStore(s); } catch (e) {} }
+
+  // ---- week-rekenwerk ------------------------------------------------------
+  // Dag-sleutels via 12:00 lokaal, zodat ze in Europa altijd samenvallen met
+  // de UTC-gebaseerde sleutels van todayKey().
+  function dayKeyOf(d) { const x = new Date(d); x.setHours(12, 0, 0, 0); return x.toISOString().slice(0, 10); }
+  function weekDayKeys() {
+    const now = new Date(); const mon = new Date(now);
+    mon.setDate(now.getDate() - ((now.getDay() + 6) % 7));
+    return Array.from({ length: 7 }, (_, i) => {
+      const d = new Date(mon); d.setDate(mon.getDate() + i); return dayKeyOf(d);
+    });
+  }
+  function weekKey() { return weekDayKeys()[0]; }
+  function sessionsThisWeek() {
+    const daily = safeStore().daily || {};
+    const today = dayKeyOf(new Date());
+    let live = 0; try { live = state.todayPracticeSeconds || 0; } catch (e) {}
+    return weekDayKeys().filter((k) => (daily[k] || 0) + (k === today ? live : 0) >= SESSION_MIN_S).length;
+  }
+  function fragmentSentAt() {
+    const m = (safeStore().v88 || {}).mama || {};
+    return (m.sent || {})[weekKey()] || null;
+  }
+
+  // ---- opnames in IndexedDB (audio-blobs passen niet in localStorage) ------
+  function withDB(fn) {
+    return new Promise((resolve, reject) => {
+      const req = indexedDB.open('pianoCoachMedia', 1);
+      req.onupgradeneeded = () => req.result.createObjectStore('recordings', { keyPath: 'id' });
+      req.onerror = () => reject(req.error);
+      req.onsuccess = () => {
+        const db = req.result;
+        fn(db).then((v) => { db.close(); resolve(v); }, (e) => { db.close(); reject(e); });
+      };
+    });
+  }
+  function dbPut(rec) {
+    return withDB((db) => new Promise((res, rej) => {
+      const tx = db.transaction('recordings', 'readwrite');
+      tx.objectStore('recordings').put(rec);
+      tx.oncomplete = () => res(rec); tx.onerror = () => rej(tx.error);
+    }));
+  }
+  function dbAll() {
+    return withDB((db) => new Promise((res, rej) => {
+      const rq = db.transaction('recordings', 'readonly').objectStore('recordings').getAll();
+      rq.onsuccess = () => res((rq.result || []).sort((a, b) => b.id - a.id));
+      rq.onerror = () => rej(rq.error);
+    }));
+  }
+
+  function fmtDur(s) { const m = Math.floor(s / 60); return m + ':' + String(Math.max(0, s % 60)).padStart(2, '0'); }
+  function fmtDay(iso) { try { return new Date(iso).toLocaleDateString('nl-NL', { weekday: 'short', day: 'numeric', month: 'short' }); } catch (e) { return iso.slice(0, 10); } }
+  function pieceCached() {
+    try { return !!(typeof getRepertoireData === 'function' && getRepertoireData(PIECE.slug)?.notes); }
+    catch (e) { return false; }
+  }
+
+  // ---- F3: concertrun ------------------------------------------------------
+  const ConcertRun = window.ConcertRun = {
+    active: false, rec: null, chunks: [], stream: null,
+    startedAt: 0, notesAtStart: 0, lastSaved: null,
+
+    async start() {
+      if (this.active) return;
+      if (!state.song || state.song.slug !== PIECE.slug) {
+        const card = document.querySelector('.song-card[data-slug="' + PIECE.slug + '"]');
+        if (card && (pieceCached() || location.protocol !== 'file:')) {
+          card.click();
+          await new Promise((r) => setTimeout(r, 700));
+        }
+      }
+      if (!state.song) { note('Concertrun', 'Laad eerst een stuk in de bibliotheek.', 'warn'); return; }
+      hidePodium();
+      state.concertRun = true;
+      document.body.classList.add('concertrun');
+      state.waitMode = false;
+      state.loop.enabled = false;
+      try { updateLoopUI(); } catch (e) {}
+      this.notesAtStart = (window.MidiBridge || {}).sessionNotes || 0;
+      this.chunks = [];
+      this.startedAt = Date.now();
+      try {
+        this.stream = await navigator.mediaDevices.getUserMedia({
+          audio: { echoCancellation: false, noiseSuppression: false, autoGainControl: false },
+        });
+        this.rec = new MediaRecorder(this.stream);
+        this.rec.ondataavailable = (e) => { if (e.data && e.data.size) this.chunks.push(e.data); };
+        this.rec.start();
+      } catch (e) {
+        this.rec = null; this.stream = null;
+        note('Geen microfoon', 'De run wordt zonder audio vastgelegd.', 'warn');
+      }
+      restart();
+      play();
+      this.active = true;
+      note('🎙 Concertrun', 'Gewoon doorspelen, er telt niets mee. Pauze = klaar.', 'info');
+    },
+
+    onPause() { if (this.active) this.finish(); },
+
+    finish() {
+      if (!this.active) return;
+      this.active = false;
+      state.concertRun = false;
+      document.body.classList.remove('concertrun');
+      const seconds = Math.round((Date.now() - this.startedAt) / 1000);
+      const notes = ((window.MidiBridge || {}).sessionNotes || 0) - this.notesAtStart;
+      const self = this;
+      const finishRec = (blob) => {
+        const rec = {
+          id: Date.now(), date: new Date().toISOString(),
+          slug: (state.song && state.song.slug) || PIECE.slug,
+          seconds, notes, audio: blob || null, mime: blob ? blob.type : null,
+        };
+        self.lastSaved = rec;
+        dbPut(rec).catch(() => {}).then(() => openReview(rec));
+      };
+      if (this.rec && this.rec.state !== 'inactive') {
+        this.rec.onstop = () => {
+          const blob = new Blob(self.chunks, { type: self.rec.mimeType || 'audio/webm' });
+          if (self.stream) self.stream.getTracks().forEach((t) => t.stop());
+          finishRec(blob.size ? blob : null);
+        };
+        this.rec.stop();
+      } else {
+        if (this.stream) this.stream.getTracks().forEach((t) => t.stop());
+        finishRec(null);
+      }
+    },
+  };
+
+  // ---- review-modal na de run ---------------------------------------------
+  function openReview(rec) {
+    let ov = byId('pod-review');
+    if (!ov) { ov = document.createElement('div'); ov.id = 'pod-review'; document.body.appendChild(ov); }
+    const hasAudio = !!rec.audio;
+    ov.innerHTML =
+      '<div class="pod-review-box">' +
+      '<h2>🎙 Concertrun opgenomen</h2>' +
+      '<div class="pod-review-meta">' + fmtDay(rec.date) + ' · ' + fmtDur(rec.seconds) +
+        (rec.notes > 0 ? ' · ' + rec.notes + ' noten' : '') + '</div>' +
+      (hasAudio
+        ? '<audio id="pod-audio" controls></audio>'
+        : '<p class="pod-review-meta">Deze run heeft geen audio (geen microfoon beschikbaar).</p>') +
+      '<div class="pod-review-actions">' +
+      (hasAudio ? '<button id="pod-send" class="pod-btn primary">💌 Stuur naar mama</button>' : '') +
+      (hasAudio ? '<button id="pod-dl" class="pod-btn">⬇ Download</button>' : '') +
+      '<button id="pod-close" class="pod-btn">Sluiten</button>' +
+      '</div>' +
+      '<div id="pod-history"></div>' +
+      '</div>';
+    ov.style.display = 'flex';
+    if (hasAudio) byId('pod-audio').src = URL.createObjectURL(rec.audio);
+    byId('pod-close').onclick = () => { ov.style.display = 'none'; showPodium(); };
+    if (hasAudio) {
+      byId('pod-dl').onclick = () => downloadRec(rec);
+      byId('pod-send').onclick = () => sendToMama(rec);
+    }
+    dbAll().then((all) => {
+      const rows = all.filter((r) => r.id !== rec.id).slice(0, 5);
+      if (!rows.length) return;
+      byId('pod-history').innerHTML = '<h3>Dan vs. nu</h3>' + rows.map((r) =>
+        '<div class="pod-hist-row"><span>' + fmtDay(r.date) + ' · ' + fmtDur(r.seconds) + '</span>' +
+        (r.audio ? '<button data-id="' + r.id + '" class="pod-hist-play">▶ luister</button>'
+                 : '<span class="pod-review-meta">geen audio</span>') +
+        '</div>').join('');
+      byId('pod-history').querySelectorAll('.pod-hist-play').forEach((b) => {
+        b.onclick = () => {
+          const row = all.find((r) => String(r.id) === b.dataset.id);
+          if (!row || !row.audio) return;
+          const player = byId('pod-audio');
+          if (player) { player.src = URL.createObjectURL(row.audio); player.play(); }
+          else new Audio(URL.createObjectURL(row.audio)).play();
+        };
+      });
+    }).catch(() => {});
+  }
+
+  function fileNameFor(rec) { return 'concertrun-' + rec.date.slice(0, 10) + '.webm'; }
+  function downloadRec(rec) {
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(rec.audio);
+    a.download = fileNameFor(rec);
+    document.body.appendChild(a); a.click(); a.remove();
+  }
+
+  async function sendToMama(rec) {
+    const text = 'Hoi mam! Mijn pianofragment van deze week: ' + PIECE.title +
+      ', ' + fmtDur(rec.seconds) + ' spelen. 🎹';
+    let shared = false;
+    try {
+      const f = new File([rec.audio], fileNameFor(rec), { type: rec.mime || 'audio/webm' });
+      if (navigator.canShare && navigator.canShare({ files: [f] })) {
+        await navigator.share({ files: [f], text });
+        shared = true;
+      }
+    } catch (e) { /* delen geannuleerd of niet ondersteund, fallback hieronder */ }
+    if (!shared) {
+      downloadRec(rec);
+      try {
+        window.open('https://wa.me/?text=' + encodeURIComponent(text +
+          ' (het audiobestand staat in je Downloads, sleep hem in de chat)'), '_blank');
+      } catch (e) {}
+    }
+    saveTo((s) => {
+      const v = s.v88 = s.v88 || {}; const m = v.mama = v.mama || {};
+      (m.sent = m.sent || {})[weekKey()] = new Date().toISOString();
+    });
+    renderCards();
+    note('💌 Fragment geteld', 'Deze week staat op verstuurd. Mooi zo.', 'info');
+  }
+
+  // ---- F5: agenda (.ics) + aankondiging ------------------------------------
+  const pad = (n) => String(n).padStart(2, '0');
+  function icsStamp(d) {
+    return d.getFullYear() + pad(d.getMonth() + 1) + pad(d.getDate()) +
+      'T' + pad(d.getHours()) + pad(d.getMinutes()) + '00';
+  }
+  function buildICS() {
+    const days = [{ dow: 1, by: 'MO' }, { dow: 3, by: 'WE' }, { dow: 6, by: 'SA' }];
+    const now = new Date();
+    const events = days.map((cfg, i) => {
+      const d = new Date(now);
+      d.setDate(d.getDate() + ((cfg.dow - d.getDay() + 7) % 7));
+      d.setHours(18, 30, 0, 0);
+      const end = new Date(d); end.setHours(19, 0, 0, 0);
+      return [
+        'BEGIN:VEVENT',
+        'UID:piano-coach-v088-' + i + '@pianocoach',
+        'DTSTART:' + icsStamp(d),
+        'DTEND:' + icsStamp(end),
+        'RRULE:FREQ=WEEKLY;BYDAY=' + cfg.by,
+        'SUMMARY:🎹 Piano: ' + PIECE.title,
+        'DESCRIPTION:Sessie voor het wekelijkse fragment naar mama. Ramen open.',
+        'BEGIN:VALARM',
+        'TRIGGER:-PT10M',
+        'ACTION:DISPLAY',
+        'DESCRIPTION:Zo piano spelen',
+        'END:VALARM',
+        'END:VEVENT',
+      ].join('\r\n');
+    });
+    return ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//PianoCoach//v088//NL',
+      events.join('\r\n'), 'END:VCALENDAR'].join('\r\n');
+  }
+  function downloadICS() {
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob([buildICS()], { type: 'text/calendar' }));
+    a.download = 'piano-oefenmomenten.ics';
+    document.body.appendChild(a); a.click(); a.remove();
+    note('📅 Agenda', 'Open het bestand, dan zet je telefoon de alarmen.', 'info');
+  }
+  const ANNOUNCE_TEXT = 'Hoi mam! Nieuw project: ik leer ' + PIECE.title + ' van Einaudi op piano. ' +
+    'Elke week stuur ik je een korte opname van waar ik ben, en de eerstvolgende keer dat we elkaar ' +
+    'zien speel ik hem live voor je. Je mag me er streng aan houden. 🎹';
+
+  // ---- F4: het podium ------------------------------------------------------
+  const CSS = [
+    '#podium { position: fixed; inset: 0; z-index: 9750; overflow-y: auto;',
+    '  background: radial-gradient(1100px 560px at 50% -8%, rgba(91,94,232,0.18), transparent 62%), var(--surface-0);',
+    '  display: flex; align-items: center; justify-content: center; }',
+    '#podium.hidden { display: none; }',
+    '.pod-wrap { width: min(520px, calc(100vw - 40px)); padding: 30px 0 40px; text-align: center; }',
+    '.pod-kicker { font-size: 12px; letter-spacing: 0.22em; color: var(--text-3); text-transform: uppercase; }',
+    '.pod-piece { font-size: clamp(30px, 7vw, 44px); margin: 10px 0 2px; color: var(--text-1); font-weight: 700; line-height: 1.1; }',
+    '.pod-composer { color: var(--text-2); margin-bottom: 6px; }',
+    '.pod-progressline { color: var(--text-3); font-size: 13px; min-height: 18px; margin-bottom: 20px; }',
+    '.pod-actions { display: flex; flex-direction: column; gap: 10px; margin: 0 auto 18px; max-width: 340px; }',
+    '.pod-btn { padding: 14px 18px; border-radius: 12px; border: 1px solid var(--line-strong);',
+    '  background: var(--surface-2); color: var(--text-1); font-size: 16px; cursor: pointer; }',
+    '.pod-btn:hover { background: var(--surface-3); }',
+    '.pod-btn.primary { background: var(--brand); border-color: var(--brand); color: var(--brand-ink); font-weight: 600; }',
+    '.pod-btn.primary:hover { background: var(--brand-hover); }',
+    '.pod-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; max-width: 420px; margin: 0 auto 16px; }',
+    '@media (max-width: 460px) { .pod-cards { grid-template-columns: 1fr; } }',
+    '.pod-card { background: var(--surface-1); border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; text-align: left; }',
+    '.pod-card h4 { margin: 0 0 4px; font-size: 11px; color: var(--text-3); font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; }',
+    '.pod-card .big { font-size: 15px; color: var(--text-1); }',
+    '.pod-card .sub { font-size: 12px; color: var(--text-3); margin-top: 3px; }',
+    '.pod-links { display: flex; gap: 18px; justify-content: center; margin-bottom: 18px; flex-wrap: wrap; }',
+    '.pod-links a { color: var(--text-2); font-size: 13px; text-decoration: underline; cursor: pointer; }',
+    '.pod-dream { color: var(--text-3); font-size: 13px; margin-bottom: 22px; }',
+    '#pod-workshop { background: none; border: none; color: var(--text-3); font-size: 13px; cursor: pointer; text-decoration: underline; }',
+    '#pod-chip { position: fixed; right: 14px; bottom: 14px; z-index: 9740; display: none;',
+    '  background: var(--surface-2); border: 1px solid var(--line-strong); color: var(--text-1);',
+    '  border-radius: 999px; padding: 8px 14px; font-size: 13px; cursor: pointer; opacity: 0.85; }',
+    '#pod-chip:hover { opacity: 1; background: var(--surface-3); }',
+    '#pod-review { display: none; position: fixed; inset: 0; z-index: 9760;',
+    '  background: rgba(10,13,18,0.82); align-items: center; justify-content: center; }',
+    '.pod-review-box { width: min(440px, calc(100vw - 40px)); background: var(--surface-1);',
+    '  border: 1px solid var(--line-strong); border-radius: 14px; padding: 20px; }',
+    '.pod-review-box h2 { margin: 0 0 6px; font-size: 18px; color: var(--text-1); }',
+    '.pod-review-box h3 { margin: 14px 0 4px; font-size: 12px; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.06em; }',
+    '.pod-review-meta { color: var(--text-3); font-size: 13px; }',
+    '#pod-review audio { width: 100%; margin: 12px 0; }',
+    '.pod-review-actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }',
+    '.pod-review-actions .pod-btn { font-size: 14px; padding: 10px 14px; }',
+    '.pod-hist-row { display: flex; justify-content: space-between; align-items: center;',
+    '  padding: 7px 0; border-top: 1px solid var(--line); color: var(--text-2); font-size: 13px; }',
+    '.pod-hist-play { background: var(--surface-2); border: 1px solid var(--line-strong); color: var(--text-1);',
+    '  border-radius: 8px; padding: 4px 10px; cursor: pointer; font-size: 12px; }',
+    'body.concertrun #hits, body.concertrun #misses, body.concertrun #wrong,',
+    'body.concertrun #accuracy { visibility: hidden; }',
+  ].join('\n');
+
+  function buildPodium() {
+    if (byId('podium')) return;
+    const st = document.createElement('style');
+    st.textContent = CSS;
+    document.head.appendChild(st);
+
+    const el = document.createElement('div');
+    el.id = 'podium';
+    el.className = 'hidden';
+    el.innerHTML =
+      '<div class="pod-wrap">' +
+      '<div class="pod-kicker">Het podium</div>' +
+      '<h1 class="pod-piece">' + PIECE.title + '</h1>' +
+      '<div class="pod-composer">' + PIECE.composer + '</div>' +
+      '<div class="pod-progressline" id="pod-progress"></div>' +
+      '<div class="pod-actions">' +
+      '<button id="pod-play" class="pod-btn primary">▶ Speel</button>' +
+      '<button id="pod-concert" class="pod-btn">🎙 Concertrun</button>' +
+      '<button id="pod-mama" class="pod-btn">💌 Stuur naar mama</button>' +
+      '</div>' +
+      '<div class="pod-cards">' +
+      '<div class="pod-card"><h4>Fragment van de week</h4><div class="big" id="pod-week-big"></div><div class="sub" id="pod-week-sub"></div></div>' +
+      '<div class="pod-card"><h4>Spelen, dan bouwen</h4><div class="big" id="pod-gate-big"></div><div class="sub" id="pod-gate-sub"></div></div>' +
+      '</div>' +
+      '<div class="pod-links">' +
+      '<a id="pod-ics">📅 Oefenmomenten in je agenda</a>' +
+      '<a id="pod-announce" target="_blank" rel="noopener">📣 Kondig het aan bij mama</a>' +
+      '</div>' +
+      '<div class="pod-dream">Droomstuk aan de horizon: <b>' + DREAM.title + '</b> (' + DREAM.composer + '). Eerst deze.</div>' +
+      '<button id="pod-workshop">Naar de werkplaats →</button>' +
+      '</div>';
+    document.body.appendChild(el);
+
+    const chip = document.createElement('button');
+    chip.id = 'pod-chip';
+    chip.textContent = '🎭 Podium';
+    document.body.appendChild(chip);
+
+    byId('pod-play').onclick = podPlay;
+    byId('pod-concert').onclick = () => ConcertRun.start();
+    byId('pod-mama').onclick = mamaButton;
+    byId('pod-ics').onclick = downloadICS;
+    byId('pod-announce').href = 'https://wa.me/?text=' + encodeURIComponent(ANNOUNCE_TEXT);
+    byId('pod-announce').onclick = () => saveTo((s) => { (s.v88 = s.v88 || {}).mama = Object.assign({}, (s.v88.mama || {}), { announced: true }); });
+    byId('pod-workshop').onclick = hidePodium;
+    chip.onclick = showPodium;
+  }
+
+  function pieceStatusLine() {
+    try {
+      const d = (typeof getRepertoireData === 'function') ? getRepertoireData(PIECE.slug) : null;
+      if (d && d.notes) {
+        const secs = (d.sections || []).length;
+        const best = d.bestAccuracy ? 'beste run ' + d.bestAccuracy + '%' : 'nog geen gemeten run';
+        return '✓ Klaar om te spelen · ' + (secs ? secs + ' secties · ' : '') + best;
+      }
+    } catch (e) {}
+    return location.protocol === 'file:'
+      ? 'Nog niet geladen: open de werkplaats en tik het stuk één keer aan.'
+      : 'Laadt automatisch bij de eerste keer spelen.';
+  }
+
+  function renderCards() {
+    if (!byId('podium')) return;
+    byId('pod-progress').textContent = pieceStatusLine();
+
+    const sent = fragmentSentAt();
+    if (sent) {
+      byId('pod-week-big').textContent = '✅ Verstuurd';
+      byId('pod-week-sub').textContent = fmtDay(sent);
+    } else {
+      const left = 6 - ((new Date().getDay() + 6) % 7);
+      byId('pod-week-big').textContent = 'Nog niet verstuurd';
+      byId('pod-week-sub').textContent = left === 0 ? 'vandaag is de deadline'
+        : 'deadline zondag, nog ' + left + (left === 1 ? ' dag' : ' dagen');
+    }
+
+    const n = sessionsThisWeek();
+    byId('pod-gate-big').textContent = n + ' van ' + SESSIONS_PER_WEEK + ' sessies';
+    byId('pod-gate-sub').textContent = n >= SESSIONS_PER_WEEK
+      ? '🔓 bouwen ontgrendeld' : '🔒 bouwen kan na sessie ' + SESSIONS_PER_WEEK;
+  }
+
+  function podPlay() {
+    hidePodium();
+    if (state.song && state.song.slug === PIECE.slug) return;
+    const card = document.querySelector('.song-card[data-slug="' + PIECE.slug + '"]');
+    if (!card) return;
+    card.click();
+    setTimeout(() => {
+      try { if (typeof setPlayFocus === 'function') setPlayFocus(true, { silent: true }); } catch (e) {}
+    }, 700);
+  }
+
+  function mamaButton() {
+    dbAll().then((all) => {
+      const wk = weekKey();
+      const thisWeek = all.find((r) => r.audio && dayKeyOf(new Date(r.date)) >= wk);
+      if (thisWeek) openReview(thisWeek);
+      else note('Nog geen opname', 'Doe eerst een concertrun, dan staat hier je fragment.', 'info');
+    }).catch(() => note('Nog geen opname', 'Doe eerst een concertrun.', 'info'));
+  }
+
+  function showPodium() {
+    buildPodium();
+    byId('podium').classList.remove('hidden');
+    byId('pod-chip').style.display = 'none';
+    renderCards();
+  }
+  function hidePodium() {
+    if (!byId('podium')) return;
+    byId('podium').classList.add('hidden');
+    byId('pod-chip').style.display = 'block';
+  }
+
+  window.Podium = { show: showPodium, hide: hidePodium, renderCards, buildICS, weekDayKeys, sessionsThisWeek, weekKey };
+
+  function podiumAllowed() {
+    const p = new URLSearchParams(location.search);
+    return !(p.get('focus') === '0' || p.get('screen') || p.get('test') || p.get('podium') === '0');
+  }
+  function start() {
+    buildPodium();
+    if (podiumAllowed()) {
+      showPodium();
+    } else {
+      byId('podium').classList.add('hidden');
+      byId('pod-chip').style.display = 'none';
+    }
+  }
+  if (document.readyState === 'complete') setTimeout(start, 250);
+  else window.addEventListener('load', () => setTimeout(start, 250));
 })();
 
 </script>
