@@ -7983,7 +7983,7 @@ function setStatus(s, text, device) {
 const MIDI_GAP_MS = 30000;    // stilte langer dan dit telt niet als oefenen
 const MIDI_FLUSH_MS = 10000;  // hoe vaak de sessielog naar localStorage gaat
 
-const Midi = window.Midi = {
+const MidiBridge = window.MidiBridge = {
   access: null,
   output: null,
   connected: false,
@@ -8003,35 +8003,35 @@ const Midi = window.Midi = {
 };
 
 function trackMidiPractice(now) {
-  const prev = Midi.lastNoteAt;
-  Midi.lastNoteAt = now;
-  Midi.sessionNotes++;
-  Midi._pendNotes++;
+  const prev = MidiBridge.lastNoteAt;
+  MidiBridge.lastNoteAt = now;
+  MidiBridge.sessionNotes++;
+  MidiBridge._pendNotes++;
   if (prev && now - prev < MIDI_GAP_MS) {
     const dt = (now - prev) / 1000;
-    Midi._pendSec += dt;
+    MidiBridge._pendSec += dt;
     // Vrij spel telt mee voor dagtotaal + streak; tijdens play telt de
     // game-loop de tijd al, dus dan hier niet nog een keer.
     if (!state.playing) state.todayPracticeSeconds += dt;
   }
-  if (now - Midi._lastFlush > MIDI_FLUSH_MS) flushMidiSession(now);
+  if (now - MidiBridge._lastFlush > MIDI_FLUSH_MS) flushMidiSession(now);
 }
 
 function flushMidiSession(now) {
-  Midi._lastFlush = now || Date.now();
-  if (Midi._pendSec < 0.5 && Midi._pendNotes < 1) return;
+  MidiBridge._lastFlush = now || Date.now();
+  if (MidiBridge._pendSec < 0.5 && MidiBridge._pendNotes < 1) return;
   try {
     const store = loadStore();
     const v88 = store.v88 = store.v88 || {};
     const days = v88.midiDays = v88.midiDays || {};
     const tk = todayKey();
     const d = days[tk] = days[tk] || { seconds: 0, notes: 0 };
-    d.seconds = Math.round((d.seconds + Midi._pendSec) * 10) / 10;
-    d.notes += Midi._pendNotes;
+    d.seconds = Math.round((d.seconds + MidiBridge._pendSec) * 10) / 10;
+    d.notes += MidiBridge._pendNotes;
     saveStore(store);
   } catch {}
-  Midi._pendSec = 0;
-  Midi._pendNotes = 0;
+  MidiBridge._pendSec = 0;
+  MidiBridge._pendNotes = 0;
   try { flushDailyPractice(); updateStreakDisplay(); } catch {}
 }
 window.addEventListener('pagehide', () => flushMidiSession());
@@ -8049,35 +8049,35 @@ function handleMIDIMessage(e) {
   const [status, note, velocity] = e.data;
   const cmd = status & 0xf0;
   if (cmd === 0x90 && velocity > 0) {
-    Midi.activeNotes.add(note);
+    MidiBridge.activeNotes.add(note);
     trackMidiPractice(Date.now());
     onKeyDown(note, velocity);
     holdKeyVisual(note);
   } else if (cmd === 0x80 || (cmd === 0x90 && velocity === 0)) {
-    Midi.activeNotes.delete(note);
+    MidiBridge.activeNotes.delete(note);
     onKeyUp(note);
   } else if (cmd === 0xb0 && note === 64) {
-    Midi.sustain = velocity >= 64;
+    MidiBridge.sustain = velocity >= 64;
   }
 }
 
 function setupMIDI(access) {
-  Midi.access = access;
+  MidiBridge.access = access;
   const refresh = () => {
     const inputs = Array.from(access.inputs.values());
     const outputs = Array.from(access.outputs.values());
-    Midi.output = outputs.find(o => /clp|clavinova|yamaha/i.test(o.name || '')) || outputs[0] || null;
-    Midi.connected = inputs.length > 0;
-    Midi.deviceName = inputs.map(i => i.name).join(', ');
-    if (!Midi.connected) {
+    MidiBridge.output = outputs.find(o => /clp|clavinova|yamaha/i.test(o.name || '')) || outputs[0] || null;
+    MidiBridge.connected = inputs.length > 0;
+    MidiBridge.deviceName = inputs.map(i => i.name).join(', ');
+    if (!MidiBridge.connected) {
       setStatus('error', 'Geen MIDI');
     } else {
-      setStatus('connected', 'Piano verbonden', Midi.deviceName);
+      setStatus('connected', 'Piano verbonden', MidiBridge.deviceName);
       for (const i of inputs) i.onmidimessage = handleMIDIMessage;
     }
     try {
       document.dispatchEvent(new CustomEvent('midi:change', {
-        detail: { connected: Midi.connected, name: Midi.deviceName },
+        detail: { connected: MidiBridge.connected, name: MidiBridge.deviceName },
       }));
     } catch {}
   };
@@ -8112,15 +8112,15 @@ const Duet = window.Duet = {
 
 function duetActive() {
   return Duet.on && state.playing && !state.listenMode &&
-         state.handMode !== 'all' && !!Midi.output && !!state.song;
+         state.handMode !== 'all' && !!MidiBridge.output && !!state.song;
 }
 
 function duetStop() {
   for (const t of Duet.timers) clearTimeout(t);
   Duet.timers.clear();
-  for (const m of Duet.sounding) Midi.noteOff(m);
+  for (const m of Duet.sounding) MidiBridge.noteOff(m);
   Duet.sounding.clear();
-  Midi.allNotesOff();
+  MidiBridge.allNotesOff();
   Duet.fired.clear();
 }
 
@@ -8138,11 +8138,11 @@ function duetTick(t) {
     if (isActiveHand(n) || Duet.fired.has(n.id)) continue;
     if (n.time > t || n.time < t - DUET_CATCHUP_S) continue;
     Duet.fired.add(n.id);
-    Midi.noteOn(n.midi, DUET_VELOCITY);
+    MidiBridge.noteOn(n.midi, DUET_VELOCITY);
     Duet.sounding.add(n.midi);
     const offT = setTimeout(() => {
       Duet.timers.delete(offT);
-      Midi.noteOff(n.midi);
+      MidiBridge.noteOff(n.midi);
       Duet.sounding.delete(n.midi);
     }, Math.max(80, (n.duration / state.tempo) * 1000));
     Duet.timers.add(offT);
