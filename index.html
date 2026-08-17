@@ -1486,14 +1486,20 @@
   /* Hide tiny key-labels in TV mode — they're unreadable when scaled anyway */
   body.tv-mode .key-label { display: none; }
   /* Big control overlay in corner */
+  /* v0.89: transport onderin het beeld, midden, bóven alle chrome — de oude
+     plek (rechtsboven, z 100) verdween achter de sticky kop (z 300). */
   body.tv-mode .tv-controls {
-    position: fixed; top: 10px; right: 16px;
-    z-index: 100; display: flex; gap: 8px;
+    position: fixed; bottom: 22px; left: 50%; transform: translateX(-50%);
+    z-index: 9600; display: flex; gap: 10px;
   }
   body.tv-mode .tv-controls button {
-    font-size: 16px; padding: 10px 18px;
-    background: rgba(0,0,0,0.6); color: #fff;
-    border: 1px solid rgba(255,255,255,0.3);
+    font-size: 20px; padding: 14px 22px; border-radius: 12px;
+    background: rgba(0,0,0,0.65); color: #fff;
+    border: 1px solid rgba(255,255,255,0.35); cursor: pointer;
+  }
+  body.tv-mode #tv-play-pause {
+    background: var(--brand); border-color: var(--brand);
+    font-weight: 700; min-width: 84px;
   }
 
   /* Channel mute panel */
@@ -4487,6 +4493,7 @@
 <div class="tv-controls" id="tv-controls" style="display:none;">
   <button id="tv-play-pause" title="Play/pause (Space)">▶</button>
   <button id="tv-restart" title="Restart (R)">⟲</button>
+  <button id="tv-lookahead" title="Vooruitblik: hoeveel seconden je noten vooruit ziet">👁 5s</button>
   <button id="tv-exit" title="Exit TV mode (T)">✕</button>
 </div>
 
@@ -6707,7 +6714,7 @@ const BLACK_SET = new Set([1, 3, 6, 8, 10]);
 const WHITE_WIDTH = 40, BLACK_WIDTH = 26;
 const KEYBOARD_WIDTH = 2080;
 let FALL_HEIGHT = 400;   // v0.87 fase 2: groeit mee met het scherm, zie fitStage()
-const LOOKAHEAD = 3.0;
+let LOOKAHEAD = 5.0;  // v0.89: vooruitblik in seconden, instelbaar via 👁 (3/5/8)
 const HIT_WINDOW = 0.18;
 const CHORD_WINDOW = 0.04;   // notes within 40ms = same chord
 const WAIT_ARRIVAL = 0.02;   // freeze 20ms before chord lands
@@ -8055,6 +8062,7 @@ function handleMIDIMessage(e) {
     trackMidiPractice(Date.now());
     onKeyDown(note, velocity);
     holdKeyVisual(note);
+    try { document.dispatchEvent(new CustomEvent('midi:note', { detail: { midi: note, velocity } })); } catch {}
   } else if (cmd === 0x80 || (cmd === 0x90 && velocity === 0)) {
     MidiBridge.activeNotes.delete(note);
     onKeyUp(note);
@@ -12407,6 +12415,8 @@ function toggleTVMode() {
   const isOn = document.body.classList.toggle('tv-mode');
   document.getElementById('btn-tv').classList.toggle('on', isOn);
   document.getElementById('tv-controls').style.display = isOn ? 'flex' : 'none';
+  // Icoon klopt ook als je al spelend of gepauzeerd binnenkomt
+  document.getElementById('tv-play-pause').textContent = state.playing ? '⏸' : '▶';
   // Also turn off performance mode if it's on
   if (isOn && document.body.classList.contains('performance-mode')) {
     document.body.classList.remove('performance-mode');
@@ -12425,6 +12435,38 @@ window.addEventListener('resize', updateTVScale);
 document.getElementById('tv-play-pause').onclick = () => { state.playing ? pause() : play(); document.getElementById('tv-play-pause').textContent = state.playing ? '⏸' : '▶'; };
 document.getElementById('tv-restart').onclick = () => restart();
 document.getElementById('tv-exit').onclick = () => toggleTVMode();
+
+// v0.89: vooruitblik instelbaar — hoe eerder je noten ziet aankomen, hoe
+// rustiger je speelt. Waarde persisteert in store.v88.lookahead.
+const LOOKAHEAD_STEPS = [3, 5, 8];
+function applyLookahead(v, save) {
+  LOOKAHEAD = v;
+  document.querySelectorAll('.btn-lookahead-label').forEach((el) => { el.textContent = '👁 ' + v + 's'; });
+  if (save) {
+    try { const s = loadStore(); (s.v88 = s.v88 || {}).lookahead = v; saveStore(s); } catch (e) {}
+  }
+}
+function cycleLookahead() {
+  const i = LOOKAHEAD_STEPS.indexOf(LOOKAHEAD);
+  applyLookahead(LOOKAHEAD_STEPS[(i + 1) % LOOKAHEAD_STEPS.length], true);
+}
+window.cycleLookahead = cycleLookahead;
+(function initLookahead() {
+  document.getElementById('tv-lookahead').classList.add('btn-lookahead-label');
+  document.getElementById('tv-lookahead').onclick = cycleLookahead;
+  const met = document.getElementById('btn-metronome');
+  if (met && !document.getElementById('btn-lookahead')) {
+    const b = document.createElement('button');
+    b.id = 'btn-lookahead';
+    b.className = 'btn-lookahead-label';
+    b.title = 'Vooruitblik: hoeveel seconden noten je vooruit ziet';
+    b.onclick = cycleLookahead;
+    met.insertAdjacentElement('afterend', b);
+  }
+  let saved = null;
+  try { saved = loadStore().v88?.lookahead; } catch (e) {}
+  applyLookahead(LOOKAHEAD_STEPS.includes(saved) ? saved : LOOKAHEAD, false);
+})();
 
 // T-key shortcut
 document.addEventListener('keydown', (e) => {
@@ -29291,7 +29333,13 @@ ACHIEVEMENTS.push({
     '.pod-kicker { font-size: 12px; letter-spacing: 0.22em; color: var(--text-3); text-transform: uppercase; }',
     '.pod-piece { font-size: clamp(30px, 7vw, 44px); margin: 10px 0 2px; color: var(--text-1); font-weight: 700; line-height: 1.1; }',
     '.pod-composer { color: var(--text-2); margin-bottom: 6px; }',
-    '.pod-progressline { color: var(--text-3); font-size: 13px; min-height: 18px; margin-bottom: 20px; }',
+    '.pod-progressline { color: var(--text-3); font-size: 13px; min-height: 18px; margin-bottom: 6px; }',
+    '.pod-midi { font-size: 13px; margin-bottom: 18px; color: var(--text-2); min-height: 20px; }',
+    '.pod-midi .ok { color: var(--accent); }',
+    '.pod-midi .warn { color: var(--warn); }',
+    '.pod-midi button { background: none; border: none; color: var(--text-2); text-decoration: underline; cursor: pointer; font-size: 13px; padding: 0; }',
+    '.pod-midi .pulse { display: inline-block; opacity: 0; transition: opacity 0.7s; }',
+    '.pod-midi .pulse.show { opacity: 1; transition: none; }',
     '.pod-actions { display: flex; flex-direction: column; gap: 10px; margin: 0 auto 18px; max-width: 340px; }',
     '.pod-btn { padding: 14px 18px; border-radius: 12px; border: 1px solid var(--line-strong);',
     '  background: var(--surface-2); color: var(--text-1); font-size: 16px; cursor: pointer; }',
@@ -29345,6 +29393,7 @@ ACHIEVEMENTS.push({
       '<h1 class="pod-piece">' + PIECE.title + '</h1>' +
       '<div class="pod-composer">' + PIECE.composer + '</div>' +
       '<div class="pod-progressline" id="pod-progress"></div>' +
+      '<div class="pod-midi" id="pod-midi"></div>' +
       '<div class="pod-actions">' +
       '<button id="pod-play" class="pod-btn primary">▶ Speel</button>' +
       '<button id="pod-concert" class="pod-btn">🎙 Concertrun</button>' +
@@ -29392,9 +29441,54 @@ ACHIEVEMENTS.push({
       : 'Laadt automatisch bij de eerste keer spelen.';
   }
 
+  // De MIDI-status hoort op het startscherm, niet verstopt in de werkplaats:
+  // verbonden + apparaatnaam, een lampje per ontvangen noot, en bij falen
+  // een reden plus een retry. Dit maakt "MIDI doet het niet" zelf-oplosbaar.
+  function renderMidiLine() {
+    const el = byId('pod-midi');
+    if (!el) return;
+    if (!navigator.requestMIDIAccess) {
+      el.innerHTML = '<span class="warn">⚠ Deze browser kan geen MIDI.</span> ' +
+        'Laptop: gebruik Chrome of Edge. iPad: de gratis app "Web MIDI Browser".';
+      return;
+    }
+    const mb = window.MidiBridge || {};
+    if (mb.connected) {
+      el.innerHTML = '<span class="ok">🎹 Verbonden: ' + (mb.deviceName || 'piano') + '</span> ' +
+        '<span class="pulse" id="pod-midi-pulse">· noot gehoord ✓</span>';
+      return;
+    }
+    el.innerHTML = '<span class="warn">⚠ Geen piano gevonden.</span> ' +
+      'Piano aan en kabel in USB TO HOST? ' +
+      '<button id="pod-midi-retry">Opnieuw zoeken</button><span id="pod-midi-extra"></span>';
+    byId('pod-midi-retry').onclick = () => {
+      navigator.requestMIDIAccess({ sysex: false })
+        .then((a) => { try { setupMIDI(a); } catch (e) {} renderMidiLine(); })
+        .catch((err) => { byId('pod-midi-extra').textContent = ' Toegang geweigerd (' + err.message + ').'; });
+    };
+    try {
+      navigator.permissions && navigator.permissions.query({ name: 'midi', sysex: false }).then((p) => {
+        if (p.state === 'denied') {
+          byId('pod-midi-extra').textContent =
+            ' MIDI is geblokkeerd: klik op het slotje in de adresbalk en zet MIDI op Toestaan.';
+        }
+      }).catch(() => {});
+    } catch (e) {}
+  }
+  document.addEventListener('midi:change', renderMidiLine);
+  let pulseTimer = 0;
+  document.addEventListener('midi:note', () => {
+    const p = byId('pod-midi-pulse');
+    if (!p) return;
+    p.classList.add('show');
+    clearTimeout(pulseTimer);
+    pulseTimer = setTimeout(() => p.classList.remove('show'), 900);
+  });
+
   function renderCards() {
     if (!byId('podium')) return;
     byId('pod-progress').textContent = pieceStatusLine();
+    renderMidiLine();
 
     const sent = fragmentSentAt();
     if (sent) {
